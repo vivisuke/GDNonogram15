@@ -142,3 +142,19 @@ func _input(event):
 			var img = 0 if cell_val == 1 else -1
 			$ImageTileMap.set_cell(xy.x, xy.y, img)
 	pass
+
+
+func clear_all():
+	# undone: 候補数字クリア
+	for y in range(N_TOTAL_CELL_VERT):
+		for x in range(N_TOTAL_CELL_HORZ):
+			$TileMap.set_cell(x, y, -1)
+			$ImageTileMap.set_cell(x, y, -1)
+		for x in range(N_CLUES_CELL_HORZ):
+			$TileMap.set_cell(-x-1, y, -1)
+	for x in range(N_TOTAL_CELL_HORZ):
+		for y in range(N_CLUES_CELL_VERT):
+			$TileMap.set_cell(x, -y-1, -1)
+func _on_ClearButton_pressed():
+	clear_all()
+	pass # Replace with function body.
