@@ -23,10 +23,45 @@ var dialog_opened = false;
 var mouse_pushed = false
 var last_xy = Vector2()
 var cell_val = 0
+var g_map = {}		# 水平・垂直方向手がかり数字配列 → 候補数値マップ
+var h_clues = []		# 水平方向手がかり数字リスト
+var v_clues = []		# 垂直方向手がかり数字リスト
+var h_candidates = []	# 水平方向候補リスト
+var v_candidates = []	# 垂直方向候補リスト
+var h_fixed_bits_1 = []
+var h_fixed_bits_0 = []
+var v_fixed_bits_1 = []
+var v_fixed_bits_0 = []
 
 func _ready():
+	mode = MODE_EDIT_PICT
 	#$TileMap.set_cell(0, 0, 0)
+	build_map()
+	print(g_map.size())
 	pass # Replace with function body.
+# 101101110 → [3, 2, 1]	下位ビットの方が配列先頭とする
+func data_to_clues(data : int) -> Array:
+	var lst = []
+	while data != 0:
+		var b = data & -data
+		data ^= b
+		var n = 1
+		b <<= 1
+		while (data & b) != 0:
+			data ^= b
+			b <<= 1
+			n += 1
+		lst.push_back(n)
+	return lst
+# key は連配列、下位ビットの方が配列先頭
+func build_map():
+	g_map.clear()
+	for data in range(1<<N_IMG_CELL_HORZ):
+		var key = data_to_clues(data)
+		if g_map.has(key):
+			g_map[key].push_back(data)
+		else:
+			g_map[key] = [data]
 func check_clues(x0, y0):
 	pass
 func update_clues(x0, y0):
