@@ -23,3 +23,7 @@ func _ready():
 func _draw():
 	draw_rect(Rect2(0, CLUES_WIDTH, CLUES_WIDTH, IMG_AREA_WIDTH), Color.lightblue)
 	draw_rect(Rect2(CLUES_WIDTH, 0, IMG_AREA_WIDTH, CLUES_WIDTH), Color.lightblue)
+# warning-ignore:unused_argument
+func _input(event):
+	#print("BoardBG::_input()")
+	pass

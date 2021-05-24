@@ -35,3 +35,6 @@ func _draw():
 	for x in range(4):
 		var px = (x*5 + N_CLUES_CELL_HORZ) * CELL_WIDTH
 		draw_line(Vector2(px, 0), Vector2(px, y2), Color.black)
+func _input(event):
+	#print("BoardGrid::_input()")
+	pass
