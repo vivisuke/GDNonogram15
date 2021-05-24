@@ -16,6 +16,9 @@ const CELL_WIDTH = BOARD_WIDTH / N_TOTAL_CELL_HORZ
 const CLUES_WIDTH = CELL_WIDTH * N_CLUES_CELL_HORZ
 const IMG_AREA_WIDTH = CELL_WIDTH * N_IMG_CELL_HORZ
 
+const TILE_NUM_0 = 1
+const ColorClues = Color("#dff9fb")
+
 enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES }
 
 var mode = MODE_EDIT_PICT;
@@ -37,7 +40,9 @@ func _ready():
 	mode = MODE_EDIT_PICT
 	#$TileMap.set_cell(0, 0, 0)
 	build_map()
-	print(g_map.size())
+	#print(g_map.size())
+	h_clues.resize(N_IMG_CELL_VERT)
+	v_clues.resize(N_IMG_CELL_HORZ)
 	pass # Replace with function body.
 # 101101110 → [3, 2, 1]	下位ビットの方が配列先頭とする
 func data_to_clues(data : int) -> Array:
@@ -65,6 +70,32 @@ func build_map():
 func check_clues(x0, y0):
 	pass
 func update_clues(x0, y0):
+	# 水平方向手がかり数字
+	var data = 0
+	for x in range(N_IMG_CELL_HORZ):
+		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == 1 else 0)
+	var lst = data_to_clues(data)
+	h_clues[y0] = lst;
+	var x = -1
+	for i in range(lst.size()):
+		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0)
+		x -= 1
+	while x >= -N_CLUES_CELL_HORZ:
+		$TileMap.set_cell(x, y0, -1)
+		x -= 1
+	# 垂直方向手がかり数字
+	data = 0
+	for y in range(N_IMG_CELL_VERT):
+		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == 1 else 0)
+	lst = data_to_clues(data)
+	v_clues[x0] = lst;
+	var y = -1
+	for i in range(lst.size()):
+		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0)
+		y -= 1
+	while y >= -N_CLUES_CELL_VERT:
+		$TileMap.set_cell(x0, y, -1)
+		y -= 1
 	pass
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
