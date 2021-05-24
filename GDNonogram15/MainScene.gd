@@ -191,5 +191,16 @@ func _on_UpButton_pressed():
 	pass # Replace with function body.
 
 
+func rotate_right():
+	var ar = []
+	for y in range(N_IMG_CELL_VERT):
+		ar.push_back($TileMap.get_cell(N_IMG_CELL_HORZ-1, y))	# may be -1 or +1
+	for x in range(N_IMG_CELL_HORZ-1, 0, -1):
+		for y in range(N_IMG_CELL_VERT):
+			$TileMap.set_cell(x, y, $TileMap.get_cell(x-1, y))
+	for y in range(N_IMG_CELL_VERT):
+		$TileMap.set_cell(0, y, ar[y])
+	update_all_clues()
 func _on_RightButton_pressed():
+	rotate_right()
 	pass # Replace with function body.
