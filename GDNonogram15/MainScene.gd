@@ -69,8 +69,8 @@ func build_map():
 			g_map[key] = [data]
 func check_clues(x0, y0):
 	pass
-func update_clues(x0, y0):
-	# 水平方向手がかり数字
+func update_h_clues(y0):
+	# 水平方向手がかり数字更新
 	var data = 0
 	for x in range(N_IMG_CELL_HORZ):
 		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == 1 else 0)
@@ -83,11 +83,12 @@ func update_clues(x0, y0):
 	while x >= -N_CLUES_CELL_HORZ:
 		$TileMap.set_cell(x, y0, -1)
 		x -= 1
-	# 垂直方向手がかり数字
-	data = 0
+func update_v_clues(x0):
+	# 垂直方向手がかり数字更新
+	var data = 0
 	for y in range(N_IMG_CELL_VERT):
 		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == 1 else 0)
-	lst = data_to_clues(data)
+	var lst = data_to_clues(data)
 	v_clues[x0] = lst;
 	var y = -1
 	for i in range(lst.size()):
@@ -96,7 +97,15 @@ func update_clues(x0, y0):
 	while y >= -N_CLUES_CELL_VERT:
 		$TileMap.set_cell(x0, y, -1)
 		y -= 1
+func update_clues(x0, y0):
+	update_h_clues(y0)
+	update_v_clues(x0)
 	pass
+func update_all_clues():
+	for y in range(N_IMG_CELL_VERT):
+		update_h_clues(y)
+	for x in range(N_IMG_CELL_HORZ):
+		update_v_clues(x)
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
 	var X0 = $TileMap.position.x
@@ -157,4 +166,30 @@ func clear_all():
 			$TileMap.set_cell(x, -y-1, -1)
 func _on_ClearButton_pressed():
 	clear_all()
+	pass # Replace with function body.
+
+func rotate_left():
+	var ar = []
+	for y in range(N_IMG_CELL_VERT):
+		ar.push_back($TileMap.get_cell(0, y))	# may be -1 or +1
+	for x in range(N_IMG_CELL_HORZ-1):
+		for y in range(N_IMG_CELL_VERT):
+			$TileMap.set_cell(x, y, $TileMap.get_cell(x+1, y))
+	for y in range(N_IMG_CELL_VERT):
+		$TileMap.set_cell(N_IMG_CELL_HORZ-1, y, ar[y])
+	update_all_clues()
+func _on_LeftButton_pressed():
+	rotate_left()
+	pass # Replace with function body.
+
+
+func _on_DownButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_UpButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_RightButton_pressed():
 	pass # Replace with function body.

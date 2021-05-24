@@ -464,7 +464,7 @@ __meta__ = {
 }
 
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
-[connection signal="pressed" from="LeftButton" to="." method="_on_ClearButton_pressed"]
-[connection signal="pressed" from="DownButton" to="." method="_on_ClearButton_pressed"]
-[connection signal="pressed" from="UpButton" to="." method="_on_ClearButton_pressed"]
-[connection signal="pressed" from="RightButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="LeftButton" to="." method="_on_LeftButton_pressed"]
+[connection signal="pressed" from="DownButton" to="." method="_on_DownButton_pressed"]
+[connection signal="pressed" from="UpButton" to="." method="_on_UpButton_pressed"]
+[connection signal="pressed" from="RightButton" to="." method="_on_RightButton_pressed"]
