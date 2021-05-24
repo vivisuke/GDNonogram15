@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -24,6 +24,14 @@
 [ext_resource path="res://images/num13.png" type="Texture" id=22]
 [ext_resource path="res://images/num11.png" type="Texture" id=23]
 [ext_resource path="res://images/num12.png" type="Texture" id=24]
+[ext_resource path="res://images/leftward_white.png" type="Texture" id=25]
+[ext_resource path="res://images/leftward_black.png" type="Texture" id=26]
+[ext_resource path="res://images/rightward_white.png" type="Texture" id=27]
+[ext_resource path="res://images/upward_black.png" type="Texture" id=28]
+[ext_resource path="res://images/rightward_black.png" type="Texture" id=29]
+[ext_resource path="res://images/downward_black.png" type="Texture" id=30]
+[ext_resource path="res://images/downward_white.png" type="Texture" id=31]
+[ext_resource path="res://images/upward_white.png" type="Texture" id=32]
 
 [sub_resource type="TileSet" id=1]
 0/name = "cross20x20.png 0"
@@ -331,10 +339,10 @@ cell_size = Vector2( 6, 6 )
 format = 1
 
 [node name="ClearButton" type="TextureButton" parent="."]
-margin_left = 37.3755
-margin_top = 655.406
-margin_right = 133.376
-margin_bottom = 751.406
+margin_left = 40.0
+margin_top = 650.0
+margin_right = 136.001
+margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 17 )
 texture_pressed = ExtResource( 18 )
@@ -355,4 +363,108 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="LeftButton" type="TextureButton" parent="."]
+margin_left = 120.0
+margin_top = 650.0
+margin_right = 216.001
+margin_bottom = 746.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 26 )
+texture_pressed = ExtResource( 25 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="LeftButton"]
+margin_left = 10.0
+margin_top = 90.0
+margin_right = 87.0
+margin_bottom = 126.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "RotLt"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DownButton" type="TextureButton" parent="."]
+margin_left = 200.0
+margin_top = 650.0
+margin_right = 296.0
+margin_bottom = 746.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 30 )
+texture_pressed = ExtResource( 31 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="DownButton"]
+margin_left = 10.0
+margin_top = 90.0
+margin_right = 87.0
+margin_bottom = 126.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "RotDn"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UpButton" type="TextureButton" parent="."]
+margin_left = 280.0
+margin_top = 650.0
+margin_right = 376.0
+margin_bottom = 746.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 28 )
+texture_pressed = ExtResource( 32 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UpButton"]
+margin_left = 10.0
+margin_top = 90.0
+margin_right = 87.0
+margin_bottom = 126.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "RotUp"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RightButton" type="TextureButton" parent="."]
+margin_left = 360.0
+margin_top = 650.0
+margin_right = 456.0
+margin_bottom = 746.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 29 )
+texture_pressed = ExtResource( 27 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="RightButton"]
+margin_left = 10.0
+margin_top = 90.0
+margin_right = 87.0
+margin_bottom = 126.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "RotRt"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="LeftButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="DownButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="UpButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="RightButton" to="." method="_on_ClearButton_pressed"]
