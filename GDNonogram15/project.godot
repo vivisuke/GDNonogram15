@@ -11,11 +11,12 @@ config_version=4
 [application]
 
 config/name="GDNonogram15"
+run/main_scene="res://MainScene.tscn"
 config/icon="res://icon.png"
 
 [display]
 
-window/size/width=500
+window/size/width=480
 window/size/height=800
 
 [physics]
