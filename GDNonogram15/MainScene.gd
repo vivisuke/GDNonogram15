@@ -181,16 +181,6 @@ func rotate_left():
 func _on_LeftButton_pressed():
 	rotate_left()
 	pass # Replace with function body.
-
-
-func _on_DownButton_pressed():
-	pass # Replace with function body.
-
-
-func _on_UpButton_pressed():
-	pass # Replace with function body.
-
-
 func rotate_right():
 	var ar = []
 	for y in range(N_IMG_CELL_VERT):
@@ -203,4 +193,30 @@ func rotate_right():
 	update_all_clues()
 func _on_RightButton_pressed():
 	rotate_right()
+	pass # Replace with function body.
+func rotate_down():
+	var ar = []
+	for x in range(N_IMG_CELL_HORZ):
+		ar.push_back($TileMap.get_cell(x, N_IMG_CELL_VERT-1))	# may be -1 or +1
+	for y in range(N_IMG_CELL_VERT-1, 0, -1):
+		for x in range(N_IMG_CELL_HORZ):
+			$TileMap.set_cell(x, y, $TileMap.get_cell(x, y-1))
+	for x in range(N_IMG_CELL_HORZ):
+		$TileMap.set_cell(x, 0, ar[x])
+	update_all_clues()
+func _on_DownButton_pressed():
+	rotate_down()
+	pass # Replace with function body.
+func rotate_up():
+	var ar = []
+	for x in range(N_IMG_CELL_HORZ):
+		ar.push_back($TileMap.get_cell(x, 0))	# may be -1 or +1
+	for y in range(N_IMG_CELL_VERT-1):
+		for x in range(N_IMG_CELL_HORZ):
+			$TileMap.set_cell(x, y, $TileMap.get_cell(x, y+1))
+	for x in range(N_IMG_CELL_HORZ):
+		$TileMap.set_cell(x, N_IMG_CELL_VERT-1, ar[x])
+	update_all_clues()
+func _on_UpButton_pressed():
+	rotate_up()
 	pass # Replace with function body.
