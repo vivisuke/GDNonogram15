@@ -63,7 +63,7 @@ func _input(event):
 				elif mode == MODE_SOLVE:
 					check_clues(xy.x, xy.y)
 				var img = 0 if v == 1 else -1
-				#$ImageTileMap.set_cell(xy.x, xy.y, img)
+				$ImageTileMap.set_cell(xy.x, xy.y, img)
 		elif event.is_action_released("click"):
 			mouse_pushed = false;
 	elif event is InputEventMouseMotion && mouse_pushed:
@@ -74,5 +74,5 @@ func _input(event):
 			$TileMap.set_cell(xy.x, xy.y, cell_val)
 			update_clues(xy.x, xy.y)
 			var img = 0 if cell_val == 1 else -1
-			#$ImageTileMap.set_cell(xy.x, xy.y, img)
+			$ImageTileMap.set_cell(xy.x, xy.y, img)
 	pass
