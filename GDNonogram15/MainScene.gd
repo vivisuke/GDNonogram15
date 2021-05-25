@@ -16,6 +16,8 @@ const CELL_WIDTH = BOARD_WIDTH / N_TOTAL_CELL_HORZ
 const CLUES_WIDTH = CELL_WIDTH * N_CLUES_CELL_HORZ
 const IMG_AREA_WIDTH = CELL_WIDTH * N_IMG_CELL_HORZ
 
+const BITS_MASK = (1<<N_IMG_CELL_HORZ) - 1
+
 const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
@@ -44,6 +46,14 @@ func _ready():
 	h_clues.resize(N_IMG_CELL_VERT)
 	v_clues.resize(N_IMG_CELL_HORZ)
 	pass # Replace with function body.
+func init_arrays():
+	h_candidates.resize(N_IMG_CELL_VERT)
+	v_candidates.resize(N_IMG_CELL_HORZ)
+	h_fixed_bits_1.resize(N_IMG_CELL_VERT)
+	h_fixed_bits_0.resize(N_IMG_CELL_VERT)
+	v_fixed_bits_1.resize(N_IMG_CELL_HORZ)
+	v_fixed_bits_0.resize(N_IMG_CELL_HORZ)
+	#print(h_candidates)
 # 101101110 → [3, 2, 1]	下位ビットの方が配列先頭とする
 func data_to_clues(data : int) -> Array:
 	var lst = []
@@ -67,6 +77,141 @@ func build_map():
 			g_map[key].push_back(data)
 		else:
 			g_map[key] = [data]
+func to_binText(d : int) -> String:
+	var txt = ""
+	var mask = 1 << (N_IMG_CELL_HORZ - 1)
+	while mask != 0:
+		txt += '1' if (d&mask) != 0 else '0'
+		mask >>= 1
+	return txt
+func to_hexText(lst : Array) -> String:
+	var txt = "["
+	for i in range(lst.size()):
+		txt += to_binText(lst[i])
+		txt += ", "
+	txt += "]"
+	return txt
+func init_candidates():
+	#print("\n*** init_candidates():")
+	#print("g_map[[4]] = ", g_map[[4]])
+	for y in range(N_IMG_CELL_VERT):
+		#print("h_clues[", y, "] = ", h_clues[y])
+		if h_clues[y] == null:
+			h_candidates[y] = [0]
+		else:
+			h_candidates[y] = g_map[h_clues[y]].duplicate()
+		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+	for x in range(N_IMG_CELL_HORZ):
+		#print("v_clues[", x, "] = ", v_clues[x])
+		if v_clues[x] == null:
+			v_candidates[x] = [0]
+		else:
+			v_candidates[x] = g_map[v_clues[x]].duplicate()
+		#print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+	#print("g_map[[4]] = ", g_map[[4]])
+func num_candidates():
+	var sum = 0
+	for y in range(N_IMG_CELL_VERT):
+		sum += h_candidates[y].size()
+	for x in range(N_IMG_CELL_HORZ):
+		sum += v_candidates[x].size()
+	return sum
+# h_candidates[] を元に h_fixed_bits_1, 0 を計算
+func update_h_fixedbits():
+	#print("\n*** update_h_fixedbits():")
+	for y in range(N_IMG_CELL_VERT):
+		var lst = h_candidates[y]
+		if lst.size() == 1:
+			h_fixed_bits_1[y] = lst[0]
+			h_fixed_bits_0[y] = ~lst[0] & BITS_MASK
+		else:
+			var bits1 = BITS_MASK
+			var bits0 = BITS_MASK
+			for i in range(lst.size()):
+				bits1 &= lst[i]
+				bits0 &= ~lst[i]
+			h_fixed_bits_1[y] = bits1
+			h_fixed_bits_0[y] = bits0
+		#print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+	#print("g_map[[4]] = ", g_map[[4]])
+	pass
+# v_candidates[] を元に v_fixed_bits_1, 0 を計算
+func update_v_fixedbits():
+	#print("\n*** update_v_fixedbits():")
+	for x in range(N_IMG_CELL_HORZ):
+		var lst = v_candidates[x]
+		if lst.size() == 1:
+			v_fixed_bits_1[x] = lst[0]
+			v_fixed_bits_0[x] = ~lst[0] & BITS_MASK
+		else:
+			var bits1 = BITS_MASK
+			var bits0 = BITS_MASK
+			for i in range(lst.size()):
+				bits1 &= lst[i]
+				bits0 &= ~lst[i]
+			v_fixed_bits_1[x] = bits1
+			v_fixed_bits_0[x] = bits0
+		#print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
+	#print("g_map[[4]] = ", g_map[[4]])
+	pass
+func hFixed_to_vFixed():
+	#print("\n*** hFixed_to_vFixed():")
+	for x in range(N_IMG_CELL_HORZ):
+		v_fixed_bits_1[x] = 0
+		v_fixed_bits_0[x] = 0
+	var hmask = 1 << N_IMG_CELL_HORZ;
+	for x in range(N_IMG_CELL_HORZ):
+		hmask >>= 1
+		var vmask = 1 << N_IMG_CELL_VERT;
+		for y in range(N_IMG_CELL_VERT):
+			vmask >>= 1
+			if( (h_fixed_bits_1[y] & hmask) != 0 ):
+				v_fixed_bits_1[x] |= vmask;
+			if( (h_fixed_bits_0[y] & hmask) != 0 ):
+				v_fixed_bits_0[x] |= vmask;
+		#print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
+	#print("g_map[[4]] = ", g_map[[4]])
+	pass
+func vFixed_to_hFixed():
+	#print("\n*** vFixed_to_hFixed():")
+	for y in range(N_IMG_CELL_VERT):
+		h_fixed_bits_1[y] = 0
+		h_fixed_bits_0[y] = 0
+	var vmask = 1 << N_IMG_CELL_VERT;
+	for y in range(N_IMG_CELL_VERT):
+		vmask >>= 1
+		var hmask = 1 << N_IMG_CELL_HORZ;
+		for x in range(N_IMG_CELL_HORZ):
+			hmask >>= 1
+			if( (v_fixed_bits_1[x] & vmask) != 0 ):
+				h_fixed_bits_1[y] |= hmask;
+			if( (v_fixed_bits_0[x] & vmask) != 0 ):
+				h_fixed_bits_0[y] |= hmask;
+		#print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+	#print("g_map[[4]] = ", g_map[[4]])
+	pass
+# v_fixed_bits_1, 0 を元に v_candidates[] から不可能なパターンを削除
+func update_v_candidates():
+	#print("\n*** update_v_candidates():")
+	for x in range(N_IMG_CELL_HORZ):
+		for i in range(v_candidates[x].size()-1, -1, -1):
+			if( (v_candidates[x][i] & v_fixed_bits_1[x]) != v_fixed_bits_1[x] ||
+					(~v_candidates[x][i] & v_fixed_bits_0[x]) != v_fixed_bits_0[x] ):
+				v_candidates[x].remove(i)
+		#print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+	#print("g_map[[4]] = ", g_map[[4]])
+	pass
+# h_fixed_bits_1, 0 を元に h_candidates[] から不可能なパターンを削除
+func update_h_candidates():
+	#print("\n*** update_h_candidates():")
+	for y in range(N_IMG_CELL_VERT):
+		for i in range(h_candidates[y].size()-1, -1, -1):
+			if( (h_candidates[y][i] & h_fixed_bits_1[y]) != h_fixed_bits_1[y] ||
+					(~h_candidates[y][i] & h_fixed_bits_0[y]) != h_fixed_bits_0[y] ):
+				h_candidates[y].remove(i)
+		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+	#print("g_map[[4]] = ", g_map[[4]])
+	pass
 func check_clues(x0, y0):
 	pass
 func update_h_clues(y0):
@@ -138,7 +283,7 @@ func _input(event):
 				elif mode == MODE_SOLVE:
 					check_clues(xy.x, xy.y)
 				var img = 0 if v == 1 else -1
-				$ImageTileMap.set_cell(xy.x, xy.y, img)
+				$MiniTileMap.set_cell(xy.x, xy.y, img)
 		elif event.is_action_released("click"):
 			mouse_pushed = false;
 	elif event is InputEventMouseMotion && mouse_pushed:
@@ -149,16 +294,15 @@ func _input(event):
 			$TileMap.set_cell(xy.x, xy.y, cell_val)
 			update_clues(xy.x, xy.y)
 			var img = 0 if cell_val == 1 else -1
-			$ImageTileMap.set_cell(xy.x, xy.y, img)
+			$MiniTileMap.set_cell(xy.x, xy.y, img)
 	pass
 
 
 func clear_all():
-	# undone: 候補数字クリア
 	for y in range(N_TOTAL_CELL_VERT):
 		for x in range(N_TOTAL_CELL_HORZ):
 			$TileMap.set_cell(x, y, -1)
-			$ImageTileMap.set_cell(x, y, -1)
+			$MiniTileMap.set_cell(x, y, -1)
 		for x in range(N_CLUES_CELL_HORZ):
 			$TileMap.set_cell(-x-1, y, -1)
 	for x in range(N_TOTAL_CELL_HORZ):
@@ -167,6 +311,11 @@ func clear_all():
 func _on_ClearButton_pressed():
 	clear_all()
 	pass # Replace with function body.
+func upate_imageTileMap():
+	for y in range(N_IMG_CELL_VERT):
+		for x in range(N_IMG_CELL_HORZ):
+			var img = 0 if $TileMap.get_cell(x, y) == 1 else -1
+			$MiniTileMap.set_cell(x, y, img)
 
 func rotate_left():
 	var ar = []
@@ -178,6 +327,7 @@ func rotate_left():
 	for y in range(N_IMG_CELL_VERT):
 		$TileMap.set_cell(N_IMG_CELL_HORZ-1, y, ar[y])
 	update_all_clues()
+	upate_imageTileMap()
 func _on_LeftButton_pressed():
 	rotate_left()
 	pass # Replace with function body.
@@ -191,6 +341,7 @@ func rotate_right():
 	for y in range(N_IMG_CELL_VERT):
 		$TileMap.set_cell(0, y, ar[y])
 	update_all_clues()
+	upate_imageTileMap()
 func _on_RightButton_pressed():
 	rotate_right()
 	pass # Replace with function body.
@@ -204,6 +355,7 @@ func rotate_down():
 	for x in range(N_IMG_CELL_HORZ):
 		$TileMap.set_cell(x, 0, ar[x])
 	update_all_clues()
+	upate_imageTileMap()
 func _on_DownButton_pressed():
 	rotate_down()
 	pass # Replace with function body.
@@ -217,6 +369,54 @@ func rotate_up():
 	for x in range(N_IMG_CELL_HORZ):
 		$TileMap.set_cell(x, N_IMG_CELL_VERT-1, ar[x])
 	update_all_clues()
+	upate_imageTileMap()
 func _on_UpButton_pressed():
 	rotate_up()
+	pass # Replace with function body.
+
+
+func _on_CheckButton_pressed():
+	init_arrays()
+	init_candidates()
+	var nc0 = 0
+	var solved = false
+	while true:
+		update_h_fixedbits()
+		#print("num candidates = ", num_candidates())
+		var nc = num_candidates()
+		if nc == N_IMG_CELL_HORZ + N_IMG_CELL_VERT:	# solved
+			solved = true
+			break
+		if nc == nc0:	# CAN't be solved
+			break;
+		nc0 = nc
+		hFixed_to_vFixed()
+		update_v_candidates()
+		update_v_fixedbits()
+		vFixed_to_hFixed()
+		update_h_candidates()
+	print(solved)
+	if solved:
+		$MessLabel.add_color_override("font_color", Color("black"))
+		$MessLabel.text = "Propper Quest"
+	else:
+		$MessLabel.add_color_override("font_color", Color("#ff0000"))
+		$MessLabel.text = "Impropper Quest"
+	var txt = ""
+	for y in range(N_IMG_CELL_VERT):
+		#print(to_binText(h_fixed_bits_1[y]), " ", to_binText(h_fixed_bits_0[y]))
+		var mask = 1<<(N_IMG_CELL_HORZ-1)
+		var x = -1
+		while mask != 0:
+			x += 1
+			if (h_fixed_bits_1[y] & mask) != 0:
+				txt += "#"
+			elif (h_fixed_bits_0[y] & mask) != 0:
+				txt += "."
+			else:
+				txt += "?"
+				$TileMapBG.set_cell(x, y, 0)	# yellow
+			mask >>= 1
+		txt += "\n"
+	print(txt)
 	pass # Replace with function body.
