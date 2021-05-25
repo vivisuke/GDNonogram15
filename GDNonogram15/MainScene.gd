@@ -231,7 +231,7 @@ func check_v_clues(x0):		# 垂直方向チェック
 	var d = get_v_data(x0)
 	var lst = g_map[v_clues[x0]]
 	var bg = 1 if lst.has(d) else -1
-	for y in range(N_CLUES_CELL_VERT):
+	for y in range(v_clues[x0].size()):
 		$TileMapBG.set_cell(x0, -y-1, bg)
 func check_clues(x0, y0):
 	check_h_clues(y0)
