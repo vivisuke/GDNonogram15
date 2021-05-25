@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -37,6 +37,7 @@
 [ext_resource path="res://images/yellow20x20.png" type="Texture" id=35]
 [ext_resource path="res://images/light_white.png" type="Texture" id=36]
 [ext_resource path="res://images/edit_white.png" type="Texture" id=37]
+[ext_resource path="res://images/lightgray20x20.png" type="Texture" id=38]
 
 [sub_resource type="TileSet" id=1]
 0/name = "yellow20x20.png 0"
@@ -53,6 +54,20 @@
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
+1/name = "lightgray20x20.png 1"
+1/texture = ExtResource( 38 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 0, 0, 20, 20 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
 
 [sub_resource type="TileSet" id=2]
 0/name = "cross20x20.png 0"

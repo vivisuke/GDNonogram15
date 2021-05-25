@@ -216,13 +216,13 @@ func update_h_candidates():
 func check_h_clues(y0):		# 水平方向チェック
 	var d = get_h_data(y0)
 	var lst = g_map[h_clues[y0]]
-	var bg = -1 if lst.has(d) else 0
+	var bg = 1 if lst.has(d) else -1
 	for x in range(N_CLUES_CELL_HORZ):
 		$TileMapBG.set_cell(-x-1, y0, bg)
 func check_v_clues(x0):		# 垂直方向チェック
 	var d = get_v_data(x0)
 	var lst = g_map[v_clues[x0]]
-	var bg = -1 if lst.has(d) else 0
+	var bg = 1 if lst.has(d) else -1
 	for y in range(N_CLUES_CELL_VERT):
 		$TileMapBG.set_cell(x0, -y-1, bg)
 func check_clues(x0, y0):
