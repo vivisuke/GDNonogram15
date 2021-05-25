@@ -345,8 +345,12 @@ func clear_all():
 			$TileMap.set_cell(x, -y-1, -1)
 	for y in range(N_IMG_CELL_VERT):
 		h_clues[y] = null
+		for x in range(N_CLUES_CELL_HORZ):
+			$TileMapBG.set_cell(-x-1, y, -1)
 	for x in range(N_IMG_CELL_HORZ):
 		v_clues[x] = null
+		for y in range(N_CLUES_CELL_VERT):
+			$TileMapBG.set_cell(x, -y-1, -1)
 func _on_ClearButton_pressed():
 	clear_all()
 	pass # Replace with function body.
