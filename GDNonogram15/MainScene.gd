@@ -305,7 +305,8 @@ func _input(event):
 			#print(xy)
 			last_xy = xy
 			$TileMap.set_cell(xy.x, xy.y, cell_val)
-			update_clues(xy.x, xy.y)
+			if( mode == MODE_EDIT_PICT):
+				update_clues(xy.x, xy.y)
 			var img = 0 if cell_val == 1 else -1
 			$MiniTileMap.set_cell(xy.x, xy.y, img)
 	pass
