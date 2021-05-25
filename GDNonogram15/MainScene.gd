@@ -45,7 +45,11 @@ func _ready():
 	build_map()
 	#print(g_map.size())
 	h_clues.resize(N_IMG_CELL_VERT)
+	for i in N_IMG_CELL_VERT:
+		h_clues[i] = [0]
 	v_clues.resize(N_IMG_CELL_HORZ)
+	for i in N_IMG_CELL_HORZ:
+		v_clues[i] = [0]
 	pass # Replace with function body.
 func init_arrays():
 	h_candidates.resize(N_IMG_CELL_VERT)
@@ -57,6 +61,8 @@ func init_arrays():
 	#print(h_candidates)
 # 101101110 → [3, 2, 1]	下位ビットの方が配列先頭とする
 func data_to_clues(data : int) -> Array:
+	if !data:
+		return [0]
 	var lst = []
 	while data != 0:
 		var b = data & -data
@@ -78,6 +84,8 @@ func build_map():
 			g_map[key].push_back(data)
 		else:
 			g_map[key] = [data]
+	#print(g_map([1]))
+	#print(g_map([0]))
 func to_binText(d : int) -> String:
 	var txt = ""
 	var mask = 1 << (N_IMG_CELL_HORZ - 1)
@@ -217,7 +225,7 @@ func check_h_clues(y0):		# 水平方向チェック
 	var d = get_h_data(y0)
 	var lst = g_map[h_clues[y0]]
 	var bg = 1 if lst.has(d) else -1
-	for x in range(N_CLUES_CELL_HORZ):
+	for x in range(h_clues[y0].size()):
 		$TileMapBG.set_cell(-x-1, y0, bg)
 func check_v_clues(x0):		# 垂直方向チェック
 	var d = get_v_data(x0)
