@@ -27,6 +27,6 @@ SPR# 状 P Open Close ver     Type  概要
 0025 ● C 05/25            │ToDo│紛らわしいので $ImageTileMap → $MiniTileMap にリネーム
 0026 ◎ C 05/25 05/25 0.001│ToDo│$TileMapBG 設置
 0027 ◎ C 05/25 05/25 0.001│ToDo│チェック処理実装
-0028 ● C 05/25            │ToDo│
+0028 ◎ C 05/25 05/25 0.001│問題│画像編集時に TileMapBG がクリアされない
 0029 ● C 05/25            │ToDo│
 0030 ● C 05/25            │ToDo│

@@ -251,6 +251,18 @@ func update_all_clues():
 		update_h_clues(y)
 	for x in range(N_IMG_CELL_HORZ):
 		update_v_clues(x)
+func clearMiniTileMap():
+	for y in range(N_IMG_CELL_VERT):
+		for x in range(N_IMG_CELL_HORZ):
+			$MiniTileMap.set_cell(x, y, -1)
+func clearTileMap():
+	for y in range(N_IMG_CELL_VERT):
+		for x in range(N_IMG_CELL_HORZ):
+			$TileMap.set_cell(x, y, -1)
+func clearTileMapBG():
+	for y in range(N_IMG_CELL_VERT):
+		for x in range(N_IMG_CELL_HORZ):
+			$TileMapBG.set_cell(x, y, -1)
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
 	var X0 = $TileMap.position.x
@@ -269,8 +281,8 @@ func _input(event):
 			#print(event.position)
 			var xy = posToXY(event.position)
 			#print(xy)
-			#$MessLabel.text = ""
-			#clearTileMapBG()
+			$MessLabel.text = ""
+			clearTileMapBG()
 			if xy.x >= 0:
 				mouse_pushed = true;
 				last_xy = xy
