@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -35,6 +35,8 @@
 [ext_resource path="res://images/check_black.png" type="Texture" id=33]
 [ext_resource path="res://images/check_white.png" type="Texture" id=34]
 [ext_resource path="res://images/yellow20x20.png" type="Texture" id=35]
+[ext_resource path="res://images/light_white.png" type="Texture" id=36]
+[ext_resource path="res://images/edit_white.png" type="Texture" id=37]
 
 [sub_resource type="TileSet" id=4]
 0/name = "yellow20x20.png 0"
@@ -313,6 +315,9 @@ size = 32
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 19 )
 
+[sub_resource type="DynamicFont" id=5]
+font_data = ExtResource( 19 )
+
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -522,9 +527,35 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="SolveButton" type="Button" parent="."]
+margin_left = 10.0
+margin_top = 20.0
+margin_right = 157.0
+margin_bottom = 74.0
+custom_fonts/font = SubResource( 5 )
+text = "Solve Mode"
+icon = ExtResource( 36 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EditButton" type="Button" parent="."]
+margin_left = 180.0
+margin_top = 20.0
+margin_right = 314.0
+margin_bottom = 74.0
+custom_fonts/font = SubResource( 5 )
+text = "Edit Mode"
+icon = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="LeftButton" to="." method="_on_LeftButton_pressed"]
 [connection signal="pressed" from="DownButton" to="." method="_on_DownButton_pressed"]
 [connection signal="pressed" from="UpButton" to="." method="_on_UpButton_pressed"]
 [connection signal="pressed" from="RightButton" to="." method="_on_RightButton_pressed"]
 [connection signal="pressed" from="CheckButton" to="." method="_on_CheckButton_pressed"]
+[connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
+[connection signal="pressed" from="EditButton" to="." method="_on_EditPictButton_pressed"]

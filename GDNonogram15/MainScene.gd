@@ -40,6 +40,7 @@ var v_fixed_bits_0 = []
 
 func _ready():
 	mode = MODE_EDIT_PICT
+	update_modeButtons()
 	#$TileMap.set_cell(0, 0, 0)
 	build_map()
 	#print(g_map.size())
@@ -320,6 +321,10 @@ func clear_all():
 	for x in range(N_TOTAL_CELL_HORZ):
 		for y in range(N_CLUES_CELL_VERT):
 			$TileMap.set_cell(x, -y-1, -1)
+	for y in range(N_IMG_CELL_VERT):
+		h_clues[y] = null
+	for x in range(N_IMG_CELL_HORZ):
+		v_clues[x] = null
 func _on_ClearButton_pressed():
 	clear_all()
 	pass # Replace with function body.
@@ -431,4 +436,27 @@ func _on_CheckButton_pressed():
 			mask >>= 1
 		txt += "\n"
 	print(txt)
+	pass # Replace with function body.
+func update_modeButtons():
+	if mode == MODE_SOLVE:
+		$SolveButton.add_color_override("font_color", Color.white)
+		$SolveButton.icon = load("res://images/light_white.png")
+		$EditButton.add_color_override("font_color", Color.darkgray)
+		$EditButton.icon = load("res://images/edit_gray.png")
+	elif mode == MODE_EDIT_PICT:
+		$SolveButton.add_color_override("font_color", Color.darkgray)
+		$SolveButton.icon = load("res://images/light_gray.png")
+		$EditButton.add_color_override("font_color", Color.white)
+		$EditButton.icon = load("res://images/edit_white.png")
+	pass
+func _on_SolveButton_pressed():
+	mode = MODE_SOLVE
+	update_modeButtons()
+	clearMiniTileMap()
+	#clearTileMapBG()
+	clearTileMap()
+	pass # Replace with function body.
+func _on_EditPictButton_pressed():
+	mode = MODE_EDIT_PICT
+	update_modeButtons()
 	pass # Replace with function body.
