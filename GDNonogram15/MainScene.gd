@@ -213,13 +213,34 @@ func update_h_candidates():
 		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
 	#print("g_map[[4]] = ", g_map[[4]])
 	pass
+func check_h_clues(y0):		# 水平方向チェック
+	var d = get_h_data(y0)
+	var lst = g_map[h_clues[y0]]
+	var bg = -1 if lst.has(d) else 0
+	for x in range(N_CLUES_CELL_HORZ):
+		$TileMapBG.set_cell(-x-1, y0, bg)
+func check_v_clues(x0):		# 垂直方向チェック
+	var d = get_v_data(x0)
+	var lst = g_map[v_clues[x0]]
+	var bg = -1 if lst.has(d) else 0
+	for y in range(N_CLUES_CELL_VERT):
+		$TileMapBG.set_cell(x0, -y-1, bg)
 func check_clues(x0, y0):
-	pass
-func update_h_clues(y0):
-	# 水平方向手がかり数字更新
+	check_h_clues(y0)
+	check_v_clues(x0)
+func get_h_data(y0):
 	var data = 0
 	for x in range(N_IMG_CELL_HORZ):
 		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == 1 else 0)
+	return data
+func get_v_data(x0):
+	var data = 0
+	for y in range(N_IMG_CELL_VERT):
+		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == 1 else 0)
+	return data
+func update_h_clues(y0):
+	# 水平方向手がかり数字更新
+	var data = get_h_data(y0)
 	var lst = data_to_clues(data)
 	h_clues[y0] = lst;
 	var x = -1
@@ -231,9 +252,7 @@ func update_h_clues(y0):
 		x -= 1
 func update_v_clues(x0):
 	# 垂直方向手がかり数字更新
-	var data = 0
-	for y in range(N_IMG_CELL_VERT):
-		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == 1 else 0)
+	var data = get_v_data(x0)
 	var lst = data_to_clues(data)
 	v_clues[x0] = lst;
 	var y = -1
@@ -307,6 +326,8 @@ func _input(event):
 			$TileMap.set_cell(xy.x, xy.y, cell_val)
 			if( mode == MODE_EDIT_PICT):
 				update_clues(xy.x, xy.y)
+			elif mode == MODE_SOLVE:
+				check_clues(xy.x, xy.y)
 			var img = 0 if cell_val == 1 else -1
 			$MiniTileMap.set_cell(xy.x, xy.y, img)
 	pass
