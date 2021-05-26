@@ -241,12 +241,12 @@ func check_clues(x0, y0):
 func get_h_data(y0):
 	var data = 0
 	for x in range(N_IMG_CELL_HORZ):
-		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == 1 else 0)
+		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == TILE_BLACK else 0)
 	return data
 func get_v_data(x0):
 	var data = 0
 	for y in range(N_IMG_CELL_VERT):
-		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == 1 else 0)
+		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == TILE_BLACK else 0)
 	return data
 func update_h_clues(y0):
 	# 水平方向手がかり数字更新
@@ -255,7 +255,8 @@ func update_h_clues(y0):
 	h_clues[y0] = lst;
 	var x = -1
 	for i in range(lst.size()):
-		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0)
+		if lst[i] != 0:
+			$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0)
 		x -= 1
 	while x >= -N_CLUES_CELL_HORZ:
 		$TileMap.set_cell(x, y0, -1)
@@ -267,7 +268,8 @@ func update_v_clues(x0):
 	v_clues[x0] = lst;
 	var y = -1
 	for i in range(lst.size()):
-		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0)
+		if lst[i] != 0:
+			$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0)
 		y -= 1
 	while y >= -N_CLUES_CELL_VERT:
 		$TileMap.set_cell(x0, y, -1)
