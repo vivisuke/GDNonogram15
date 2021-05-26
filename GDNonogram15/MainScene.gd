@@ -42,7 +42,7 @@ var v_fixed_bits_1 = []
 var v_fixed_bits_0 = []
 
 func _ready():
-	mode = MODE_EDIT_PICT
+	mode = MODE_SOLVE
 	update_modeButtons()
 	#$TileMap.set_cell(0, 0, 0)
 	build_map()
@@ -53,7 +53,40 @@ func _ready():
 	v_clues.resize(N_IMG_CELL_HORZ)
 	for i in N_IMG_CELL_HORZ:
 		v_clues[i] = [0]
+	#
+	#var vq = ["3", "1 1", "3"]
+	#var hq = ["3", "1 1", "3"]
+	var vq = ["1", "2", "2", "5 2", "4 3 3", "5 1 2 3", "5 6", "4 7", "4 2 2 3", "4 2 2 3", "3 3 3", "4 2", "2", "2", "1"]
+	var hq = ["5", "7", "7", "8", "4 1", "1 2 1", "1 1 2 1", "1 1", "1 1 1", "7", "7", "2", "7", "13", "15"]
+	set_quest(vq, hq)
 	pass # Replace with function body.
+func set_quest(vq, hq):
+	for x in range(N_IMG_CELL_HORZ):
+		var lst = []
+		if x < vq.size():
+			var txt : String = vq[x]
+			if (txt.length() % 2) == 1:
+				txt = " " + txt
+			while !txt.empty():
+				lst.push_front(int(txt.left(2)))
+				txt = txt.substr(2)
+		else:
+			lst = [0]
+		v_clues[x] = lst
+		update_v_cluesText(x, lst)
+	for y in range(N_IMG_CELL_VERT):
+		var lst = []
+		if y < hq.size():
+			var txt : String = hq[y]
+			if (txt.length() % 2) == 1:
+				txt = " " + txt
+			while !txt.empty():
+				lst.push_front(int(txt.left(2)))
+				txt = txt.substr(2)
+		else:
+			lst = [0]
+		h_clues[y] = lst
+		update_h_cluesText(y, lst)
 func init_arrays():
 	h_candidates.resize(N_IMG_CELL_VERT)
 	v_candidates.resize(N_IMG_CELL_HORZ)
@@ -249,11 +282,7 @@ func get_v_data(x0):
 	for y in range(N_IMG_CELL_VERT):
 		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == TILE_BLACK else 0)
 	return data
-func update_h_clues(y0):
-	# 水平方向手がかり数字更新
-	var data = get_h_data(y0)
-	var lst = data_to_clues(data)
-	h_clues[y0] = lst;
+func update_h_cluesText(y0, lst):
 	var x = -1
 	for i in range(lst.size()):
 		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0 if lst[i] != 0 else TIlE_NONE)
@@ -261,11 +290,13 @@ func update_h_clues(y0):
 	while x >= -N_CLUES_CELL_HORZ:
 		$TileMap.set_cell(x, y0, TIlE_NONE)
 		x -= 1
-func update_v_clues(x0):
-	# 垂直方向手がかり数字更新
-	var data = get_v_data(x0)
+func update_h_clues(y0):
+	# 水平方向手がかり数字更新
+	var data = get_h_data(y0)
 	var lst = data_to_clues(data)
-	v_clues[x0] = lst;
+	h_clues[y0] = lst;
+	update_h_cluesText(y0, lst)
+func update_v_cluesText(x0, lst):
 	var y = -1
 	for i in range(lst.size()):
 		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0 if lst[i] != 0 else TIlE_NONE)
@@ -273,6 +304,12 @@ func update_v_clues(x0):
 	while y >= -N_CLUES_CELL_VERT:
 		$TileMap.set_cell(x0, y, TIlE_NONE)
 		y -= 1
+func update_v_clues(x0):
+	# 垂直方向手がかり数字更新
+	var data = get_v_data(x0)
+	var lst = data_to_clues(data)
+	v_clues[x0] = lst;
+	update_v_cluesText(x0, lst)
 func update_clues(x0, y0):
 	update_h_clues(y0)
 	update_v_clues(x0)
