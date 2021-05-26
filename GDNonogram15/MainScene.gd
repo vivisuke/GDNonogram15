@@ -393,19 +393,28 @@ func clear_all():
 		for x in range(N_TOTAL_CELL_HORZ):
 			$TileMap.set_cell(x, y, TIlE_NONE)
 			$MiniTileMap.set_cell(x, y, TIlE_NONE)
-		for x in range(N_CLUES_CELL_HORZ):
-			$TileMap.set_cell(-x-1, y, TIlE_NONE)
-	for x in range(N_TOTAL_CELL_HORZ):
-		for y in range(N_CLUES_CELL_VERT):
-			$TileMap.set_cell(x, -y-1, TIlE_NONE)
-	for y in range(N_IMG_CELL_VERT):
-		h_clues[y] = null
-		for x in range(N_CLUES_CELL_HORZ):
-			$TileMapBG.set_cell(-x-1, y, TIlE_NONE)
-	for x in range(N_IMG_CELL_HORZ):
-		v_clues[x] = null
-		for y in range(N_CLUES_CELL_VERT):
-			$TileMapBG.set_cell(x, -y-1, TIlE_NONE)
+	if mode == MODE_EDIT_PICT:
+		for y in range(N_TOTAL_CELL_VERT):
+			for x in range(N_CLUES_CELL_HORZ):
+				$TileMap.set_cell(-x-1, y, TIlE_NONE)
+		for x in range(N_TOTAL_CELL_HORZ):
+			for y in range(N_CLUES_CELL_VERT):
+				$TileMap.set_cell(x, -y-1, TIlE_NONE)
+		for y in range(N_IMG_CELL_VERT):
+			h_clues[y] = [0]
+			for x in range(N_CLUES_CELL_HORZ):
+				$TileMapBG.set_cell(-x-1, y, TIlE_NONE)
+		for x in range(N_IMG_CELL_HORZ):
+			v_clues[x] = [0]
+			for y in range(N_CLUES_CELL_VERT):
+				$TileMapBG.set_cell(x, -y-1, TIlE_NONE)
+	else:
+		for y in range(N_IMG_CELL_VERT):
+			for x in range(N_CLUES_CELL_HORZ):
+				$TileMapBG.set_cell(-x-1, y, TIlE_NONE)
+		for x in range(N_IMG_CELL_HORZ):
+			for y in range(N_CLUES_CELL_VERT):
+				$TileMapBG.set_cell(x, -y-1, TIlE_NONE)
 func _on_ClearButton_pressed():
 	clear_all()
 	pass # Replace with function body.
@@ -542,8 +551,16 @@ func change_cross_to_none():
 		for x in range(N_IMG_CELL_HORZ):
 			if $TileMap.get_cell(x, y) == TILE_CROSS:
 				$TileMap.set_cell(x, y, TIlE_NONE)
+func clear_clues_BG():
+	for y in range(N_IMG_CELL_VERT):
+		for x in range(N_CLUES_CELL_HORZ):
+			$TileMapBG.set_cell(-x-1, y, TIlE_NONE)
+	for x in range(N_IMG_CELL_HORZ):
+		for y in range(N_CLUES_CELL_VERT):
+			$TileMapBG.set_cell(x, -y-1, TIlE_NONE)
 func _on_EditPictButton_pressed():
 	mode = MODE_EDIT_PICT
 	update_modeButtons()
-	change_cross_to_none()
+	change_cross_to_none()		#
+	clear_clues_BG()			# 手がかり数字強調クリア
 	pass # Replace with function body.
