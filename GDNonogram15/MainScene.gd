@@ -18,7 +18,7 @@ const IMG_AREA_WIDTH = CELL_WIDTH * N_IMG_CELL_HORZ
 const BITS_MASK = (1<<N_IMG_CELL_HORZ) - 1
 
 const TIlE_NONE = -1
-const TILE_EMPTY = 0
+const TILE_CROSS = 0		# ☓
 const TILE_BLACK = 1
 
 const TILE_NUM_0 = 1
@@ -357,9 +357,9 @@ func _input(event):
 				last_xy = xy
 				var v = $TileMap.get_cell(xy.x, xy.y)
 				if event.is_action_pressed("click"):		# left mouse button
-					v = TILE_BLACK if v == TILE_EMPTY else -v;
+					v = TILE_BLACK if v == TILE_CROSS else -v;
 				else:
-					#v = TILE_EMPTY if v != TILE_EMPTY else TILE_BLACK
+					#v = TILE_CROSS if v != TILE_CROSS else TILE_BLACK
 					v += 1
 					if v > TILE_BLACK:
 						v = TIlE_NONE
@@ -537,7 +537,13 @@ func _on_SolveButton_pressed():
 	#clearTileMapBG()
 	clearTileMap()
 	pass # Replace with function body.
+func change_cross_to_none():
+	for y in range(N_IMG_CELL_VERT):
+		for x in range(N_IMG_CELL_HORZ):
+			if $TileMap.get_cell(x, y) == TILE_CROSS:
+				$TileMap.set_cell(x, y, TIlE_NONE)
 func _on_EditPictButton_pressed():
 	mode = MODE_EDIT_PICT
 	update_modeButtons()
+	change_cross_to_none()
 	pass # Replace with function body.
