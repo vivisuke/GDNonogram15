@@ -20,6 +20,8 @@ const BITS_MASK = (1<<N_IMG_CELL_HORZ) - 1
 const TIlE_NONE = -1
 const TILE_CROSS = 0		# ☓
 const TILE_BLACK = 1
+const TILE_BG_YELLOW = 0
+const TILE_BG_GRAY = 1
 
 const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
@@ -260,13 +262,25 @@ func update_h_candidates():
 func check_h_clues(y0):		# 水平方向チェック
 	var d = get_h_data(y0)
 	var lst = g_map[h_clues[y0]]
-	var bg = 1 if lst.has(d) else TIlE_NONE
+	#var bg = 1 if lst.has(d) else TIlE_NONE
+	var bg = TIlE_NONE
+	if lst.has(d):		# d が正解に含まれる場合
+		bg = TILE_BG_GRAY			# グレイ
+		for x in range(N_IMG_CELL_HORZ):
+			if $TileMap.get_cell(x, y0) == TIlE_NONE:
+				$TileMap.set_cell(x, y0, TILE_CROSS)
 	for x in range(h_clues[y0].size()):
 		$TileMapBG.set_cell(-x-1, y0, bg)
 func check_v_clues(x0):		# 垂直方向チェック
 	var d = get_v_data(x0)
 	var lst = g_map[v_clues[x0]]
-	var bg = 1 if lst.has(d) else TIlE_NONE
+	#var bg = 1 if lst.has(d) else TIlE_NONE
+	var bg = TIlE_NONE
+	if lst.has(d):		# d が正解に含まれる場合
+		bg = TILE_BG_GRAY			# グレイ
+		for y in range(N_IMG_CELL_VERT):
+			if $TileMap.get_cell(x0, y) == TIlE_NONE:
+				$TileMap.set_cell(x0, y, TILE_CROSS)
 	for y in range(v_clues[x0].size()):
 		$TileMapBG.set_cell(x0, -y-1, bg)
 func check_clues(x0, y0):
@@ -386,8 +400,6 @@ func _input(event):
 			var img = 0 if cell_val == 1 else TIlE_NONE
 			$MiniTileMap.set_cell(xy.x, xy.y, img)
 	pass
-
-
 func clear_all():
 	for y in range(N_TOTAL_CELL_VERT):
 		for x in range(N_TOTAL_CELL_HORZ):
