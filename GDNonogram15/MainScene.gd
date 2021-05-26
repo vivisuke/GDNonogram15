@@ -17,7 +17,7 @@ const CLUES_WIDTH = CELL_WIDTH * N_CLUES_CELL_HORZ
 const IMG_AREA_WIDTH = CELL_WIDTH * N_IMG_CELL_HORZ
 const BITS_MASK = (1<<N_IMG_CELL_HORZ) - 1
 
-const TIlE_NONE = -1
+const TILE_NONE = -1
 const TILE_CROSS = 0		# ☓
 const TILE_BLACK = 1
 const TILE_BG_YELLOW = 0
@@ -42,6 +42,7 @@ var h_fixed_bits_1 = []
 var h_fixed_bits_0 = []
 var v_fixed_bits_1 = []
 var v_fixed_bits_0 = []
+var h_autoFilledCross = []		# 自動計算で☓を入れたセル（ビットボード）
 
 func _ready():
 	mode = MODE_SOLVE
@@ -50,8 +51,10 @@ func _ready():
 	build_map()
 	#print(g_map.size())
 	h_clues.resize(N_IMG_CELL_VERT)
+	h_autoFilledCross.resize(N_IMG_CELL_VERT)
 	for i in N_IMG_CELL_VERT:
 		h_clues[i] = [0]
+		h_autoFilledCross[i] = 0
 	v_clues.resize(N_IMG_CELL_HORZ)
 	for i in N_IMG_CELL_HORZ:
 		v_clues[i] = [0]
@@ -260,27 +263,44 @@ func update_h_candidates():
 	#print("g_map[[4]] = ", g_map[[4]])
 	pass
 func check_h_clues(y0):		# 水平方向チェック
+	if h_autoFilledCross[y0] != 0:
+		var mask = 1 << N_IMG_CELL_HORZ
+		for x in range(N_IMG_CELL_HORZ):
+			mask >>= 1
+			if (h_autoFilledCross[y0] & mask) != 0:
+				$TileMap.set_cell(x, y0, TILE_NONE)
+		h_autoFilledCross[y0] = 0
 	var d = get_h_data(y0)
 	var lst = g_map[h_clues[y0]]
-	#var bg = 1 if lst.has(d) else TIlE_NONE
-	var bg = TIlE_NONE
+	#var bg = 1 if lst.has(d) else TILE_NONE
+	var bg = TILE_NONE
 	if lst.has(d):		# d が正解に含まれる場合
 		bg = TILE_BG_GRAY			# グレイ
+		var mask = 1 << N_IMG_CELL_HORZ
 		for x in range(N_IMG_CELL_HORZ):
-			if $TileMap.get_cell(x, y0) == TIlE_NONE:
+			mask >>= 1
+			if $TileMap.get_cell(x, y0) == TILE_NONE:
 				$TileMap.set_cell(x, y0, TILE_CROSS)
+				h_autoFilledCross[y0] |= mask
 	for x in range(h_clues[y0].size()):
 		$TileMapBG.set_cell(-x-1, y0, bg)
-func check_v_clues(x0):		# 垂直方向チェック
+func check_v_clues(x0 : int):		# 垂直方向チェック
+	var mask = 1 << (x0 - 1)
+	for y in range(N_IMG_CELL_VERT):
+		if (h_autoFilledCross[y] & mask) != 0:
+			$TileMap.set_cell(x0, y, TILE_NONE)
+			h_autoFilledCross[y] ^= mask
+	#
 	var d = get_v_data(x0)
 	var lst = g_map[v_clues[x0]]
-	#var bg = 1 if lst.has(d) else TIlE_NONE
-	var bg = TIlE_NONE
+	#var bg = 1 if lst.has(d) else TILE_NONE
+	var bg = TILE_NONE
 	if lst.has(d):		# d が正解に含まれる場合
 		bg = TILE_BG_GRAY			# グレイ
 		for y in range(N_IMG_CELL_VERT):
-			if $TileMap.get_cell(x0, y) == TIlE_NONE:
+			if $TileMap.get_cell(x0, y) == TILE_NONE:
 				$TileMap.set_cell(x0, y, TILE_CROSS)
+				h_autoFilledCross[y] |= mask
 	for y in range(v_clues[x0].size()):
 		$TileMapBG.set_cell(x0, -y-1, bg)
 func check_clues(x0, y0):
@@ -299,10 +319,10 @@ func get_v_data(x0):
 func update_h_cluesText(y0, lst):
 	var x = -1
 	for i in range(lst.size()):
-		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0 if lst[i] != 0 else TIlE_NONE)
+		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0 if lst[i] != 0 else TILE_NONE)
 		x -= 1
 	while x >= -N_CLUES_CELL_HORZ:
-		$TileMap.set_cell(x, y0, TIlE_NONE)
+		$TileMap.set_cell(x, y0, TILE_NONE)
 		x -= 1
 func update_h_clues(y0):
 	# 水平方向手がかり数字更新
@@ -313,10 +333,10 @@ func update_h_clues(y0):
 func update_v_cluesText(x0, lst):
 	var y = -1
 	for i in range(lst.size()):
-		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0 if lst[i] != 0 else TIlE_NONE)
+		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0 if lst[i] != 0 else TILE_NONE)
 		y -= 1
 	while y >= -N_CLUES_CELL_VERT:
-		$TileMap.set_cell(x0, y, TIlE_NONE)
+		$TileMap.set_cell(x0, y, TILE_NONE)
 		y -= 1
 func update_v_clues(x0):
 	# 垂直方向手がかり数字更新
@@ -336,15 +356,15 @@ func update_all_clues():
 func clearMiniTileMap():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			$MiniTileMap.set_cell(x, y, TIlE_NONE)
+			$MiniTileMap.set_cell(x, y, TILE_NONE)
 func clearTileMap():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			$TileMap.set_cell(x, y, TIlE_NONE)
+			$TileMap.set_cell(x, y, TILE_NONE)
 func clearTileMapBG():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			$TileMapBG.set_cell(x, y, TIlE_NONE)
+			$TileMapBG.set_cell(x, y, TILE_NONE)
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
 	var X0 = $TileMap.position.x
@@ -376,14 +396,14 @@ func _input(event):
 					#v = TILE_CROSS if v != TILE_CROSS else TILE_BLACK
 					v += 1
 					if v > TILE_BLACK:
-						v = TIlE_NONE
+						v = TILE_NONE
 				cell_val = v
 				$TileMap.set_cell(xy.x, xy.y, v)
 				if mode == MODE_EDIT_PICT:
 					update_clues(xy.x, xy.y)
 				elif mode == MODE_SOLVE:
 					check_clues(xy.x, xy.y)
-				var img = 0 if v == TILE_BLACK else TIlE_NONE
+				var img = 0 if v == TILE_BLACK else TILE_NONE
 				$MiniTileMap.set_cell(xy.x, xy.y, img)
 		elif event.is_action_released("click") || event.is_action_released("rt_click"):
 			mouse_pushed = false;
@@ -397,43 +417,43 @@ func _input(event):
 				update_clues(xy.x, xy.y)
 			elif mode == MODE_SOLVE:
 				check_clues(xy.x, xy.y)
-			var img = 0 if cell_val == 1 else TIlE_NONE
+			var img = 0 if cell_val == 1 else TILE_NONE
 			$MiniTileMap.set_cell(xy.x, xy.y, img)
 	pass
 func clear_all():
 	for y in range(N_TOTAL_CELL_VERT):
 		for x in range(N_TOTAL_CELL_HORZ):
-			$TileMap.set_cell(x, y, TIlE_NONE)
-			$MiniTileMap.set_cell(x, y, TIlE_NONE)
+			$TileMap.set_cell(x, y, TILE_NONE)
+			$MiniTileMap.set_cell(x, y, TILE_NONE)
 	if mode == MODE_EDIT_PICT:
 		for y in range(N_TOTAL_CELL_VERT):
 			for x in range(N_CLUES_CELL_HORZ):
-				$TileMap.set_cell(-x-1, y, TIlE_NONE)
+				$TileMap.set_cell(-x-1, y, TILE_NONE)
 		for x in range(N_TOTAL_CELL_HORZ):
 			for y in range(N_CLUES_CELL_VERT):
-				$TileMap.set_cell(x, -y-1, TIlE_NONE)
+				$TileMap.set_cell(x, -y-1, TILE_NONE)
 		for y in range(N_IMG_CELL_VERT):
 			h_clues[y] = [0]
 			for x in range(N_CLUES_CELL_HORZ):
-				$TileMapBG.set_cell(-x-1, y, TIlE_NONE)
+				$TileMapBG.set_cell(-x-1, y, TILE_NONE)
 		for x in range(N_IMG_CELL_HORZ):
 			v_clues[x] = [0]
 			for y in range(N_CLUES_CELL_VERT):
-				$TileMapBG.set_cell(x, -y-1, TIlE_NONE)
+				$TileMapBG.set_cell(x, -y-1, TILE_NONE)
 	else:
 		for y in range(N_IMG_CELL_VERT):
 			for x in range(N_CLUES_CELL_HORZ):
-				$TileMapBG.set_cell(-x-1, y, TIlE_NONE)
+				$TileMapBG.set_cell(-x-1, y, TILE_NONE)
 		for x in range(N_IMG_CELL_HORZ):
 			for y in range(N_CLUES_CELL_VERT):
-				$TileMapBG.set_cell(x, -y-1, TIlE_NONE)
+				$TileMapBG.set_cell(x, -y-1, TILE_NONE)
 func _on_ClearButton_pressed():
 	clear_all()
 	pass # Replace with function body.
 func upate_imageTileMap():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			var img = 0 if $TileMap.get_cell(x, y) == 1 else TIlE_NONE
+			var img = 0 if $TileMap.get_cell(x, y) == 1 else TILE_NONE
 			$MiniTileMap.set_cell(x, y, img)
 
 func rotate_left():
@@ -454,7 +474,7 @@ func rotate_right():
 	var ar = []
 	for y in range(N_IMG_CELL_VERT):
 		ar.push_back($TileMap.get_cell(N_IMG_CELL_HORZ-1, y))	# may be -1 or +1
-	for x in range(N_IMG_CELL_HORZ-1, 0, TIlE_NONE):
+	for x in range(N_IMG_CELL_HORZ-1, 0, TILE_NONE):
 		for y in range(N_IMG_CELL_VERT):
 			$TileMap.set_cell(x, y, $TileMap.get_cell(x-1, y))
 	for y in range(N_IMG_CELL_VERT):
@@ -468,7 +488,7 @@ func rotate_down():
 	var ar = []
 	for x in range(N_IMG_CELL_HORZ):
 		ar.push_back($TileMap.get_cell(x, N_IMG_CELL_VERT-1))	# may be -1 or +1
-	for y in range(N_IMG_CELL_VERT-1, 0, TIlE_NONE):
+	for y in range(N_IMG_CELL_VERT-1, 0, TILE_NONE):
 		for x in range(N_IMG_CELL_HORZ):
 			$TileMap.set_cell(x, y, $TileMap.get_cell(x, y-1))
 	for x in range(N_IMG_CELL_HORZ):
@@ -562,14 +582,14 @@ func change_cross_to_none():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
 			if $TileMap.get_cell(x, y) == TILE_CROSS:
-				$TileMap.set_cell(x, y, TIlE_NONE)
+				$TileMap.set_cell(x, y, TILE_NONE)
 func clear_clues_BG():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_CLUES_CELL_HORZ):
-			$TileMapBG.set_cell(-x-1, y, TIlE_NONE)
+			$TileMapBG.set_cell(-x-1, y, TILE_NONE)
 	for x in range(N_IMG_CELL_HORZ):
 		for y in range(N_CLUES_CELL_VERT):
-			$TileMapBG.set_cell(x, -y-1, TIlE_NONE)
+			$TileMapBG.set_cell(x, -y-1, TILE_NONE)
 func _on_EditPictButton_pressed():
 	mode = MODE_EDIT_PICT
 	update_modeButtons()
