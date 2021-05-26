@@ -42,7 +42,8 @@ var h_fixed_bits_1 = []
 var h_fixed_bits_0 = []
 var v_fixed_bits_1 = []
 var v_fixed_bits_0 = []
-var h_autoFilledCross = []		# 自動計算で☓を入れたセル（ビットボード）
+var h_autoFilledCross = []		# 自動計算で☓を入れたセル（ビットボード, x == 0 が最下位ビット）
+var v_autoFilledCross = []		# 自動計算で☓を入れたセル（ビットボード, x == 0 が最下位ビット）
 
 func _ready():
 	mode = MODE_SOLVE
@@ -52,12 +53,14 @@ func _ready():
 	#print(g_map.size())
 	h_clues.resize(N_IMG_CELL_VERT)
 	h_autoFilledCross.resize(N_IMG_CELL_VERT)
+	v_autoFilledCross.resize(N_IMG_CELL_HORZ)
 	for i in N_IMG_CELL_VERT:
 		h_clues[i] = [0]
 		h_autoFilledCross[i] = 0
 	v_clues.resize(N_IMG_CELL_HORZ)
 	for i in N_IMG_CELL_HORZ:
 		v_clues[i] = [0]
+		v_autoFilledCross[i] = 0
 	#
 	#var vq = ["3", "1 1", "3"]
 	#var hq = ["3", "1 1", "3"]
@@ -264,32 +267,42 @@ func update_h_candidates():
 	pass
 func check_h_clues(y0):		# 水平方向チェック
 	if h_autoFilledCross[y0] != 0:
-		var mask = 1 << N_IMG_CELL_HORZ
+		var vmask = 1 << y0
+		var mask = 1
 		for x in range(N_IMG_CELL_HORZ):
-			mask >>= 1
-			if (h_autoFilledCross[y0] & mask) != 0:
+			if (h_autoFilledCross[y0] & mask) != 0 && (v_autoFilledCross[x] & vmask) == 0:
 				$TileMap.set_cell(x, y0, TILE_NONE)
+			mask <<= 1
 		h_autoFilledCross[y0] = 0
+	#
 	var d = get_h_data(y0)
 	var lst = g_map[h_clues[y0]]
 	#var bg = 1 if lst.has(d) else TILE_NONE
 	var bg = TILE_NONE
 	if lst.has(d):		# d が正解に含まれる場合
 		bg = TILE_BG_GRAY			# グレイ
-		var mask = 1 << N_IMG_CELL_HORZ
+		var mask = 1
 		for x in range(N_IMG_CELL_HORZ):
-			mask >>= 1
 			if $TileMap.get_cell(x, y0) == TILE_NONE:
 				$TileMap.set_cell(x, y0, TILE_CROSS)
 				h_autoFilledCross[y0] |= mask
+			mask <<= 1
 	for x in range(h_clues[y0].size()):
 		$TileMapBG.set_cell(-x-1, y0, bg)
 func check_v_clues(x0 : int):		# 垂直方向チェック
-	var mask = 1 << (x0 - 1)
-	for y in range(N_IMG_CELL_VERT):
-		if (h_autoFilledCross[y] & mask) != 0:
-			$TileMap.set_cell(x0, y, TILE_NONE)
-			h_autoFilledCross[y] ^= mask
+	if v_autoFilledCross[x0] != 0:
+		var hmask = 1 << x0
+		var mask = 1
+		for y in range(N_IMG_CELL_VERT):
+			if (v_autoFilledCross[x0] & mask) != 0 && (h_autoFilledCross[y] & hmask) == 0:
+				$TileMap.set_cell(x0, y, TILE_NONE)
+			mask <<= 1
+		v_autoFilledCross[x0] = 0
+	#var mask = 1 << x0
+	#for y in range(N_IMG_CELL_VERT):
+	#	if (h_autoFilledCross[y] & mask) != 0:
+	#		$TileMap.set_cell(x0, y, TILE_NONE)
+	#		h_autoFilledCross[y] ^= mask
 	#
 	var d = get_v_data(x0)
 	var lst = g_map[v_clues[x0]]
@@ -297,10 +310,12 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 	var bg = TILE_NONE
 	if lst.has(d):		# d が正解に含まれる場合
 		bg = TILE_BG_GRAY			# グレイ
+		var mask = 1
 		for y in range(N_IMG_CELL_VERT):
 			if $TileMap.get_cell(x0, y) == TILE_NONE:
 				$TileMap.set_cell(x0, y, TILE_CROSS)
-				h_autoFilledCross[y] |= mask
+				v_autoFilledCross[x0] |= mask
+			mask <<= 1
 	for y in range(v_clues[x0].size()):
 		$TileMapBG.set_cell(x0, -y-1, bg)
 func check_clues(x0, y0):
