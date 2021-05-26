@@ -256,8 +256,7 @@ func update_h_clues(y0):
 	h_clues[y0] = lst;
 	var x = -1
 	for i in range(lst.size()):
-		if lst[i] != 0:
-			$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0)
+		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0 if lst[i] != 0 else TIlE_NONE)
 		x -= 1
 	while x >= -N_CLUES_CELL_HORZ:
 		$TileMap.set_cell(x, y0, TIlE_NONE)
@@ -269,8 +268,7 @@ func update_v_clues(x0):
 	v_clues[x0] = lst;
 	var y = -1
 	for i in range(lst.size()):
-		if lst[i] != 0:
-			$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0)
+		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0 if lst[i] != 0 else TIlE_NONE)
 		y -= 1
 	while y >= -N_CLUES_CELL_VERT:
 		$TileMap.set_cell(x0, y, TIlE_NONE)
