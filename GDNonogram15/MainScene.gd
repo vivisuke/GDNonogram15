@@ -265,12 +265,13 @@ func update_h_candidates():
 		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
 	#print("g_map[[4]] = ", g_map[[4]])
 	pass
-func check_h_clues(y0):		# 水平方向チェック
+func check_h_clues(y0 : int):		# 水平方向チェック
 	if h_autoFilledCross[y0] != 0:
 		var vmask = 1 << y0
 		var mask = 1
 		for x in range(N_IMG_CELL_HORZ):
-			if (h_autoFilledCross[y0] & mask) != 0 && (v_autoFilledCross[x] & vmask) == 0:
+			if( (h_autoFilledCross[y0] & mask) != 0 && (v_autoFilledCross[x] & vmask) == 0 &&
+					$TileMap.get_cell(x, y0) == TILE_CROSS ):
 				$TileMap.set_cell(x, y0, TILE_NONE)
 			mask <<= 1
 		h_autoFilledCross[y0] = 0
@@ -294,7 +295,8 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 		var hmask = 1 << x0
 		var mask = 1
 		for y in range(N_IMG_CELL_VERT):
-			if (v_autoFilledCross[x0] & mask) != 0 && (h_autoFilledCross[y] & hmask) == 0:
+			if( (v_autoFilledCross[x0] & mask) != 0 && (h_autoFilledCross[y] & hmask) == 0 &&
+					$TileMap.get_cell(x0, y) == TILE_CROSS ):
 				$TileMap.set_cell(x0, y, TILE_NONE)
 			mask <<= 1
 		v_autoFilledCross[x0] = 0
