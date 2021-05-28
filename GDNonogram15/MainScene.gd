@@ -553,6 +553,7 @@ func _on_CheckButton_pressed():
 	init_candidates()
 	var nc0 = 0
 	var solved = false
+	var itr = 0
 	while true:
 		update_h_fixedbits()
 		#print("num candidates = ", num_candidates())
@@ -568,12 +569,13 @@ func _on_CheckButton_pressed():
 		update_v_fixedbits()
 		vFixed_to_hFixed()
 		update_h_candidates()
+		itr += 1
 	print(solved)
 	if solved:
-		$MessLabel.add_color_override("font_color", Color("black"))
-		$MessLabel.text = "Propper Quest"
+		$MessLabel.add_color_override("font_color", Color.black)
+		$MessLabel.text = "Propper Quest (difficulty: %d)" % itr
 	else:
-		$MessLabel.add_color_override("font_color", Color("#ff0000"))
+		$MessLabel.add_color_override("font_color", Color.red)
 		$MessLabel.text = "Impropper Quest"
 	var txt = ""
 	for y in range(N_IMG_CELL_VERT):
