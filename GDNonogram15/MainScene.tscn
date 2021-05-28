@@ -369,8 +369,8 @@ format = 1
 [node name="BoardGrid" type="ColorRect" parent="."]
 margin_left = 9.0
 margin_top = 99.0
-margin_right = 471.0
-margin_bottom = 561.0
+margin_right = 472.0
+margin_bottom = 562.0
 color = Color( 1, 1, 1, 0 )
 script = ExtResource( 3 )
 __meta__ = {
