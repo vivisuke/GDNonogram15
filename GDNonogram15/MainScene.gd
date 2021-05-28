@@ -38,6 +38,7 @@ var h_clues = []		# 水平方向手がかり数字リスト
 var v_clues = []		# 垂直方向手がかり数字リスト
 var h_candidates = []	# 水平方向候補リスト
 var v_candidates = []	# 垂直方向候補リスト
+var h_answer1_bits_1 = []		# 解答画像データ
 var h_fixed_bits_1 = []
 var h_fixed_bits_0 = []
 var v_fixed_bits_1 = []
@@ -64,9 +65,25 @@ func _ready():
 	#
 	#var vq = ["3", "1 1", "3"]
 	#var hq = ["3", "1 1", "3"]
-	var vq = ["1", "2", "2", "5 2", "4 3 3", "5 1 2 3", "5 6", "4 7", "4 2 2 3", "4 2 2 3", "3 3 3", "4 2", "2", "2", "1"]
-	var hq = ["5", "7", "7", "8", "4 1", "1 2 1", "1 1 2 1", "1 1", "1 1 1", "7", "7", "2", "7", "13", "15"]
+	# ラピュタ兵
+	#var vq = ["1", "2", "2", "5 2", "4 3 3", "5 1 2 3", "5 6", "4 7", "4 2 2 3", "4 2 2 3", "3 3 3", "4 2", "2", "2", "1"]
+	#var hq = ["5", "7", "7", "8", "4 1", "1 2 1", "1 1 2 1", "1 1", "1 1 1", "7", "7", "2", "7", "13", "15"]
+	# 少女
+	var vq = ["10", "13", "14", "6 2", "2 1 2 1", "6 7", "7 1", "7 1", "9 1", "9 2", "8 1", "10 2", "5 8", "3 1 7", "2 7"]
+	var hq = ["9", "11", "3 9", "3 9", "15", "4 8 1", "3 6 1", "3 2 5 1", "3 2 2 4", "3 4", "3 3", "3 1 3", "3 4 3", "4 4", "4 4"]
+	# 貯金箱
+	#var vq = ["5", "5", "8", "3 6", "15", "14", "111", "110", "110", "110", "13", "12", "12", "8", "4"]
+	#var hq = ["1", "2", "7", "3 3", "12", "14", "311", "15", "15", "15", "12", "12", "10", "9", "3 3"]
+	# ひよこ
+	#var vq = ["0", "1", "2", "2 1", "3 1", "3 2 1", "4 5", "5 3 1", "12", "13 1", "4 6 2", "9 1", "4", "1", "0"]
+	#var hq = ["3", "5", "7", "7", "5 2", "10", "3 4", "4 4", "1 4", "1 5", "7", "5", "1 1", "1 1", "3 3"]
+	# B2 ボンバー
+	#var vq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7 5", "7 1 1 1", "4 1 1", "4", "4 1 3", "4 3 1"]
+	#var hq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7", "7 2 2", "4 1 1 1", "4 2 2", "4 1 1 1", "4 2 2"]
 	set_quest(vq, hq)
+	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
+	for y in range(N_IMG_CELL_VERT):
+		h_answer1_bits_1[y] = 0
 	pass # Replace with function body.
 func set_quest(vq, hq):
 	for x in range(N_IMG_CELL_HORZ):
@@ -589,11 +606,16 @@ func update_modeButtons():
 		$EditButton.icon = load("res://images/edit_white.png")
 	pass
 func _on_SolveButton_pressed():
+	if mode == MODE_SOLVE:
+		return
 	mode = MODE_SOLVE
 	update_modeButtons()
-	clearMiniTileMap()
-	#clearTileMapBG()
+	# 解答保存
+	for y in range(N_IMG_CELL_VERT):
+		h_answer1_bits_1[y] = get_h_data(y)
+	#
 	clearTileMap()
+	clearMiniTileMap()
 	pass # Replace with function body.
 func change_cross_to_none():
 	for y in range(N_IMG_CELL_VERT):
@@ -608,8 +630,16 @@ func clear_clues_BG():
 		for y in range(N_CLUES_CELL_VERT):
 			$TileMapBG.set_cell(x, -y-1, TILE_NONE)
 func _on_EditPictButton_pressed():
+	if mode == MODE_EDIT_PICT:
+		return
 	mode = MODE_EDIT_PICT
 	update_modeButtons()
 	change_cross_to_none()		#
 	clear_clues_BG()			# 手がかり数字強調クリア
+	for y in range(N_IMG_CELL_VERT):
+		var d = h_answer1_bits_1[y]
+		var mask = 1 << N_IMG_CELL_HORZ
+		for x in range(N_IMG_CELL_HORZ):
+			mask >>= 1
+			$TileMap.set_cell(x, y, TILE_BLACK if (d & mask) != 0 else TILE_NONE)
 	pass # Replace with function body.
