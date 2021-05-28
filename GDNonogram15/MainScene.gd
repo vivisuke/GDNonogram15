@@ -282,8 +282,13 @@ func update_h_candidates():
 		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
 	#print("g_map[[4]] = ", g_map[[4]])
 	pass
+func is_data_OK(d, d0, lst):	# d が lst のすべてと矛盾する場合は false を返す
+	for i in range(lst.size()):
+		if (lst[i] & d) == d && (~lst[i] & d0) == d0:
+			return true
+	return false
 func check_h_clues(y0 : int):		# 水平方向チェック
-	if h_autoFilledCross[y0] != 0:
+	if h_autoFilledCross[y0] != 0:		# ☓オートフィルでフィルされた☓を削除
 		var vmask = 1 << y0
 		var mask = 1
 		for x in range(N_IMG_CELL_HORZ):
@@ -294,17 +299,22 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 		h_autoFilledCross[y0] = 0
 	#
 	var d = get_h_data(y0)
+	var d0 = get_h_data0(y0)
+	#print("d0 = ", d0)
 	var lst = g_map[h_clues[y0]]
-	#var bg = 1 if lst.has(d) else TILE_NONE
 	var bg = TILE_NONE
-	if lst.has(d):		# d が正解に含まれる場合
-		bg = TILE_BG_GRAY			# グレイ
-		var mask = 1
-		for x in range(N_IMG_CELL_HORZ):
-			if $TileMap.get_cell(x, y0) == TILE_NONE:
-				$TileMap.set_cell(x, y0, TILE_CROSS)
-				h_autoFilledCross[y0] |= mask
-			mask <<= 1
+	if !is_data_OK(d, d0, lst):
+		bg = TILE_BG_YELLOW
+	else:
+		#var bg = 1 if lst.has(d) else TILE_NONE
+		if lst.has(d):		# d が正解に含まれる場合
+			bg = TILE_BG_GRAY			# グレイ
+			var mask = 1
+			for x in range(N_IMG_CELL_HORZ):
+				if $TileMap.get_cell(x, y0) == TILE_NONE:
+					$TileMap.set_cell(x, y0, TILE_CROSS)
+					h_autoFilledCross[y0] |= mask
+				mask <<= 1
 	for x in range(h_clues[y0].size()):
 		$TileMapBG.set_cell(-x-1, y0, bg)
 func check_v_clues(x0 : int):		# 垂直方向チェック
@@ -324,17 +334,20 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 	#		h_autoFilledCross[y] ^= mask
 	#
 	var d = get_v_data(x0)
+	var d0 = get_v_data0(x0)
 	var lst = g_map[v_clues[x0]]
-	#var bg = 1 if lst.has(d) else TILE_NONE
 	var bg = TILE_NONE
-	if lst.has(d):		# d が正解に含まれる場合
-		bg = TILE_BG_GRAY			# グレイ
-		var mask = 1
-		for y in range(N_IMG_CELL_VERT):
-			if $TileMap.get_cell(x0, y) == TILE_NONE:
-				$TileMap.set_cell(x0, y, TILE_CROSS)
-				v_autoFilledCross[x0] |= mask
-			mask <<= 1
+	if !is_data_OK(d, d0, lst):
+		bg = TILE_BG_YELLOW
+	else:
+		if lst.has(d):		# d が正解に含まれる場合
+			bg = TILE_BG_GRAY			# グレイ
+			var mask = 1
+			for y in range(N_IMG_CELL_VERT):
+				if $TileMap.get_cell(x0, y) == TILE_NONE:
+					$TileMap.set_cell(x0, y, TILE_CROSS)
+					v_autoFilledCross[x0] |= mask
+				mask <<= 1
 	for y in range(v_clues[x0].size()):
 		$TileMapBG.set_cell(x0, -y-1, bg)
 func check_clues(x0, y0):
@@ -345,10 +358,20 @@ func get_h_data(y0):
 	for x in range(N_IMG_CELL_HORZ):
 		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == TILE_BLACK else 0)
 	return data
+func get_h_data0(y0):
+	var data = 0
+	for x in range(N_IMG_CELL_HORZ):
+		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == TILE_CROSS else 0)
+	return data
 func get_v_data(x0):
 	var data = 0
 	for y in range(N_IMG_CELL_VERT):
 		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == TILE_BLACK else 0)
+	return data
+func get_v_data0(x0):
+	var data = 0
+	for y in range(N_IMG_CELL_VERT):
+		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == TILE_CROSS else 0)
 	return data
 func update_h_cluesText(y0, lst):
 	var x = -1
@@ -607,7 +630,7 @@ func update_modeButtons():
 		$EditButton.add_color_override("font_color", Color.white)
 		$EditButton.icon = load("res://images/edit_white.png")
 	pass
-func _on_SolveButton_pressed():
+func _on_SolveButton_pressed():		# 解答モード
 	if mode == MODE_SOLVE:
 		return
 	mode = MODE_SOLVE
@@ -631,7 +654,7 @@ func clear_clues_BG():
 	for x in range(N_IMG_CELL_HORZ):
 		for y in range(N_CLUES_CELL_VERT):
 			$TileMapBG.set_cell(x, -y-1, TILE_NONE)
-func _on_EditPictButton_pressed():
+func _on_EditPictButton_pressed():		# 問題エディットモード
 	if mode == MODE_EDIT_PICT:
 		return
 	mode = MODE_EDIT_PICT
