@@ -164,6 +164,31 @@ func to_sliced(data):
 			b <<= 1
 		ar.push_back(t)
 	return ar
+# 値：-1 for init, -2 for 不一致
+func usedup_clues(lst : Array,		# 可能な候補リスト
+					data : int,		# ユーザ入力状態（ビットパターン）
+					nc : int):	# nc: 手がかり数字数
+	var uu = []
+	uu.resize(nc)
+	for i in range(nc):
+		uu[i] = 0
+	var ds = to_sliced(data)		# ユーザ入力状態をビット塊に分ける
+	for k in range(ds.size()):		# ユーザ入力の各ビット塊について
+		var pos = -1
+		for i in range(lst.size()):			# 各候補について
+			var cs = to_sliced(lst[i])
+			var ix = cs.find(ds[k])
+			if ix < 0:		# not found
+				pos = -1
+				break
+			if pos < 0:
+				pos = ix
+			elif ix != pos:
+				pos = -1
+				break
+		if pos >= 0:
+			uu[pos] = 1
+	return uu
 func build_slicedTable():
 	slicedTable.resize(1<<N_IMG_CELL_HORZ)
 	for d in range(1<<N_IMG_CELL_HORZ):
@@ -335,6 +360,8 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 	#if !is_data_OK(d1, d0, lst):
 	if lst.empty():
 		bg = TILE_BG_YELLOW
+		for x in range(h_clues[y0].size()):
+			$TileMapBG.set_cell(-x-1, y0, bg)
 	else:
 		#var bg = 1 if lst.has(d1) else TILE_NONE
 		if lst.has(d1):		# d1 が正解に含まれる場合
@@ -345,27 +372,17 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 					$TileMap.set_cell(x, y0, TILE_CROSS)
 					h_autoFilledCross[y0] |= mask
 				mask <<= 1
+			for x in range(h_clues[y0].size()):
+				$TileMapBG.set_cell(-x-1, y0, bg)
 		else:
 			# 部分確定判定
 			#	lst: 可能なビットパターンリスト（配列）
 			#	ユーザ入力パターン（d1）を連続1ごとにスライスし、それと lst[] の各要素とを比較し、
 			#	全要素と一致していれば、その部分がマッチしている（はず）
-"""			var border = ((d1<<1) | (d1 >>1)) & ~d1
-			for i in range(lst.size()-1, -1, -1):
-				if (lst[i] & border) != 0:
-					lst.remove(i)
-			print("y0 = ", y0, ", lst = ", array_to_binText(lst))
-			var fixed1 = (1<<N_IMG_CELL_HORZ) - 1
-			var ov = 0
-			for i in range(lst.size()):
-				fixed1 &= lst[i]
-				ov |= lst[i]
-			#print("fixed1 = ", to_binText(fixed1))
-			print("fixed1 = ", to_binText(fixed1), ", ov = ", to_binText(ov))
-"""
-			pass
-	for x in range(h_clues[y0].size()):
-		$TileMapBG.set_cell(-x-1, y0, bg)
+			var uu = usedup_clues(lst, d1, h_clues[y0].size())
+			for x in range(h_clues[y0].size()):
+				$TileMapBG.set_cell(-x-1, y0, (TILE_NONE if uu[x] == 0 else TILE_BG_GRAY))
+	pass
 func check_v_clues(x0 : int):		# 垂直方向チェック
 	if v_autoFilledCross[x0] != 0:
 		var hmask = 1 << x0
@@ -382,14 +399,18 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 	#		$TileMap.set_cell(x0, y, TILE_NONE)
 	#		h_autoFilledCross[y] ^= mask
 	#
-	var d = get_v_data(x0)
+	var d1 = get_v_data(x0)
 	var d0 = get_v_data0(x0)
-	var lst = g_map[v_clues[x0]]
+	var lst = g_map[v_clues[x0]].duplicate()
 	var bg = TILE_NONE
-	if !is_data_OK(d, d0, lst):
+	remove_conflicted(d1, d0, lst)
+	#if !is_data_OK(d1, d0, lst):
+	if lst.empty():
 		bg = TILE_BG_YELLOW
+		for y in range(v_clues[x0].size()):
+			$TileMapBG.set_cell(x0, -y-1, bg)
 	else:
-		if lst.has(d):		# d が正解に含まれる場合
+		if lst.has(d1):		# d1 が正解に含まれる場合
 			bg = TILE_BG_GRAY			# グレイ
 			var mask = 1
 			for y in range(N_IMG_CELL_VERT):
@@ -397,8 +418,16 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 					$TileMap.set_cell(x0, y, TILE_CROSS)
 					v_autoFilledCross[x0] |= mask
 				mask <<= 1
-	for y in range(v_clues[x0].size()):
-		$TileMapBG.set_cell(x0, -y-1, bg)
+			for y in range(v_clues[x0].size()):
+				$TileMapBG.set_cell(x0, -y-1, bg)
+		else:
+			# 部分確定判定
+			#	lst: 可能なビットパターンリスト（配列）
+			#	ユーザ入力パターン（d1）を連続1ごとにスライスし、それと lst[] の各要素とを比較し、
+			#	全要素と一致していれば、その部分がマッチしている（はず）
+			var uu = usedup_clues(lst, d1, v_clues[x0].size())
+			for y in range(v_clues[x0].size()):
+				$TileMapBG.set_cell(x0, -y-1, (TILE_NONE if uu[y] == 0 else TILE_BG_GRAY))
 func check_clues(x0, y0):
 	check_h_clues(y0)
 	check_v_clues(x0)
