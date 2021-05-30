@@ -34,6 +34,7 @@ var mouse_pushed = false
 var last_xy = Vector2()
 var cell_val = 0
 var g_map = {}		# 水平・垂直方向手がかり数字配列 → 候補数値マップ
+var slicedTable = []	# {0x0000 ～ 0x7fff → 連続ビットごとにスライスした配列} の配列
 var h_clues = []		# 水平方向手がかり数字リスト
 var v_clues = []		# 垂直方向手がかり数字リスト
 var h_candidates = []	# 水平方向候補リスト
@@ -51,6 +52,7 @@ func _ready():
 	update_modeButtons()
 	#$TileMap.set_cell(0, 0, 0)
 	build_map()
+	build_slicedTable()
 	#print(g_map.size())
 	h_clues.resize(N_IMG_CELL_VERT)
 	h_autoFilledCross.resize(N_IMG_CELL_VERT)
@@ -75,11 +77,11 @@ func _ready():
 	#var vq = ["5", "5", "8", "3 6", "15", "14", "111", "110", "110", "110", "13", "12", "12", "8", "4"]
 	#var hq = ["1", "2", "7", "3 3", "12", "14", "311", "15", "15", "15", "12", "12", "10", "9", "3 3"]
 	# ひよこ
-	var vq = ["0", "1", "2", "2 1", "3 1", "3 2 1", "4 5", "5 3 1", "12", "13 1", "4 6 2", "9 1", "4", "1", "0"]
-	var hq = ["3", "5", "7", "7", "5 2", "10", "3 4", "4 4", "1 4", "1 5", "7", "5", "1 1", "1 1", "3 3"]
+	#var vq = ["0", "1", "2", "2 1", "3 1", "3 2 1", "4 5", "5 3 1", "12", "13 1", "4 6 2", "9 1", "4", "1", "0"]
+	#var hq = ["3", "5", "7", "7", "5 2", "10", "3 4", "4 4", "1 4", "1 5", "7", "5", "1 1", "1 1", "3 3"]
 	# B2 ボンバー
-	#var vq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7 5", "7 1 1 1", "4 1 1", "4", "4 1 3", "4 3 1"]
-	#var hq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7", "7 2 2", "4 1 1 1", "4 2 2", "4 1 1 1", "4 2 2"]
+	var vq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7 5", "7 1 1 1", "4 1 1", "4", "4 1 3", "4 3 1"]
+	var hq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7", "7 2 2", "4 1 1 1", "4 2 2", "4 1 1 1", "4 2 2"]
 	set_quest(vq, hq)
 	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
 	for y in range(N_IMG_CELL_VERT):
@@ -147,6 +149,28 @@ func build_map():
 			g_map[key] = [data]
 	#print(g_map([1]))
 	#print(g_map([0]))
+func to_sliced(data):
+	if data == 0:
+		return [0]
+	var ar = []
+	while data != 0:
+		var b = data & -data
+		var t = b
+		data ^= b
+		b <<= 1
+		while (data & b) != 0:
+			data ^= b
+			t |= b
+			b <<= 1
+		ar.push_back(t)
+	return ar
+func build_slicedTable():
+	slicedTable.resize(1<<N_IMG_CELL_HORZ)
+	for d in range(1<<N_IMG_CELL_HORZ):
+		var ar = to_sliced(d)
+		#print(array_to_binText(ar))
+		slicedTable[d] = ar
+	pass
 func to_binText(d : int) -> String:
 	var txt = ""
 	var mask = 1 << (N_IMG_CELL_HORZ - 1)
@@ -154,7 +178,7 @@ func to_binText(d : int) -> String:
 		txt += '1' if (d&mask) != 0 else '0'
 		mask >>= 1
 	return txt
-func to_hexText(lst : Array) -> String:
+func array_to_binText(lst : Array) -> String:
 	var txt = "["
 	for i in range(lst.size()):
 		txt += to_binText(lst[i])
@@ -170,14 +194,14 @@ func init_candidates():
 			h_candidates[y] = [0]
 		else:
 			h_candidates[y] = g_map[h_clues[y]].duplicate()
-		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+		#print( "h_cand[", y, "] = ", to_binText(h_candidates[y]) )
 	for x in range(N_IMG_CELL_HORZ):
 		#print("v_clues[", x, "] = ", v_clues[x])
 		if v_clues[x] == null:
 			v_candidates[x] = [0]
 		else:
 			v_candidates[x] = g_map[v_clues[x]].duplicate()
-		#print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+		#print( "v_cand[", x, "] = ", to_binText(v_candidates[x]) )
 	#print("g_map[[4]] = ", g_map[[4]])
 func num_candidates():
 	var sum = 0
@@ -268,7 +292,7 @@ func update_v_candidates():
 			if( (v_candidates[x][i] & v_fixed_bits_1[x]) != v_fixed_bits_1[x] ||
 					(~v_candidates[x][i] & v_fixed_bits_0[x]) != v_fixed_bits_0[x] ):
 				v_candidates[x].remove(i)
-		#print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+		#print( "v_cand[", x, "] = ", to_binText(v_candidates[x]) )
 	#print("g_map[[4]] = ", g_map[[4]])
 	pass
 # h_fixed_bits_1, 0 を元に h_candidates[] から不可能なパターンを削除
@@ -279,7 +303,7 @@ func update_h_candidates():
 			if( (h_candidates[y][i] & h_fixed_bits_1[y]) != h_fixed_bits_1[y] ||
 					(~h_candidates[y][i] & h_fixed_bits_0[y]) != h_fixed_bits_0[y] ):
 				h_candidates[y].remove(i)
-		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+		#print( "h_cand[", y, "] = ", to_binText(h_candidates[y]) )
 	#print("g_map[[4]] = ", g_map[[4]])
 	pass
 func is_data_OK(d, d0, lst):	# d が lst のすべてと矛盾する場合は false を返す
@@ -287,6 +311,10 @@ func is_data_OK(d, d0, lst):	# d が lst のすべてと矛盾する場合は fa
 		if (lst[i] & d) == d && (~lst[i] & d0) == d0:
 			return true
 	return false
+func remove_conflicted(d1, d0, lst):		# d1, d0 と矛盾する要素を削除
+	for i in range(lst.size()-1, -1, -1):
+		if (lst[i] & d1) != d1 || (~lst[i] & d0) != d0:
+			lst.remove(i)
 func check_h_clues(y0 : int):		# 水平方向チェック
 	if h_autoFilledCross[y0] != 0:		# ☓オートフィルでフィルされた☓を削除
 		var vmask = 1 << y0
@@ -298,16 +326,18 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 			mask <<= 1
 		h_autoFilledCross[y0] = 0
 	#
-	var d = get_h_data(y0)
+	var d1 = get_h_data(y0)
 	var d0 = get_h_data0(y0)
 	#print("d0 = ", d0)
 	var lst = g_map[h_clues[y0]].duplicate()
 	var bg = TILE_NONE
-	if !is_data_OK(d, d0, lst):
+	remove_conflicted(d1, d0, lst)
+	#if !is_data_OK(d1, d0, lst):
+	if lst.empty():
 		bg = TILE_BG_YELLOW
 	else:
-		#var bg = 1 if lst.has(d) else TILE_NONE
-		if lst.has(d):		# d が正解に含まれる場合
+		#var bg = 1 if lst.has(d1) else TILE_NONE
+		if lst.has(d1):		# d1 が正解に含まれる場合
 			bg = TILE_BG_GRAY			# グレイ
 			var mask = 1
 			for x in range(N_IMG_CELL_HORZ):
@@ -317,6 +347,22 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 				mask <<= 1
 		else:
 			# 部分確定判定
+			#	lst: 可能なビットパターンリスト（配列）
+			#	ユーザ入力パターン（d1）を連続1ごとにスライスし、それと lst[] の各要素とを比較し、
+			#	全要素と一致していれば、その部分がマッチしている（はず）
+"""			var border = ((d1<<1) | (d1 >>1)) & ~d1
+			for i in range(lst.size()-1, -1, -1):
+				if (lst[i] & border) != 0:
+					lst.remove(i)
+			print("y0 = ", y0, ", lst = ", array_to_binText(lst))
+			var fixed1 = (1<<N_IMG_CELL_HORZ) - 1
+			var ov = 0
+			for i in range(lst.size()):
+				fixed1 &= lst[i]
+				ov |= lst[i]
+			#print("fixed1 = ", to_binText(fixed1))
+			print("fixed1 = ", to_binText(fixed1), ", ov = ", to_binText(ov))
+"""
 			pass
 	for x in range(h_clues[y0].size()):
 		$TileMapBG.set_cell(-x-1, y0, bg)
