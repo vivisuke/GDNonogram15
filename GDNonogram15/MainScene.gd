@@ -50,6 +50,7 @@ var v_autoFilledCross = []		# 自動計算で☓を入れたセル（ビット�
 func _ready():
 	mode = MODE_SOLVE
 	update_modeButtons()
+	update_commandButtons()
 	#$TileMap.set_cell(0, 0, 0)
 	build_map()
 	build_slicedTable()
@@ -79,9 +80,12 @@ func _ready():
 	# ひよこ
 	#var vq = ["0", "1", "2", "2 1", "3 1", "3 2 1", "4 5", "5 3 1", "12", "13 1", "4 6 2", "9 1", "4", "1", "0"]
 	#var hq = ["3", "5", "7", "7", "5 2", "10", "3 4", "4 4", "1 4", "1 5", "7", "5", "1 1", "1 1", "3 3"]
-	# B2 ボンバー
-	var vq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7 5", "7 1 1 1", "4 1 1", "4", "4 1 3", "4 3 1"]
-	var hq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7", "7 2 2", "4 1 1 1", "4 2 2", "4 1 1 1", "4 2 2"]
+	# B2 ボンバー	難易度：2
+	#var vq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7 5", "7 1 1 1", "4 1 1", "4", "4 1 3", "4 3 1"]
+	#var hq = ["15", "211", "113", "113", "11", "11", "8 2", "9", "6 2", "7", "7 2 2", "4 1 1 1", "4 2 2", "4 1 1 1", "4 2 2"]
+	# アトム？	難易度：6
+	var vq = ["7", "3 1", "2", "4 3", "6 1 1 1",	"6 1", "6 1", "3 3 1", "4 1 1 1", "4",	"4", "4 1", "4 1 2", "3 2", "7"]
+	var hq = ["1", "2", "5", "8", "10",	"6 5", "1 3 6", "2 1 4", "1 3", "1 2 2 1",	"1 1 1 1 1", "1 2 2 1", "1 2", "1 2", "1 5 2"]
 	set_quest(vq, hq)
 	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
 	for y in range(N_IMG_CELL_VERT):
@@ -708,11 +712,18 @@ func update_modeButtons():
 		$EditButton.add_color_override("font_color", Color.white)
 		$EditButton.icon = load("res://images/edit_white.png")
 	pass
+func update_commandButtons():
+	$LeftButton.disabled = mode == MODE_SOLVE
+	$DownButton.disabled = mode == MODE_SOLVE
+	$UpButton.disabled = mode == MODE_SOLVE
+	$RightButton.disabled = mode == MODE_SOLVE
+	$CheckButton.disabled = mode == MODE_SOLVE
 func _on_SolveButton_pressed():		# 解答モード
 	if mode == MODE_SOLVE:
 		return
 	mode = MODE_SOLVE
 	update_modeButtons()
+	update_commandButtons()
 	# 解答保存
 	for y in range(N_IMG_CELL_VERT):
 		h_answer1_bits_1[y] = get_h_data(y)
@@ -737,6 +748,7 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 		return
 	mode = MODE_EDIT_PICT
 	update_modeButtons()
+	update_commandButtons()
 	change_cross_to_none()		#
 	clear_clues_BG()			# 手がかり数字強調クリア
 	for y in range(N_IMG_CELL_VERT):		# 画像復活

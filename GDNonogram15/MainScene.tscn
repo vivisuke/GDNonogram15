@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -38,6 +38,11 @@
 [ext_resource path="res://images/light_white.png" type="Texture" id=36]
 [ext_resource path="res://images/edit_white.png" type="Texture" id=37]
 [ext_resource path="res://images/lightgray20x20.png" type="Texture" id=38]
+[ext_resource path="res://images/downward_gray.png" type="Texture" id=39]
+[ext_resource path="res://images/leftward_gray.png" type="Texture" id=40]
+[ext_resource path="res://images/rightward_gray.png" type="Texture" id=41]
+[ext_resource path="res://images/upward_gray.png" type="Texture" id=42]
+[ext_resource path="res://images/check_gray.png" type="Texture" id=43]
 
 [sub_resource type="TileSet" id=1]
 0/name = "yellow20x20.png 0"
@@ -420,6 +425,7 @@ margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 26 )
 texture_pressed = ExtResource( 25 )
+texture_disabled = ExtResource( 40 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -445,6 +451,7 @@ margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 30 )
 texture_pressed = ExtResource( 31 )
+texture_disabled = ExtResource( 39 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -470,6 +477,7 @@ margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 28 )
 texture_pressed = ExtResource( 32 )
+texture_disabled = ExtResource( 42 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -495,6 +503,7 @@ margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 29 )
 texture_pressed = ExtResource( 27 )
+texture_disabled = ExtResource( 41 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -520,6 +529,7 @@ margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 33 )
 texture_pressed = ExtResource( 34 )
+texture_disabled = ExtResource( 43 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
