@@ -46,6 +46,8 @@ var v_fixed_bits_1 = []
 var v_fixed_bits_0 = []
 var h_autoFilledCross = []		# 自動計算で☓を入れたセル（ビットボード, x == 0 が最下位ビット）
 var v_autoFilledCross = []		# 自動計算で☓を入れたセル（ビットボード, x == 0 が最下位ビット）
+var h_usedup = []			# 水平方向手がかり数字を使い切った＆エラー無し
+var v_usedup = []			# 垂直方向手がかり数字を使い切った＆エラー無し
 
 func _ready():
 	mode = MODE_SOLVE
@@ -58,13 +60,17 @@ func _ready():
 	h_clues.resize(N_IMG_CELL_VERT)
 	h_autoFilledCross.resize(N_IMG_CELL_VERT)
 	v_autoFilledCross.resize(N_IMG_CELL_HORZ)
-	for i in N_IMG_CELL_VERT:
-		h_clues[i] = [0]
-		h_autoFilledCross[i] = 0
+	h_usedup.resize(N_IMG_CELL_VERT)
+	v_usedup.resize(N_IMG_CELL_HORZ)
+	for y in N_IMG_CELL_VERT:
+		h_clues[y] = [0]
+		h_autoFilledCross[y] = 0
+		h_usedup[y] = false
 	v_clues.resize(N_IMG_CELL_HORZ)
-	for i in N_IMG_CELL_HORZ:
-		v_clues[i] = [0]
-		v_autoFilledCross[i] = 0
+	for x in N_IMG_CELL_HORZ:
+		v_clues[x] = [0]
+		v_autoFilledCross[x] = 0
+		v_usedup[x] = false
 	#
 	#var vq = ["3", "1 1", "3"]
 	#var hq = ["3", "1 1", "3"]
@@ -361,14 +367,14 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 	var lst = g_map[h_clues[y0]].duplicate()
 	var bg = TILE_NONE
 	remove_conflicted(d1, d0, lst)
-	#if !is_data_OK(d1, d0, lst):
+	h_usedup[y0] = false
 	if lst.empty():
 		bg = TILE_BG_YELLOW
 		for x in range(h_clues[y0].size()):
 			$TileMapBG.set_cell(-x-1, y0, bg)
 	else:
-		#var bg = 1 if lst.has(d1) else TILE_NONE
 		if lst.has(d1):		# d1 が正解に含まれる場合
+			h_usedup[y0] = true
 			bg = TILE_BG_GRAY			# グレイ
 			var mask = 1
 			for x in range(N_IMG_CELL_HORZ):
@@ -408,13 +414,14 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 	var lst = g_map[v_clues[x0]].duplicate()
 	var bg = TILE_NONE
 	remove_conflicted(d1, d0, lst)
-	#if !is_data_OK(d1, d0, lst):
+	v_usedup[x0] = false
 	if lst.empty():
 		bg = TILE_BG_YELLOW
 		for y in range(v_clues[x0].size()):
 			$TileMapBG.set_cell(x0, -y-1, bg)
 	else:
 		if lst.has(d1):		# d1 が正解に含まれる場合
+			v_usedup[x0] = true
 			bg = TILE_BG_GRAY			# グレイ
 			var mask = 1
 			for y in range(N_IMG_CELL_VERT):
