@@ -96,6 +96,7 @@ func _ready():
 	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
 	for y in range(N_IMG_CELL_VERT):
 		h_answer1_bits_1[y] = 0
+	init_usedup()
 	pass # Replace with function body.
 func set_quest(vq, hq):
 	for x in range(N_IMG_CELL_HORZ):
@@ -442,6 +443,21 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 func check_clues(x0, y0):
 	check_h_clues(y0)
 	check_v_clues(x0)
+func init_usedup():
+	for y in range(N_IMG_CELL_VERT):
+		if h_clues[y] == [0]:
+			h_usedup[y] = true
+	for x in range(N_IMG_CELL_HORZ):
+		if v_clues[x] == [0]:
+			v_usedup[x] = true
+func is_solved():
+	for y in range(N_IMG_CELL_VERT):
+		if !h_usedup[y]:
+			return false;
+	for x in range(N_IMG_CELL_HORZ):
+		if !v_usedup[x]:
+			return false;
+	return true;
 func get_h_data(y0):
 	var data = 0
 	for x in range(N_IMG_CELL_HORZ):
@@ -565,6 +581,12 @@ func _input(event):
 				check_clues(xy.x, xy.y)
 			var img = 0 if cell_val == 1 else TILE_NONE
 			$MiniTileMap.set_cell(xy.x, xy.y, img)
+	if mode == MODE_SOLVE:
+		if is_solved():
+			$MessLabel.add_color_override("font_color", Color.blue)
+			$MessLabel.text = "Solved, Good Job !"
+		else:
+			$MessLabel.text = ""
 	pass
 func clear_all():
 	for y in range(N_TOTAL_CELL_VERT):
@@ -737,6 +759,7 @@ func _on_SolveButton_pressed():		# 解答モード
 	#
 	clearTileMap()
 	clearMiniTileMap()
+	init_usedup()
 	pass # Replace with function body.
 func change_cross_to_none():
 	for y in range(N_IMG_CELL_VERT):
