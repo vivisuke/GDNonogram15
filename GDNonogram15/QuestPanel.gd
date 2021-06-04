@@ -4,7 +4,8 @@ const RADIUS = 10
 const POSITION = Vector2(2, 2)
 const SIZE = Vector2(450-10, 90)
 const THUMBNAIL_WIDTH = 15*4
-const THUMBNAIL_POS = (90-THUMBNAIL_WIDTH)/2+2
+const THUMBNAIL_POS = (90-THUMBNAIL_WIDTH)/2+5
+const THUMBNAIL_X = 100-30
 
 func _ready():
 	pass # Replace with function body.
@@ -19,5 +20,5 @@ func _draw():
 	style_box.shadow_size = 8
 	draw_style_box(style_box, Rect2(POSITION, SIZE))
 	# サムネイル
-	draw_rect(Rect2(THUMBNAIL_POS, THUMBNAIL_POS, THUMBNAIL_WIDTH, THUMBNAIL_WIDTH), Color.white)
+	draw_rect(Rect2(THUMBNAIL_X, THUMBNAIL_POS, THUMBNAIL_WIDTH, THUMBNAIL_WIDTH), Color.white)
 
