@@ -6,10 +6,14 @@ var mouse_pushed = false
 var mouse_pos
 var scroll_pos
 
+var QuestPanel = load("res://QuestPanel.tscn")
 
 
 func _ready():
 	print(g.quest_list.size())
+	for i in g.quest_list.size():
+		var panel = QuestPanel.instance()
+		$ScrollContainer/VBoxContainer.add_child(panel)
 	pass # Replace with function body.
 
 func _input(event):
