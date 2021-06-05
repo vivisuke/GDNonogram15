@@ -116,6 +116,8 @@ func set_quest(vq, hq):
 		var lst = []
 		if x < vq.size():
 			var txt : String = vq[x]
+			if txt.empty():
+				txt = " 0"
 			if (txt.length() % 2) == 1:
 				txt = " " + txt
 			while !txt.empty():
@@ -129,6 +131,8 @@ func set_quest(vq, hq):
 		var lst = []
 		if y < hq.size():
 			var txt : String = hq[y]
+			if txt.empty():
+				txt = " 0"
 			if (txt.length() % 2) == 1:
 				txt = " " + txt
 			while !txt.empty():
