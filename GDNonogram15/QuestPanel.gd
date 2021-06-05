@@ -11,7 +11,11 @@ func _ready():
 	pass # Replace with function body.
 
 func set_number(n : int):
-	$numLabel.text = "#%d" % n
+	$number.text = "#%d" % n
+func set_difficulty(n : int):
+	$difficulty.text = "Difficulty: %d" % n
+func set_author(name):
+	$author.text = "Author: " + name
 func _draw():
 	# 外枠
 	var style_box = StyleBoxFlat.new()
