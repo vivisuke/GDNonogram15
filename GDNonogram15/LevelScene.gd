@@ -1,10 +1,15 @@
 extends Node2D
 
+onready var g = get_node("/root/Global")
+
 var mouse_pushed = false
 var mouse_pos
 var scroll_pos
 
+
+
 func _ready():
+	print(g.test)
 	pass # Replace with function body.
 
 func _input(event):

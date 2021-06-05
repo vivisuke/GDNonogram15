@@ -40,6 +40,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="numLabel" type="Label" parent="."]
+margin_left = 22.0
+margin_top = 38.0
+margin_right = 62.0
+margin_bottom = 62.0
+custom_fonts/font = SubResource( 1 )
+text = "#01"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Label3" type="Label" parent="."]
 margin_left = 169.0
 margin_top = 65.0
