@@ -1,5 +1,7 @@
 extends ReferenceRect
 
+signal pressed(num)
+
 const RADIUS = 10
 const POSITION = Vector2(2, 2)
 const SIZE = Vector2(450-10, 90)
@@ -8,10 +10,12 @@ const THUMBNAIL_POS = (90-THUMBNAIL_WIDTH)/2+2
 const THUMBNAIL_X = 100-30
 
 var mouse_pushed = false
+var number :int = 0
 func _ready():
 	pass # Replace with function body.
 
 func set_number(n : int):
+	number = n
 	$number.text = "#%d" % n
 func set_difficulty(n : int):
 	$difficulty.text = "Difficulty: %d" % n
@@ -27,6 +31,7 @@ func _input(event):
 		elif event.is_action_released("click") && mouse_pushed:
 			if get_global_rect().has_point(event.position):		# 
 				print("pressed: ", $number.text)
+				emit_signal("pressed", number)
 			mouse_pushed = false;
 			update()
 	elif event is InputEventMouseMotion && mouse_pushed:	# mouse Moved

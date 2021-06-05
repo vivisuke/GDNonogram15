@@ -17,6 +17,8 @@ func _ready():
 		panel.set_difficulty(g.quest_list[i][0])
 		panel.set_author(g.quest_list[i][2])
 		$ScrollContainer/VBoxContainer.add_child(panel)
+		#
+		panel.connect("pressed", self, "_on_QuestPanel_pressed")
 	pass # Replace with function body.
 
 func _input(event):
@@ -32,4 +34,7 @@ func _input(event):
 	elif event is InputEventMouseMotion && mouse_pushed:	# mouse Moved
 		$ScrollContainer.set_v_scroll(scroll_pos + mouse_pos.y - event.position.y)
 	pass
-	
+
+func _on_QuestPanel_pressed(num):
+	print("QuestPanel_pressed(", num, ")")
+	pass # Replace with function body.
