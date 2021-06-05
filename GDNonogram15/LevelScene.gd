@@ -37,4 +37,6 @@ func _input(event):
 
 func _on_QuestPanel_pressed(num):
 	print("QuestPanel_pressed(", num, ")")
+	g.qNumber = num
+	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
