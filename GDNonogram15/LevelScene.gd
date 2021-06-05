@@ -9,7 +9,7 @@ var scroll_pos
 
 
 func _ready():
-	print(g.test)
+	print(g.quest_list.size())
 	pass # Replace with function body.
 
 func _input(event):
