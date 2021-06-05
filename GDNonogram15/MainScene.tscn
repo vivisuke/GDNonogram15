@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -43,6 +43,8 @@
 [ext_resource path="res://images/rightward_gray.png" type="Texture" id=41]
 [ext_resource path="res://images/upward_gray.png" type="Texture" id=42]
 [ext_resource path="res://images/check_gray.png" type="Texture" id=43]
+[ext_resource path="res://images/list_white.png" type="Texture" id=44]
+[ext_resource path="res://images/list_black.png" type="Texture" id=45]
 
 [sub_resource type="TileSet" id=1]
 0/name = "yellow20x20.png 0"
@@ -392,6 +394,31 @@ tile_set = SubResource( 3 )
 cell_size = Vector2( 6, 6 )
 format = 1
 
+[node name="BackButton" type="TextureButton" parent="."]
+margin_left = 10.0
+margin_top = 726.724
+margin_right = 106.001
+margin_bottom = 822.724
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 45 )
+texture_pressed = ExtResource( 44 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="BackButton"]
+margin_left = 10.0
+margin_top = 90.0
+margin_right = 87.0
+margin_bottom = 126.0
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="ClearButton" type="TextureButton" parent="."]
 margin_left = 10.0
 margin_top = 650.0
@@ -581,6 +608,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="LeftButton" to="." method="_on_LeftButton_pressed"]
 [connection signal="pressed" from="DownButton" to="." method="_on_DownButton_pressed"]

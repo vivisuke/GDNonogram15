@@ -801,3 +801,6 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 			mask >>= 1
 			$TileMap.set_cell(x, y, TILE_BLACK if (d & mask) != 0 else TILE_NONE)
 	upate_imageTileMap()
+func _on_BackButton_pressed():
+	get_tree().change_scene("res://LevelScene.tscn")
+	pass # Replace with function body.
