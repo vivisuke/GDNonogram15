@@ -13,6 +13,7 @@ func _ready():
 	print(g.quest_list.size())
 	for i in g.quest_list.size():
 		var panel = QuestPanel.instance()
+		panel.set_number(i+1)
 		$ScrollContainer/VBoxContainer.add_child(panel)
 	pass # Replace with function body.
 

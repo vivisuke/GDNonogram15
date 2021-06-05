@@ -10,6 +10,8 @@ const THUMBNAIL_X = 100-30
 func _ready():
 	pass # Replace with function body.
 
+func set_number(n : int):
+	$numLabel.text = "#%d" % n
 func _draw():
 	# 外枠
 	var style_box = StyleBoxFlat.new()
