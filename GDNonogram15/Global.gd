@@ -58,6 +58,7 @@ var quest_list = [
 	#
 ]
 var qNumber = 0		# [#1, ...#N]
+var solved = []
 #var test = 123
 
 func _ready():

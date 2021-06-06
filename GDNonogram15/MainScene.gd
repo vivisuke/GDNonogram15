@@ -602,6 +602,7 @@ func _input(event):
 			$MiniTileMap.set_cell(xy.x, xy.y, img)
 	if mode == MODE_SOLVE:
 		if is_solved():
+			g.solved[qix] = true
 			$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][0]) +
 									", '" + g.quest_list[qix][1] + "' by " + g.quest_list[qix][2])
 			$MessLabel.add_color_override("font_color", Color.blue)

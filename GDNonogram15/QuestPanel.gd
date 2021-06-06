@@ -21,6 +21,8 @@ func set_number(n : int):
 	$number.text = "#%d" % n
 func set_difficulty(n : int):
 	$difficulty.text = "Difficulty: %d" % n
+func set_title(ttl):
+	$title.text = "Title: " + ttl
 func set_author(name):
 	$author.text = "Author: " + name
 func _input(event):

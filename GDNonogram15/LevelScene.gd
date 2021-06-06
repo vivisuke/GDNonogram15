@@ -12,9 +12,13 @@ var QuestPanel = load("res://QuestPanel.tscn")
 func _ready():
 	print(g.quest_list.size())
 	for i in g.quest_list.size():
+		if g.solved.size() <= i:
+			g.solved.push_back(false)
 		var panel = QuestPanel.instance()
 		panel.set_number(i+1)
 		panel.set_difficulty(g.quest_list[i][0])
+		if g.solved[i]:
+			panel.set_title(g.quest_list[i][1])
 		panel.set_author(g.quest_list[i][2])
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#
