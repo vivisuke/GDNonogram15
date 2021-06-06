@@ -386,14 +386,14 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 	var bg = TILE_NONE
 	remove_conflicted(d1, d0, lst)
 	h_usedup[y0] = false
-	if lst.empty():
+	if lst.empty():		# 候補数字が無くなった
 		bg = TILE_BG_YELLOW
 		for x in range(h_clues[y0].size()):
 			$TileMapBG.set_cell(-x-1, y0, bg)
 	else:
 		if lst.has(d1):		# d1 が正解に含まれる場合
 			h_usedup[y0] = true
-			bg = TILE_BG_GRAY			# グレイ
+			bg = TILE_BG_GRAY if d1 != 0 else TILE_NONE			# グレイ or 無し
 			var mask = 1
 			for x in range(N_IMG_CELL_HORZ):
 				if $TileMap.get_cell(x, y0) == TILE_NONE:
@@ -440,7 +440,7 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 	else:
 		if lst.has(d1):		# d1 が正解に含まれる場合
 			v_usedup[x0] = true
-			bg = TILE_BG_GRAY			# グレイ
+			bg = TILE_BG_GRAY if d1 != 0 else TILE_NONE			# グレイ or 無し
 			var mask = 1
 			for y in range(N_IMG_CELL_VERT):
 				if $TileMap.get_cell(x0, y) == TILE_NONE:
