@@ -46,11 +46,11 @@
 [ext_resource path="res://images/list_white.png" type="Texture" id=44]
 [ext_resource path="res://images/list_black.png" type="Texture" id=45]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=1]
 size = 20
 font_data = ExtResource( 19 )
 
-[sub_resource type="TileSet" id=1]
+[sub_resource type="TileSet" id=2]
 0/name = "yellow20x20.png 0"
 0/texture = ExtResource( 35 )
 0/tex_offset = Vector2( 0, 0 )
@@ -80,7 +80,7 @@ font_data = ExtResource( 19 )
 1/shapes = [  ]
 1/z_index = 0
 
-[sub_resource type="TileSet" id=2]
+[sub_resource type="TileSet" id=3]
 0/name = "cross20x20.png 0"
 0/texture = ExtResource( 5 )
 0/tex_offset = Vector2( 0, 0 )
@@ -320,7 +320,7 @@ font_data = ExtResource( 19 )
 16/shapes = [  ]
 16/z_index = 0
 
-[sub_resource type="TileSet" id=3]
+[sub_resource type="TileSet" id=4]
 0/name = "black6x6.png 0"
 0/texture = ExtResource( 6 )
 0/tex_offset = Vector2( 0, 0 )
@@ -336,7 +336,7 @@ font_data = ExtResource( 19 )
 0/shapes = [  ]
 0/z_index = 0
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=5]
 size = 32
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 19 )
@@ -360,7 +360,7 @@ margin_left = 15.0
 margin_top = 105.708
 margin_right = 55.0
 margin_bottom = 133.708
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -376,15 +376,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TileMapBG" type="TileMap" parent="."]
-position = Vector2( 170, 310 )
-tile_set = SubResource( 1 )
+[node name="TileMapBG" type="TileMap" parent="BoardBG"]
+position = Vector2( 160, 160 )
+tile_set = SubResource( 2 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2( 170, 310 )
-tile_set = SubResource( 2 )
+tile_set = SubResource( 3 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
@@ -401,7 +401,7 @@ __meta__ = {
 
 [node name="MiniTileMap" type="TileMap" parent="."]
 position = Vector2( 45, 185 )
-tile_set = SubResource( 3 )
+tile_set = SubResource( 4 )
 cell_size = Vector2( 6, 6 )
 format = 1
 
@@ -423,7 +423,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Back"
 __meta__ = {
@@ -448,7 +448,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Clear"
 __meta__ = {
@@ -474,7 +474,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "RotLt"
 __meta__ = {
@@ -500,7 +500,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "RotDn"
 __meta__ = {
@@ -526,7 +526,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "RotUp"
 __meta__ = {
@@ -552,7 +552,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "RotRt"
 __meta__ = {
@@ -578,7 +578,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Check"
 __meta__ = {
@@ -590,7 +590,7 @@ margin_left = 20.0
 margin_top = 640.0
 margin_right = 60.0
 margin_bottom = 668.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

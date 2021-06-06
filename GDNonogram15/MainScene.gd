@@ -38,7 +38,7 @@ var last_xy = Vector2()
 var cell_val = 0
 var g_map = {}		# 水平・垂直方向手がかり数字配列 → 候補数値マップ
 var slicedTable = []	# {0x0000 ～ 0x7fff → 連続ビットごとにスライスした配列} の配列
-var h_clues = []		# 水平方向手がかり数字リスト
+var h_clues = []		# 水平方向手がかり数字リスト（数字配列の配列）
 var v_clues = []		# 垂直方向手がかり数字リスト
 var h_candidates = []	# 水平方向候補リスト
 var v_candidates = []	# 垂直方向候補リスト
@@ -391,7 +391,7 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 	if lst.empty():		# 候補数字が無くなった
 		bg = TILE_BG_YELLOW
 		for x in range(h_clues[y0].size()):
-			$TileMapBG.set_cell(-x-1, y0, bg)
+			$BoardBG/TileMapBG.set_cell(-x-1, y0, bg)
 	else:
 		if lst.has(d1):		# d1 が正解に含まれる場合
 			h_usedup[y0] = true
@@ -403,7 +403,7 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 					h_autoFilledCross[y0] |= mask
 				mask <<= 1
 			for x in range(h_clues[y0].size()):
-				$TileMapBG.set_cell(-x-1, y0, bg)
+				$BoardBG/TileMapBG.set_cell(-x-1, y0, bg)
 		else:
 			# 部分確定判定
 			#	lst: 可能なビットパターンリスト（配列）
@@ -411,7 +411,7 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 			#	全要素と一致していれば、その部分がマッチしている（はず）
 			var uu = usedup_clues(lst, d1, h_clues[y0].size())
 			for x in range(h_clues[y0].size()):
-				$TileMapBG.set_cell(-x-1, y0, (TILE_NONE if uu[x] == 0 else TILE_BG_GRAY))
+				$BoardBG/TileMapBG.set_cell(-x-1, y0, (TILE_NONE if uu[x] == 0 else TILE_BG_GRAY))
 	pass
 func check_v_clues(x0 : int):		# 垂直方向チェック
 	if v_autoFilledCross[x0] != 0:
@@ -438,7 +438,7 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 	if lst.empty():
 		bg = TILE_BG_YELLOW
 		for y in range(v_clues[x0].size()):
-			$TileMapBG.set_cell(x0, -y-1, bg)
+			$BoardBG/TileMapBG.set_cell(x0, -y-1, bg)
 	else:
 		if lst.has(d1):		# d1 が正解に含まれる場合
 			v_usedup[x0] = true
@@ -450,7 +450,7 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 					v_autoFilledCross[x0] |= mask
 				mask <<= 1
 			for y in range(v_clues[x0].size()):
-				$TileMapBG.set_cell(x0, -y-1, bg)
+				$BoardBG/TileMapBG.set_cell(x0, -y-1, bg)
 		else:
 			# 部分確定判定
 			#	lst: 可能なビットパターンリスト（配列）
@@ -458,7 +458,7 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 			#	全要素と一致していれば、その部分がマッチしている（はず）
 			var uu = usedup_clues(lst, d1, v_clues[x0].size())
 			for y in range(v_clues[x0].size()):
-				$TileMapBG.set_cell(x0, -y-1, (TILE_NONE if uu[y] == 0 else TILE_BG_GRAY))
+				$BoardBG/TileMapBG.set_cell(x0, -y-1, (TILE_NONE if uu[y] == 0 else TILE_BG_GRAY))
 func check_clues(x0, y0):
 	check_h_clues(y0)
 	check_v_clues(x0)
@@ -545,7 +545,7 @@ func clearTileMap():
 func clearTileMapBG():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			$TileMapBG.set_cell(x, y, TILE_NONE)
+			$BoardBG/TileMapBG.set_cell(x, y, TILE_NONE)
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
 	var X0 = $TileMap.position.x
@@ -628,18 +628,18 @@ func clear_all():
 		for y in range(N_IMG_CELL_VERT):
 			h_clues[y] = [0]
 			for x in range(N_CLUES_CELL_HORZ):
-				$TileMapBG.set_cell(-x-1, y, TILE_NONE)
+				$BoardBG/TileMapBG.set_cell(-x-1, y, TILE_NONE)
 		for x in range(N_IMG_CELL_HORZ):
 			v_clues[x] = [0]
 			for y in range(N_CLUES_CELL_VERT):
-				$TileMapBG.set_cell(x, -y-1, TILE_NONE)
+				$BoardBG/TileMapBG.set_cell(x, -y-1, TILE_NONE)
 	else:
 		for y in range(N_IMG_CELL_VERT):
 			for x in range(N_CLUES_CELL_HORZ):
-				$TileMapBG.set_cell(-x-1, y, TILE_NONE)
+				$BoardBG/TileMapBG.set_cell(-x-1, y, TILE_NONE)
 		for x in range(N_IMG_CELL_HORZ):
 			for y in range(N_CLUES_CELL_VERT):
-				$TileMapBG.set_cell(x, -y-1, TILE_NONE)
+				$BoardBG/TileMapBG.set_cell(x, -y-1, TILE_NONE)
 func _on_ClearButton_pressed():
 	clear_all()
 	pass # Replace with function body.
@@ -706,10 +706,20 @@ func _on_UpButton_pressed():
 	rotate_up()
 	pass # Replace with function body.
 
-
+func print_clues(clues):
+	var txt = "["
+	for x in range(N_IMG_CELL_HORZ):
+		txt += '"'
+		for i in range(clues[x].size()-1, -1, -1):
+			txt += "%2d" % clues[x][i]
+		txt += '",'
+	txt += "]"
+	print(txt)
 func _on_CheckButton_pressed():
 	init_arrays()
 	init_candidates()
+	print_clues(v_clues)
+	print_clues(h_clues)
 	var nc0 = 0
 	var solved = false
 	var itr = 0
@@ -749,7 +759,7 @@ func _on_CheckButton_pressed():
 				txt += "."
 			else:
 				txt += "?"
-				$TileMapBG.set_cell(x, y, 0)	# yellow
+				$BoardBG/TileMapBG.set_cell(x, y, 0)	# yellow
 			mask >>= 1
 		txt += "\n"
 	print(txt)
@@ -794,10 +804,10 @@ func change_cross_to_none():
 func clear_clues_BG():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_CLUES_CELL_HORZ):
-			$TileMapBG.set_cell(-x-1, y, TILE_NONE)
+			$BoardBG/TileMapBG.set_cell(-x-1, y, TILE_NONE)
 	for x in range(N_IMG_CELL_HORZ):
 		for y in range(N_CLUES_CELL_VERT):
-			$TileMapBG.set_cell(x, -y-1, TILE_NONE)
+			$BoardBG/TileMapBG.set_cell(x, -y-1, TILE_NONE)
 func _on_EditPictButton_pressed():		# 問題エディットモード
 	if mode == MODE_EDIT_PICT:
 		return
