@@ -46,6 +46,10 @@
 [ext_resource path="res://images/list_white.png" type="Texture" id=44]
 [ext_resource path="res://images/list_black.png" type="Texture" id=45]
 
+[sub_resource type="DynamicFont" id=5]
+size = 20
+font_data = ExtResource( 19 )
+
 [sub_resource type="TileSet" id=1]
 0/name = "yellow20x20.png 0"
 0/texture = ExtResource( 35 )
@@ -337,10 +341,6 @@ size = 32
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 19 )
 
-[sub_resource type="DynamicFont" id=5]
-size = 24
-font_data = ExtResource( 19 )
-
 [sub_resource type="DynamicFont" id=6]
 font_data = ExtResource( 19 )
 
@@ -355,33 +355,44 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="questLabel" type="Label" parent="."]
+margin_left = 15.0
+margin_top = 105.708
+margin_right = 55.0
+margin_bottom = 133.708
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="BoardBG" type="ColorRect" parent="."]
 margin_left = 10.0
-margin_top = 100.0
+margin_top = 150.0
 margin_right = 470.0
-margin_bottom = 560.0
+margin_bottom = 610.0
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="TileMapBG" type="TileMap" parent="."]
-position = Vector2( 170, 260 )
+position = Vector2( 170, 310 )
 tile_set = SubResource( 1 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
 [node name="TileMap" type="TileMap" parent="."]
-position = Vector2( 170, 260 )
+position = Vector2( 170, 310 )
 tile_set = SubResource( 2 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
 [node name="BoardGrid" type="ColorRect" parent="."]
 margin_left = 9.0
-margin_top = 99.0
+margin_top = 149.0
 margin_right = 472.0
-margin_bottom = 562.0
+margin_bottom = 612.0
 color = Color( 1, 1, 1, 0 )
 script = ExtResource( 3 )
 __meta__ = {
@@ -389,7 +400,7 @@ __meta__ = {
 }
 
 [node name="MiniTileMap" type="TileMap" parent="."]
-position = Vector2( 45, 135 )
+position = Vector2( 45, 185 )
 tile_set = SubResource( 3 )
 cell_size = Vector2( 6, 6 )
 format = 1
@@ -421,9 +432,9 @@ __meta__ = {
 
 [node name="ClearButton" type="TextureButton" parent="."]
 margin_left = 10.0
-margin_top = 650.0
+margin_top = 700.0
 margin_right = 106.001
-margin_bottom = 746.0
+margin_bottom = 796.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 17 )
 texture_pressed = ExtResource( 18 )
@@ -446,9 +457,9 @@ __meta__ = {
 
 [node name="LeftButton" type="TextureButton" parent="."]
 margin_left = 90.0
-margin_top = 650.0
+margin_top = 700.0
 margin_right = 186.001
-margin_bottom = 746.0
+margin_bottom = 796.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 26 )
 texture_pressed = ExtResource( 25 )
@@ -472,9 +483,9 @@ __meta__ = {
 
 [node name="DownButton" type="TextureButton" parent="."]
 margin_left = 170.0
-margin_top = 650.0
+margin_top = 700.0
 margin_right = 266.0
-margin_bottom = 746.0
+margin_bottom = 796.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 30 )
 texture_pressed = ExtResource( 31 )
@@ -498,9 +509,9 @@ __meta__ = {
 
 [node name="UpButton" type="TextureButton" parent="."]
 margin_left = 250.0
-margin_top = 650.0
+margin_top = 700.0
 margin_right = 346.0
-margin_bottom = 746.0
+margin_bottom = 796.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 28 )
 texture_pressed = ExtResource( 32 )
@@ -524,9 +535,9 @@ __meta__ = {
 
 [node name="RightButton" type="TextureButton" parent="."]
 margin_left = 330.0
-margin_top = 650.0
+margin_top = 700.0
 margin_right = 426.0
-margin_bottom = 746.0
+margin_bottom = 796.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 29 )
 texture_pressed = ExtResource( 27 )
@@ -550,9 +561,9 @@ __meta__ = {
 
 [node name="CheckButton" type="TextureButton" parent="."]
 margin_left = 410.0
-margin_top = 650.0
+margin_top = 700.0
 margin_right = 506.0
-margin_bottom = 746.0
+margin_bottom = 796.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 33 )
 texture_pressed = ExtResource( 34 )
@@ -576,9 +587,9 @@ __meta__ = {
 
 [node name="MessLabel" type="Label" parent="."]
 margin_left = 20.0
-margin_top = 591.0
+margin_top = 640.0
 margin_right = 60.0
-margin_bottom = 619.0
+margin_bottom = 668.0
 custom_fonts/font = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false

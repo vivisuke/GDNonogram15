@@ -30,6 +30,7 @@ const ColorClues = Color("#dff9fb")
 
 enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES }
 
+var qix
 var mode = MODE_EDIT_PICT;
 var dialog_opened = false;
 var mouse_pushed = false
@@ -104,7 +105,8 @@ func _ready():
 	#var vq = ["7", "3 1", "2", "4 3", "6 1 1 1",	"6 1", "6 1", "3 3 1", "4 1 1 1", "4",	"4", "4 1", "4 1 2", "3 2", "7"]
 	#var hq = ["1", "2", "5", "8", "10",	"6 5", "1 3 6", "2 1 4", "1 3", "1 2 2 1",	"1 1 1 1 1", "1 2 2 1", "1 2", "1 2", "1 5 2"]
 	#set_quest(vq, hq)
-	var qix = g.qNumber - 1
+	qix = g.qNumber - 1
+	$questLabel.text = ("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][0]) + ", '???' by " + g.quest_list[qix][2]
 	set_quest(g.quest_list[qix][3], g.quest_list[qix][4])
 	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
 	for y in range(N_IMG_CELL_VERT):
@@ -600,6 +602,8 @@ func _input(event):
 			$MiniTileMap.set_cell(xy.x, xy.y, img)
 	if mode == MODE_SOLVE:
 		if is_solved():
+			$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][0]) +
+									", '" + g.quest_list[qix][1] + "' by " + g.quest_list[qix][2])
 			$MessLabel.add_color_override("font_color", Color.blue)
 			$MessLabel.text = "Solved, Good Job !"
 		else:
