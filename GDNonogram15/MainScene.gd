@@ -603,6 +603,9 @@ func _input(event):
 	if mode == MODE_SOLVE:
 		if is_solved():
 			g.solved[qix] = true
+			g.ans_images[qix] = []
+			for y in range(N_IMG_CELL_VERT):
+				g.ans_images[qix].push_back(get_h_data(y))
 			$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][0]) +
 									", '" + g.quest_list[qix][1] + "' by " + g.quest_list[qix][2])
 			$MessLabel.add_color_override("font_color", Color.blue)

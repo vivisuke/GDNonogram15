@@ -11,6 +11,7 @@ var QuestPanel = load("res://QuestPanel.tscn")
 
 func _ready():
 	print(g.quest_list.size())
+	g.ans_images.resize(g.quest_list.size())
 	for i in g.quest_list.size():
 		if g.solved.size() <= i:
 			g.solved.push_back(false)
@@ -19,6 +20,7 @@ func _ready():
 		panel.set_difficulty(g.quest_list[i][0])
 		if g.solved[i]:
 			panel.set_title(g.quest_list[i][1])
+			panel.set_ans_image(g.ans_images[i])
 		panel.set_author(g.quest_list[i][2])
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#

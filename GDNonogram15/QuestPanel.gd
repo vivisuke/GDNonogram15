@@ -2,6 +2,9 @@ extends ReferenceRect
 
 signal pressed(num)
 
+#onready var g = get_node("/root/Global")
+#var g = null
+
 const RADIUS = 10
 const POSITION = Vector2(2, 2)
 const SIZE = Vector2(450-10, 90)
@@ -12,19 +15,32 @@ const THUMBNAIL_X = 100-30
 var mouse_pushed = false
 var saved_pos
 var number :int = 0
+var solved = false
+var ans_iamge = []
 
 func _ready():
+	#g = get_node("/root/Global")
 	pass # Replace with function body.
 
 func set_number(n : int):
+	#if g == null:
+	#	g = get_node("/root/Global")
 	number = n
 	$number.text = "#%d" % n
+	#if g.solved[n-1]:
+	#	$Question.hide()
 func set_difficulty(n : int):
 	$difficulty.text = "Difficulty: %d" % n
 func set_title(ttl):
 	$title.text = "Title: " + ttl
+	solved = true
+	$Question.hide()
+	update()
 func set_author(name):
 	$author.text = "Author: " + name
+func set_ans_image(ai):
+	ans_iamge = ai
+	update()
 func _input(event):
 	if event is InputEventMouseButton:
 		#print("InputEventMouseButton")
@@ -56,4 +72,7 @@ func _draw():
 	draw_style_box(style_box, Rect2(POSITION, SIZE))
 	# サムネイル
 	draw_rect(Rect2(THUMBNAIL_X, THUMBNAIL_POS, THUMBNAIL_WIDTH, THUMBNAIL_WIDTH), Color.white)
+	if !ans_iamge.empty():
+		for i in range(ans_iamge.size()):
+			print(ans_iamge[i])
 

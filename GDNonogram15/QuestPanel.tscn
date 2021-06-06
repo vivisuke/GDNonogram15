@@ -62,6 +62,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Question" type="Sprite" parent="."]
 position = Vector2( 100, 48 )
 texture = ExtResource( 3 )
