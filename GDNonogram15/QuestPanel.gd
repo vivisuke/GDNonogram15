@@ -10,7 +10,9 @@ const THUMBNAIL_POS = (90-THUMBNAIL_WIDTH)/2+2
 const THUMBNAIL_X = 100-30
 
 var mouse_pushed = false
+var saved_pos
 var number :int = 0
+
 func _ready():
 	pass # Replace with function body.
 
@@ -27,15 +29,17 @@ func _input(event):
 		if event.is_action_pressed("click"):		# left mouse button
 			if get_global_rect().has_point(event.position):		# 
 				mouse_pushed = true;
+				saved_pos = get_global_rect()
 				update()
 		elif event.is_action_released("click") && mouse_pushed:
-			if get_global_rect().has_point(event.position):		# 
-				print("pressed: ", $number.text)
-				emit_signal("pressed", number)
+			if get_global_rect() == saved_pos:
+				if get_global_rect().has_point(event.position):		# 
+					print("pressed: ", $number.text)
+					emit_signal("pressed", number)
 			mouse_pushed = false;
 			update()
 	elif event is InputEventMouseMotion && mouse_pushed:	# mouse Moved
-		if !get_global_rect().has_point(event.position):	# 
+		if get_global_rect() != saved_pos || !get_global_rect().has_point(event.position):	# 
 			mouse_pushed = false;
 			update()
 func _draw():
