@@ -8,7 +8,10 @@ signal pressed(num)
 const RADIUS = 10
 const POSITION = Vector2(2, 2)
 const SIZE = Vector2(450-10, 90)
-const THUMBNAIL_WIDTH = 15*4
+const IMG_WIDTH = 15
+const IMG_HEIGHT = 15
+const TNCELLWD = 4
+const THUMBNAIL_WIDTH = IMG_WIDTH*TNCELLWD
 const THUMBNAIL_POS = (90-THUMBNAIL_WIDTH)/2+2
 const THUMBNAIL_X = 100-30
 
@@ -71,8 +74,15 @@ func _draw():
 	style_box.shadow_size = 8
 	draw_style_box(style_box, Rect2(POSITION, SIZE))
 	# サムネイル
-	draw_rect(Rect2(THUMBNAIL_X, THUMBNAIL_POS, THUMBNAIL_WIDTH, THUMBNAIL_WIDTH), Color.white)
+	var col = Color.lightgray if ans_iamge.empty() else Color.white
+	draw_rect(Rect2(THUMBNAIL_X-2, THUMBNAIL_POS-2, THUMBNAIL_WIDTH+4, THUMBNAIL_WIDTH+4), col)
 	if !ans_iamge.empty():
-		for i in range(ans_iamge.size()):
-			print(ans_iamge[i])
-
+		for y in range(IMG_HEIGHT):
+			#print(ans_iamge[i])
+			var py = y * TNCELLWD + THUMBNAIL_POS
+			var mask = 1 << IMG_WIDTH
+			for x in range(IMG_WIDTH):
+				mask >>= 1
+				if (ans_iamge[y] & mask) != 0:
+					var px = x * TNCELLWD + THUMBNAIL_X
+					draw_rect(Rect2(px, py, TNCELLWD, TNCELLWD), Color.black)
