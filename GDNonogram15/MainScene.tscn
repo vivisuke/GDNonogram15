@@ -396,9 +396,9 @@ format = 1
 
 [node name="BackButton" type="TextureButton" parent="."]
 margin_left = 10.0
-margin_top = 726.724
+margin_top = 20.0
 margin_right = 106.001
-margin_bottom = 822.724
+margin_bottom = 116.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 45 )
 texture_pressed = ExtResource( 44 )
@@ -585,9 +585,9 @@ __meta__ = {
 }
 
 [node name="SolveButton" type="Button" parent="."]
-margin_left = 10.0
+margin_left = 149.796
 margin_top = 20.0
-margin_right = 157.0
+margin_right = 296.796
 margin_bottom = 74.0
 custom_fonts/font = SubResource( 6 )
 text = "Solve Mode"
@@ -597,9 +597,9 @@ __meta__ = {
 }
 
 [node name="EditButton" type="Button" parent="."]
-margin_left = 180.0
+margin_left = 335.0
 margin_top = 20.0
-margin_right = 314.0
+margin_right = 469.0
 margin_bottom = 74.0
 custom_fonts/font = SubResource( 6 )
 text = "Edit Mode"
