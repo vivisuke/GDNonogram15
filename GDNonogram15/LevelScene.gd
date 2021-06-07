@@ -43,6 +43,13 @@ func _input(event):
 
 func _on_QuestPanel_pressed(num):
 	print("QuestPanel_pressed(", num, ")")
+	g.solveMode = true;
 	g.qNumber = num
+	get_tree().change_scene("res://MainScene.tscn")
+	pass # Replace with function body.
+
+
+func _on_EditButton_pressed():
+	g.solveMode = false;
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.

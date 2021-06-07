@@ -57,6 +57,7 @@ var quest_list = [
 	["5", "7", "7", "8", "4 1", "1 2 1", "1 1 2 1", "1 1", "1 1 1", "7", "7", "2", "7", "13", "15"]],
 	#
 ]
+var solveMode = true
 var qNumber = 0			# [#1, ...#N]
 var solved = []			# true/false
 var ans_images = []		# 解答ビットパターン配列

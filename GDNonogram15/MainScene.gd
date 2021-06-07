@@ -53,7 +53,11 @@ var h_usedup = []			# 水平方向手がかり数字を使い切った＆エラ�
 var v_usedup = []			# 垂直方向手がかり数字を使い切った＆エラー無し
 
 func _ready():
-	mode = MODE_SOLVE
+	if g.solveMode:
+		mode = MODE_SOLVE
+		$EditButton.disabled = true
+	else:
+		mode = MODE_EDIT_PICT
 	update_modeButtons()
 	update_commandButtons()
 	#$TileMap.set_cell(0, 0, 0)
@@ -105,13 +109,14 @@ func _ready():
 	#var vq = ["7", "3 1", "2", "4 3", "6 1 1 1",	"6 1", "6 1", "3 3 1", "4 1 1 1", "4",	"4", "4 1", "4 1 2", "3 2", "7"]
 	#var hq = ["1", "2", "5", "8", "10",	"6 5", "1 3 6", "2 1 4", "1 3", "1 2 2 1",	"1 1 1 1 1", "1 2 2 1", "1 2", "1 2", "1 5 2"]
 	#set_quest(vq, hq)
-	qix = g.qNumber - 1
-	$questLabel.text = ("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][0]) + ", '???' by " + g.quest_list[qix][2]
-	set_quest(g.quest_list[qix][3], g.quest_list[qix][4])
-	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
-	for y in range(N_IMG_CELL_VERT):
-		h_answer1_bits_1[y] = 0
-	init_usedup()
+	if g.solveMode:
+		qix = g.qNumber - 1
+		$questLabel.text = ("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][0]) + ", '???' by " + g.quest_list[qix][2]
+		set_quest(g.quest_list[qix][3], g.quest_list[qix][4])
+		h_answer1_bits_1.resize(N_IMG_CELL_VERT)
+		for y in range(N_IMG_CELL_VERT):
+			h_answer1_bits_1[y] = 0
+		init_usedup()
 	pass # Replace with function body.
 func set_quest(vq, hq):
 	for x in range(N_IMG_CELL_HORZ):
