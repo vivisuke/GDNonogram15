@@ -25,8 +25,14 @@ func _ready():
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#
 		panel.connect("pressed", self, "_on_QuestPanel_pressed")
+	print("vscroll = ", g.lvl_vscroll)
+	$ScrollContainer.set_v_scroll(g.lvl_vscroll)
 	pass # Replace with function body.
-
+func _process(delta):
+	if g.lvl_vscroll > 0:
+		$ScrollContainer.set_v_scroll(g.lvl_vscroll)
+		g.lvl_vscroll = -1
+	pass
 func _input(event):
 	if event is InputEventMouseButton:
 		#print("InputEventMouseButton")
@@ -43,6 +49,8 @@ func _input(event):
 
 func _on_QuestPanel_pressed(num):
 	print("QuestPanel_pressed(", num, ")")
+	g.lvl_vscroll = $ScrollContainer.scroll_vertical
+	print("vscroll = ", g.lvl_vscroll)
 	g.solveMode = true;
 	g.qNumber = num
 	get_tree().change_scene("res://MainScene.tscn")
@@ -50,6 +58,8 @@ func _on_QuestPanel_pressed(num):
 
 
 func _on_EditButton_pressed():
+	g.lvl_vscroll = $ScrollContainer.scroll_vertical
+	print("vscroll = ", g.lvl_vscroll)
 	g.solveMode = false;
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.

@@ -1,11 +1,16 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://LevelScene.gd" type="Script" id=2]
 [ext_resource path="res://images/edit_white.png" type="Texture" id=3]
+[ext_resource path="res://fonts/Hokjesgeest-PDGB.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 4 )
 
 [node name="LevelScene" type="Node2D"]
 script = ExtResource( 2 )
@@ -37,6 +42,18 @@ margin_bottom = 774.0
 custom_fonts/font = SubResource( 1 )
 text = "Edit Mode"
 icon = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleLabel" type="Label" parent="."]
+margin_top = 30.0
+margin_right = 480.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "GDNonogram"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
