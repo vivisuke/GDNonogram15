@@ -28,6 +28,8 @@ const TILE_BG_GRAY = 1
 const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
+var FallingBlack = load("res://FallingBlack.tscn")
+
 enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES }
 
 var qix
@@ -551,6 +553,11 @@ func clearTileMapBG():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
 			$BoardBG/TileMapBG.set_cell(x, y, TILE_NONE)
+func setup_fallingBlack(pos):
+	var obj = FallingBlack.instance()
+	obj.setup(pos)
+	#obj.position = pos
+	add_child(obj)
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
 	var X0 = $TileMap.position.x
@@ -560,6 +567,10 @@ func posToXY(pos):
 			xy.x = floor((pos.x - X0) / CELL_WIDTH)
 			xy.y = floor((pos.y - Y0) / CELL_WIDTH)
 	return xy
+func xyToPos(x, y):
+	var px = $TileMap.position.x + x * CELL_WIDTH
+	var py = $TileMap.position.y + y * CELL_WIDTH
+	return Vector2(px, py)
 func _input(event):
 	if dialog_opened:
 		return;
@@ -575,7 +586,8 @@ func _input(event):
 			if xy.x >= 0:
 				mouse_pushed = true;
 				last_xy = xy
-				var v = $TileMap.get_cell(xy.x, xy.y)
+				var v0 = $TileMap.get_cell(xy.x, xy.y)
+				var v = v0
 				if event.is_action_pressed("click"):		# left mouse button
 					v = TILE_BLACK if v == TILE_CROSS else -v;
 				else:
@@ -585,6 +597,8 @@ func _input(event):
 						v = TILE_NONE
 				cell_val = v
 				$TileMap.set_cell(xy.x, xy.y, v)
+				if v0 == TILE_BLACK && v != TILE_BLACK:
+					setup_fallingBlack(event.position)
 				if mode == MODE_EDIT_PICT:
 					update_clues(xy.x, xy.y)
 				elif mode == MODE_SOLVE:
@@ -598,7 +612,10 @@ func _input(event):
 		if xy.x >= 0 && xy != last_xy:
 			#print(xy)
 			last_xy = xy
+			var v0 = $TileMap.get_cell(xy.x, xy.y)
 			$TileMap.set_cell(xy.x, xy.y, cell_val)
+			if v0 == TILE_BLACK && cell_val != TILE_BLACK:
+				setup_fallingBlack(event.position)
 			if( mode == MODE_EDIT_PICT):
 				update_clues(xy.x, xy.y)
 			elif mode == MODE_SOLVE:
@@ -621,6 +638,8 @@ func _input(event):
 func clear_all():
 	for y in range(N_TOTAL_CELL_VERT):
 		for x in range(N_TOTAL_CELL_HORZ):
+			if $TileMap.get_cell(x, y) == TILE_BLACK:
+				setup_fallingBlack(xyToPos(x, y))
 			$TileMap.set_cell(x, y, TILE_NONE)
 			$MiniTileMap.set_cell(x, y, TILE_NONE)
 	if mode == MODE_EDIT_PICT:
@@ -718,7 +737,7 @@ func print_clues(clues):
 		for i in range(clues[x].size()-1, -1, -1):
 			txt += "%2d" % clues[x][i]
 		txt += '",'
-	txt += "]"
+	txt += "],"
 	print(txt)
 func _on_CheckButton_pressed():
 	init_arrays()
