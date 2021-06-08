@@ -1,7 +1,7 @@
 extends Node2D
 
 enum {
-	KEY_DIFFICULTY,
+	KEY_DIFFICULTY = 0,
 	KEY_TITLE,
 	KEY_AUTHOR,
 	KEY_V_CLUES,
