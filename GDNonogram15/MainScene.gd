@@ -626,15 +626,12 @@ func _input(event):
 			#print(xy)
 			last_xy = xy
 			var v0 = $TileMap.get_cell(xy.x, xy.y)
-			$TileMap.set_cell(xy.x, xy.y, cell_val)
+			push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, cell_val])
+			update_undo_redo()
+			set_cell_basic(xy.x, xy.y, cell_val)
+			#$TileMap.set_cell(xy.x, xy.y, cell_val)
 			if v0 == TILE_BLACK && cell_val != TILE_BLACK:
 				setup_fallingBlack(event.position)
-			if( mode == MODE_EDIT_PICT):
-				update_clues(xy.x, xy.y)
-			elif mode == MODE_SOLVE:
-				check_clues(xy.x, xy.y)
-			var img = 0 if cell_val == 1 else TILE_NONE
-			$MiniTileMap.set_cell(xy.x, xy.y, img)
 	if mode == MODE_SOLVE:
 		if is_solved():
 			if g.solveMode:
