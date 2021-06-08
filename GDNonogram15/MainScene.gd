@@ -30,7 +30,8 @@ const ColorClues = Color("#dff9fb")
 
 var FallingBlack = load("res://FallingBlack.tscn")
 
-enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES }
+enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES, }
+enum { SET_CELL, CLEAR_ALL, }
 
 var qix
 var mode = MODE_EDIT_PICT;
@@ -53,6 +54,9 @@ var h_autoFilledCross = []		# 自動計算で☓を入れたセル（ビット�
 var v_autoFilledCross = []		# 自動計算で☓を入れたセル（ビットボード, x == 0 が最下位ビット）
 var h_usedup = []			# 水平方向手がかり数字を使い切った＆エラー無し
 var v_usedup = []			# 垂直方向手がかり数字を使い切った＆エラー無し
+
+var undo_ix = 0
+var undo_stack = []
 
 func _ready():
 	if g.solveMode:
@@ -122,7 +126,16 @@ func _ready():
 		for y in range(N_IMG_CELL_VERT):
 			h_answer1_bits_1[y] = 0
 		init_usedup()
+	update_undo_redo()
 	pass # Replace with function body.
+func update_undo_redo():
+	$UndoButton.disabled = undo_ix == 0
+	$RedoButton.disabled = undo_ix == undo_stack.size()
+func push_to_undo_stack(item):
+	if undo_stack.size() > undo_ix:
+		undo_stack.resize(undo_ix)
+	undo_stack.push_back(item)
+	undo_ix += 1
 func set_quest(vq, hq):
 	for x in range(N_IMG_CELL_HORZ):
 		var lst = []
@@ -600,6 +613,8 @@ func _input(event):
 						v = TILE_NONE
 				cell_val = v
 				$TileMap.set_cell(xy.x, xy.y, v)
+				push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, v])
+				update_undo_redo()
 				if v0 == TILE_BLACK && v != TILE_BLACK:
 					setup_fallingBlack(event.position)
 				if mode == MODE_EDIT_PICT:
@@ -854,4 +869,36 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 	upate_imageTileMap()
 func _on_BackButton_pressed():
 	get_tree().change_scene("res://LevelScene.tscn")
+	pass # Replace with function body.
+func _on_UndoButton_pressed():
+	undo_ix -= 1
+	var item = undo_stack[undo_ix]
+	if item[0] == SET_CELL:
+		var x = item[1]
+		var y = item[2]
+		var v0 = item[3]
+		$TileMap.set_cell(x, y, v0)
+		if mode == MODE_EDIT_PICT:
+			update_clues(x, y)
+		elif mode == MODE_SOLVE:
+			check_clues(x, y)
+		var img = 0 if v0 == TILE_BLACK else TILE_NONE
+		$MiniTileMap.set_cell(x, y, img)
+	update_undo_redo()
+	pass # Replace with function body.
+func _on_RedoButton_pressed():
+	var item = undo_stack[undo_ix]
+	if item[0] == SET_CELL:
+		var x = item[1]
+		var y = item[2]
+		var v = item[4]
+		$TileMap.set_cell(x, y, v)
+		if mode == MODE_EDIT_PICT:
+			update_clues(x, y)
+		elif mode == MODE_SOLVE:
+			check_clues(x, y)
+		var img = 0 if v == TILE_BLACK else TILE_NONE
+		$MiniTileMap.set_cell(x, y, img)
+	undo_ix += 1
+	update_undo_redo()
 	pass # Replace with function body.

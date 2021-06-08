@@ -10,6 +10,8 @@ var QuestPanel = load("res://QuestPanel.tscn")
 
 
 func _ready():
+	#var vsb = $ScrollContainer.get_v_scrollbar()
+	#vsb.step = 10
 	print(g.quest_list.size())
 	g.ans_images.resize(g.quest_list.size())
 	for i in g.quest_list.size():
@@ -35,6 +37,11 @@ func _process(delta):
 	pass
 func _input(event):
 	if event is InputEventMouseButton:
+		if event.is_pressed():
+			if event.button_index == BUTTON_WHEEL_UP:
+				print("BUTTON_WHEEL_UP")
+			if event.button_index == BUTTON_WHEEL_DOWN:
+				print("BUTTON_WHEEL_DOWN")
 		#print("InputEventMouseButton")
 		if event.is_action_pressed("click"):		# left mouse button
 			if $ScrollContainer.get_global_rect().has_point(event.position):		# in ScrollContainer

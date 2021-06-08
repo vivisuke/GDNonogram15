@@ -681,6 +681,8 @@ __meta__ = {
 
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="UndoButton" to="." method="_on_UndoButton_pressed"]
+[connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
 [connection signal="pressed" from="LeftButton" to="." method="_on_LeftButton_pressed"]
 [connection signal="pressed" from="DownButton" to="." method="_on_DownButton_pressed"]
 [connection signal="pressed" from="UpButton" to="." method="_on_UpButton_pressed"]
