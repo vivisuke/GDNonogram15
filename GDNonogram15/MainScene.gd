@@ -60,6 +60,8 @@ func _ready():
 		$EditButton.disabled = true
 	else:
 		mode = MODE_EDIT_PICT
+		$questLabel.text = ""
+		$MessLabel.text = ""
 	update_modeButtons()
 	update_commandButtons()
 	#$TileMap.set_cell(0, 0, 0)
