@@ -612,17 +612,12 @@ func _input(event):
 					if v > TILE_BLACK:
 						v = TILE_NONE
 				cell_val = v
-				$TileMap.set_cell(xy.x, xy.y, v)
+				#$TileMap.set_cell(xy.x, xy.y, v)
 				push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, v])
 				update_undo_redo()
+				set_cell_basic(xy.x, xy.y, v)
 				if v0 == TILE_BLACK && v != TILE_BLACK:
 					setup_fallingBlack(event.position)
-				if mode == MODE_EDIT_PICT:
-					update_clues(xy.x, xy.y)
-				elif mode == MODE_SOLVE:
-					check_clues(xy.x, xy.y)
-				var img = 0 if v == TILE_BLACK else TILE_NONE
-				$MiniTileMap.set_cell(xy.x, xy.y, img)
 		elif event.is_action_released("click") || event.is_action_released("rt_click"):
 			mouse_pushed = false;
 	elif event is InputEventMouseMotion && mouse_pushed:
@@ -870,6 +865,14 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 func _on_BackButton_pressed():
 	get_tree().change_scene("res://LevelScene.tscn")
 	pass # Replace with function body.
+func set_cell_basic(x, y, v):
+	$TileMap.set_cell(x, y, v)
+	if mode == MODE_EDIT_PICT:
+		update_clues(x, y)
+	elif mode == MODE_SOLVE:
+		check_clues(x, y)
+	var img = 0 if v == TILE_BLACK else TILE_NONE
+	$MiniTileMap.set_cell(x, y, img)
 func _on_UndoButton_pressed():
 	undo_ix -= 1
 	var item = undo_stack[undo_ix]
@@ -877,13 +880,7 @@ func _on_UndoButton_pressed():
 		var x = item[1]
 		var y = item[2]
 		var v0 = item[3]
-		$TileMap.set_cell(x, y, v0)
-		if mode == MODE_EDIT_PICT:
-			update_clues(x, y)
-		elif mode == MODE_SOLVE:
-			check_clues(x, y)
-		var img = 0 if v0 == TILE_BLACK else TILE_NONE
-		$MiniTileMap.set_cell(x, y, img)
+		set_cell_basic(x, y, v0)
 	update_undo_redo()
 	pass # Replace with function body.
 func _on_RedoButton_pressed():
@@ -892,13 +889,7 @@ func _on_RedoButton_pressed():
 		var x = item[1]
 		var y = item[2]
 		var v = item[4]
-		$TileMap.set_cell(x, y, v)
-		if mode == MODE_EDIT_PICT:
-			update_clues(x, y)
-		elif mode == MODE_SOLVE:
-			check_clues(x, y)
-		var img = 0 if v == TILE_BLACK else TILE_NONE
-		$MiniTileMap.set_cell(x, y, img)
+		set_cell_basic(x, y, v)
 	undo_ix += 1
 	update_undo_redo()
 	pass # Replace with function body.
