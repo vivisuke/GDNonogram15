@@ -68,10 +68,10 @@ func _draw():
 	var style_box = StyleBoxFlat.new()
 	style_box.set_corner_radius_all(RADIUS)
 	style_box.bg_color = Color.darkslategray if !mouse_pushed else Color.gray
-	style_box.border_color = Color.green
+	style_box.border_color = Color.green if !mouse_pushed else Color.darkslategray
 	style_box.set_border_width_all(2)
-	style_box.shadow_offset = Vector2(4, 4)
-	style_box.shadow_size = 8
+	style_box.shadow_offset = Vector2(4, 4) if !mouse_pushed else Vector2(0, 0)
+	style_box.shadow_size = 8 # if !mouse_pushed else 4
 	draw_style_box(style_box, Rect2(POSITION, SIZE))
 	# サムネイル
 	var col = Color.lightgray if ans_iamge.empty() else Color.white
