@@ -691,7 +691,7 @@ func upate_imageTileMap():
 			var img = 0 if $TileMap.get_cell(x, y) == 1 else TILE_NONE
 			$MiniTileMap.set_cell(x, y, img)
 
-func rotate_left():
+func rotate_left_basic():
 	var ar = []
 	for y in range(N_IMG_CELL_VERT):
 		ar.push_back($TileMap.get_cell(0, y))	# may be -1 or +1
@@ -703,9 +703,10 @@ func rotate_left():
 	update_all_clues()
 	upate_imageTileMap()
 func _on_LeftButton_pressed():
-	rotate_left()
+	push_to_undo_stack([ROT_LEFT])
+	rotate_left_basic()
 	pass # Replace with function body.
-func rotate_right():
+func rotate_right_basic():
 	var ar = []
 	for y in range(N_IMG_CELL_VERT):
 		ar.push_back($TileMap.get_cell(N_IMG_CELL_HORZ-1, y))	# may be -1 or +1
@@ -717,9 +718,10 @@ func rotate_right():
 	update_all_clues()
 	upate_imageTileMap()
 func _on_RightButton_pressed():
-	rotate_right()
+	push_to_undo_stack([ROT_RIGHT])
+	rotate_right_basic()
 	pass # Replace with function body.
-func rotate_down():
+func rotate_down_basic():
 	var ar = []
 	for x in range(N_IMG_CELL_HORZ):
 		ar.push_back($TileMap.get_cell(x, N_IMG_CELL_VERT-1))	# may be -1 or +1
@@ -731,9 +733,10 @@ func rotate_down():
 	update_all_clues()
 	upate_imageTileMap()
 func _on_DownButton_pressed():
-	rotate_down()
+	push_to_undo_stack([ROT_DOWN])
+	rotate_down_basic()
 	pass # Replace with function body.
-func rotate_up():
+func rotate_up_basic():
 	var ar = []
 	for x in range(N_IMG_CELL_HORZ):
 		ar.push_back($TileMap.get_cell(x, 0))	# may be -1 or +1
@@ -745,7 +748,8 @@ func rotate_up():
 	update_all_clues()
 	upate_imageTileMap()
 func _on_UpButton_pressed():
-	rotate_up()
+	push_to_undo_stack([ROT_UP])
+	rotate_up_basic()
 	pass # Replace with function body.
 
 func print_clues(clues):
@@ -891,6 +895,14 @@ func _on_UndoButton_pressed():
 			for x in range(N_IMG_CELL_HORZ):
 				set_cell_basic(x, y, (TILE_BLACK if (d&mask) != 0 else TILE_NONE))
 				mask >>= 1
+	elif item[0] == ROT_LEFT:
+		rotate_right_basic()
+	elif item[0] == ROT_RIGHT:
+		rotate_left_basic()
+	elif item[0] == ROT_UP:
+		rotate_down_basic()
+	elif item[0] == ROT_DOWN:
+		rotate_up_basic()
 	update_undo_redo()
 	pass # Replace with function body.
 func _on_RedoButton_pressed():
@@ -902,6 +914,14 @@ func _on_RedoButton_pressed():
 		set_cell_basic(x, y, v)
 	elif item[0] == CLEAR_ALL:
 		clear_all_basic()
+	elif item[0] == ROT_LEFT:
+		rotate_left_basic()
+	elif item[0] == ROT_RIGHT:
+		rotate_right_basic()
+	elif item[0] == ROT_UP:
+		rotate_up_basic()
+	elif item[0] == ROT_DOWN:
+		rotate_down_basic()
 	undo_ix += 1
 	update_undo_redo()
 	pass # Replace with function body.
