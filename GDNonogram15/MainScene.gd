@@ -31,7 +31,7 @@ const ColorClues = Color("#dff9fb")
 var FallingBlack = load("res://FallingBlack.tscn")
 
 enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES, }
-enum { SET_CELL, CLEAR_ALL, }
+enum { SET_CELL, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
 
 var qix
 var mode = MODE_EDIT_PICT;
@@ -648,6 +648,12 @@ func _input(event):
 			$MessLabel.text = ""
 	pass
 func clear_all():
+	var item = [CLEAR_ALL]
+	for y in range(N_IMG_CELL_VERT):
+		item.push_back(get_h_data(y))
+	push_to_undo_stack(item)
+	clear_all_basic()
+func clear_all_basic():
 	for y in range(N_TOTAL_CELL_VERT):
 		for x in range(N_TOTAL_CELL_HORZ):
 			if $TileMap.get_cell(x, y) == TILE_BLACK:
@@ -878,6 +884,13 @@ func _on_UndoButton_pressed():
 		var y = item[2]
 		var v0 = item[3]
 		set_cell_basic(x, y, v0)
+	elif item[0] == CLEAR_ALL:
+		for y in range(N_IMG_CELL_VERT):
+			var d = item[y+1]
+			var mask = 1 << (N_IMG_CELL_HORZ - 1)
+			for x in range(N_IMG_CELL_HORZ):
+				set_cell_basic(x, y, (TILE_BLACK if (d&mask) != 0 else TILE_NONE))
+				mask >>= 1
 	update_undo_redo()
 	pass # Replace with function body.
 func _on_RedoButton_pressed():
@@ -887,6 +900,8 @@ func _on_RedoButton_pressed():
 		var y = item[2]
 		var v = item[4]
 		set_cell_basic(x, y, v)
+	elif item[0] == CLEAR_ALL:
+		clear_all_basic()
 	undo_ix += 1
 	update_undo_redo()
 	pass # Replace with function body.
