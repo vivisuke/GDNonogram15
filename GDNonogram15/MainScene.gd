@@ -827,6 +827,7 @@ func update_modeButtons():
 		$EditButton.icon = load("res://images/edit_white.png")
 	pass
 func update_commandButtons():
+	$HintButton.disabled = mode != MODE_SOLVE
 	$LeftButton.disabled = mode == MODE_SOLVE
 	$DownButton.disabled = mode == MODE_SOLVE
 	$UpButton.disabled = mode == MODE_SOLVE
