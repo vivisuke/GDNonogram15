@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=61 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -51,6 +51,9 @@
 [ext_resource path="res://images/undo_white.png" type="Texture" id=49]
 [ext_resource path="res://images/undo_black.png" type="Texture" id=50]
 [ext_resource path="res://images/undo_gray.png" type="Texture" id=51]
+[ext_resource path="res://images/lightbulb_white.png" type="Texture" id=52]
+[ext_resource path="res://images/lightbulb_gray.png" type="Texture" id=53]
+[ext_resource path="res://images/lightbulb_black.png" type="Texture" id=54]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -462,6 +465,33 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="HintButton" type="TextureButton" parent="."]
+margin_left = 250.0
+margin_top = 660.0
+margin_right = 346.0
+margin_bottom = 756.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 54 )
+texture_pressed = ExtResource( 52 )
+texture_disabled = ExtResource( 53 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HintButton"]
+margin_left = 10.0
+margin_top = 90.0
+margin_right = 87.0
+margin_bottom = 126.0
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Hint"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="UndoButton" type="TextureButton" parent="."]
 margin_left = 330.0
 margin_top = 660.0
@@ -681,6 +711,7 @@ __meta__ = {
 
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
 [connection signal="pressed" from="UndoButton" to="." method="_on_UndoButton_pressed"]
 [connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
 [connection signal="pressed" from="LeftButton" to="." method="_on_LeftButton_pressed"]

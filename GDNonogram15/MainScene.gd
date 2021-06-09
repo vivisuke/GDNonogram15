@@ -58,6 +58,8 @@ var v_usedup = []			# 垂直方向手がかり数字を使い切った＆エラ�
 var undo_ix = 0
 var undo_stack = []
 
+var help_text = ""
+
 func _ready():
 	if g.solveMode:
 		mode = MODE_SOLVE
@@ -618,6 +620,8 @@ func _input(event):
 				set_cell_basic(xy.x, xy.y, v)
 				if v0 == TILE_BLACK && v != TILE_BLACK:
 					setup_fallingBlack(event.position)
+			else:
+				return		# 盤面外をクリックした場合
 		elif event.is_action_released("click") || event.is_action_released("rt_click"):
 			mouse_pushed = false;
 	elif event is InputEventMouseMotion && mouse_pushed:
@@ -644,7 +648,7 @@ func _input(event):
 										"' by " + g.quest_list[qix][g.KEY_AUTHOR])
 			$MessLabel.add_color_override("font_color", Color.blue)
 			$MessLabel.text = "Solved, Good Job !"
-		else:
+		elif help_text.empty():
 			$MessLabel.text = ""
 	pass
 func clear_all():
@@ -770,7 +774,7 @@ func _on_CheckButton_pressed():
 	var solved = false
 	var itr = 0
 	while true:
-		update_h_fixedbits()
+		update_h_fixedbits()	# h_candidates[] を元に h_fixed_bits_1, 0 を計算
 		#print("num candidates = ", num_candidates())
 		var nc = num_candidates()
 		if nc == N_IMG_CELL_HORZ + N_IMG_CELL_VERT:	# solved
@@ -924,4 +928,46 @@ func _on_RedoButton_pressed():
 		rotate_down_basic()
 	undo_ix += 1
 	update_undo_redo()
+	pass # Replace with function body.
+func fixedLine():
+	for y in range(N_IMG_CELL_VERT):
+		var d = get_h_data(y)
+		if (d & h_fixed_bits_1[y]) != h_fixed_bits_1[y]:
+			return y;
+		var d0 = get_h_data0(y)
+		if (d0 & h_fixed_bits_0[y]) != h_fixed_bits_0[y]:
+			return y;
+	return -1
+func fixedColumn():
+	for x in range(N_IMG_CELL_VERT):
+		var d = get_v_data(x)
+		if (d & v_fixed_bits_1[x]) != v_fixed_bits_1[x]:
+			return x;
+		var d0 = get_v_data0(x)
+		if (d0 & v_fixed_bits_0[x]) != v_fixed_bits_0[x]:
+			return x;
+	return -1
+func _on_HintButton_pressed():
+	init_arrays()
+	init_candidates()
+	update_h_fixedbits()	# h_candidates[] を元に h_fixed_bits_1, 0 を計算
+	var y = fixedLine()		# 確定セルがある行を探す
+	print("hint: line = ", y)
+	if y >= 0:
+		help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+		$MessLabel.add_color_override("font_color", Color.black)
+		$MessLabel.text = help_text
+		for x in range(N_IMG_CELL_HORZ):
+			$BoardBG/TileMapBG.set_cell(x, y, TILE_BG_YELLOW)
+		return
+	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
+	var x = fixedColumn()	# 確定セルがある列を探す
+	print("hint: column = ", x)
+	if x >= 0:
+		help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
+		$MessLabel.add_color_override("font_color", Color.black)
+		$MessLabel.text = help_text
+		for y2 in range(N_IMG_CELL_VERT):
+			$BoardBG/TileMapBG.set_cell(x, y2, TILE_BG_YELLOW)
+		return
 	pass # Replace with function body.
