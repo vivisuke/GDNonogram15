@@ -19,11 +19,11 @@ func _ready():
 			g.solved.push_back(false)
 		var panel = QuestPanel.instance()
 		panel.set_number(i+1)
-		panel.set_difficulty(g.quest_list[i][0])
+		panel.set_difficulty(g.quest_list[i][g.KEY_DIFFICULTY])
 		if g.solved[i]:
-			panel.set_title(g.quest_list[i][1])
+			panel.set_title(g.quest_list[i][g.KEY_TITLE])
 			panel.set_ans_image(g.ans_images[i])
-		panel.set_author(g.quest_list[i][2])
+		panel.set_author(g.quest_list[i][g.KEY_AUTHOR])
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#
 		panel.connect("pressed", self, "_on_QuestPanel_pressed")
