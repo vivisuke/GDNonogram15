@@ -36,9 +36,9 @@ __meta__ = {
 
 [node name="EditButton" type="Button" parent="."]
 margin_left = 180.0
-margin_top = 720.0
+margin_top = 725.0
 margin_right = 314.0
-margin_bottom = 774.0
+margin_bottom = 779.0
 custom_fonts/font = SubResource( 1 )
 text = "Edit Mode"
 icon = ExtResource( 3 )
@@ -47,13 +47,32 @@ __meta__ = {
 }
 
 [node name="TitleLabel" type="Label" parent="."]
-margin_top = 30.0
+margin_top = 20.0
 margin_right = 480.0
-margin_bottom = 64.0
+margin_bottom = 54.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "GDNonogram"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="versionLabel" type="Label" parent="."]
+margin_top = 70.0
+margin_right = 480.0
+margin_bottom = 84.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "ver 0.001"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+margin_top = 100.0
+margin_right = 480.0
+margin_bottom = 700.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -643,7 +643,7 @@ func _input(event):
 		if is_solved():
 			if g.solveMode:
 				#g.solved[qix] = true
-				if !g.solvedPat.has(qID):
+				if !g.solvedPat.has(qID):		# クリア辞書に入っていない場合
 					var lst = []
 					for y in range(N_IMG_CELL_VERT):
 						lst.push_back(get_h_data(y))
