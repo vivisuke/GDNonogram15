@@ -29,6 +29,7 @@ const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
 var FallingBlack = load("res://FallingBlack.tscn")
+var FallingCross = load("res://FallingCross.tscn")
 
 enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES, }
 enum { SET_CELL, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
@@ -577,7 +578,10 @@ func clearTileMapBG():
 func setup_fallingBlack(pos):
 	var obj = FallingBlack.instance()
 	obj.setup(pos)
-	#obj.position = pos
+	add_child(obj)
+func setup_fallingCross(pos):
+	var obj = FallingCross.instance()
+	obj.setup(pos)
 	add_child(obj)
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
@@ -642,6 +646,12 @@ func _input(event):
 	if mode == MODE_SOLVE:
 		if is_solved():
 			if g.solveMode:
+				# ☓消去
+				for y in range(N_IMG_CELL_VERT):
+					for x in range(N_IMG_CELL_HORZ):
+						if $TileMap.get_cell(x, y) == TILE_CROSS:
+							$TileMap.set_cell(x, y, TILE_NONE)
+							setup_fallingCross(xyToPos(x, y))
 				#g.solved[qix] = true
 				if !g.solvedPat.has(qID):		# クリア辞書に入っていない場合
 					var lst = []
