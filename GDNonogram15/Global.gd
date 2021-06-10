@@ -173,6 +173,7 @@ var quest_list = [
 var lvl_vscroll = 0	# レベルシーン スクロール位置
 var solveMode = true
 var qNumber = 0			# [#1, ...#N]
+var qix2ID = []			# qix → QID 配列
 var solved = []			# true/false
 var ans_images = []		# 解答ビットパターン配列
 #var test = 123

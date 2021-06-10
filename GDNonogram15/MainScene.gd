@@ -33,7 +33,7 @@ var FallingBlack = load("res://FallingBlack.tscn")
 enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES, }
 enum { SET_CELL, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
 
-var qix
+var qix					# 問題番号 [0, N]
 var mode = MODE_EDIT_PICT;
 var dialog_opened = false;
 var mouse_pushed = false
@@ -122,6 +122,7 @@ func _ready():
 	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
 	if g.solveMode:
 		qix = g.qNumber - 1
+		print("QID = ", g.qix2ID[qix])
 		$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 							", '???' by " + g.quest_list[qix][g.KEY_AUTHOR])
 		set_quest(g.quest_list[qix][g.KEY_V_CLUES], g.quest_list[qix][g.KEY_H_CLUES])

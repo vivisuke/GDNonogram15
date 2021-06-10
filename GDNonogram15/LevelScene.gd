@@ -14,9 +14,11 @@ func _ready():
 	#vsb.step = 10
 	print(g.quest_list.size())
 	g.ans_images.resize(g.quest_list.size())
-	for i in g.quest_list.size():
+	g.qix2ID.resize(g.quest_list.size())
+	for i in g.quest_list.size():	# 問題パネルセットアップ
 		if g.solved.size() <= i:
 			g.solved.push_back(false)
+		g.qix2ID[i] = g.quest_list[i][g.KEY_ID]
 		var panel = QuestPanel.instance()
 		panel.set_number(i+1)
 		panel.set_difficulty(g.quest_list[i][g.KEY_DIFFICULTY])
