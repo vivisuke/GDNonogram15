@@ -1,5 +1,13 @@
 extends Node2D
 
+var lvl_vscroll = 0	# レベルシーン スクロール位置
+var solveMode = true
+var qNumber = 0			# [#1, ...#N]
+var qix2ID = []			# qix → QID 配列
+var solvedPat = {}		# QID -> [data0, data1, ...] 辞書
+var solved = []			# true/false
+var ans_images = []		# 解答ビットパターン配列
+
 enum {
 	KEY_ID = 0,
 	KEY_DIFFICULTY,
@@ -170,12 +178,6 @@ var quest_list = [
 	[" 1"," 1 4 1"," 2 8 1"," 1 3 5 1"," 2 4"," 1 3 5"," 6 4 1"," 1 9 2"," 8 2"," 1 8"," 1 1 3 2"," 2 5 2 1"," 1 4 1"," 1 1"," 1",]],
 	#
 ]
-var lvl_vscroll = 0	# レベルシーン スクロール位置
-var solveMode = true
-var qNumber = 0			# [#1, ...#N]
-var qix2ID = []			# qix → QID 配列
-var solved = []			# true/false
-var ans_images = []		# 解答ビットパターン配列
 #var test = 123
 
 func _ready():

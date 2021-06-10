@@ -34,6 +34,7 @@ enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES, }
 enum { SET_CELL, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
 
 var qix					# 問題番号 [0, N]
+var qID					# 問題ID
 var mode = MODE_EDIT_PICT;
 var dialog_opened = false;
 var mouse_pushed = false
@@ -122,7 +123,8 @@ func _ready():
 	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
 	if g.solveMode:
 		qix = g.qNumber - 1
-		print("QID = ", g.qix2ID[qix])
+		qID = g.qix2ID[qix]
+		print("QID = ", qID)
 		$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 							", '???' by " + g.quest_list[qix][g.KEY_AUTHOR])
 		set_quest(g.quest_list[qix][g.KEY_V_CLUES], g.quest_list[qix][g.KEY_H_CLUES])
@@ -641,9 +643,11 @@ func _input(event):
 		if is_solved():
 			if g.solveMode:
 				g.solved[qix] = true
-				g.ans_images[qix] = []
-				for y in range(N_IMG_CELL_VERT):
-					g.ans_images[qix].push_back(get_h_data(y))
+				if !g.solvedPat.has(qID):
+					var lst = []
+					for y in range(N_IMG_CELL_VERT):
+						lst.push_back(get_h_data(y))
+					g.solvedPat[qID] = lst
 				$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 										", '" + g.quest_list[qix][g.KEY_TITLE] +
 										"' by " + g.quest_list[qix][g.KEY_AUTHOR])

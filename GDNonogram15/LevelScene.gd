@@ -24,7 +24,8 @@ func _ready():
 		panel.set_difficulty(g.quest_list[i][g.KEY_DIFFICULTY])
 		if g.solved[i]:
 			panel.set_title(g.quest_list[i][g.KEY_TITLE])
-			panel.set_ans_image(g.ans_images[i])
+			panel.set_ans_image(g.solvedPat[g.qix2ID[i]])
+			#panel.set_ans_image(g.ans_images[i])
 		panel.set_author(g.quest_list[i][g.KEY_AUTHOR])
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#
