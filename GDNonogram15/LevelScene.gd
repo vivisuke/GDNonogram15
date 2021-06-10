@@ -12,17 +12,27 @@ var QuestPanel = load("res://QuestPanel.tscn")
 func _ready():
 	#var vsb = $ScrollContainer.get_v_scrollbar()
 	#vsb.step = 10
+	if !g.solvedPatLoaded:
+		g.solvedPatLoaded = true
+		var file = File.new()
+		#print(g.solvedPatFileName)
+		if file.file_exists(g.solvedPatFileName):
+			file.open(g.solvedPatFileName, File.READ)
+			g.solvedPat = file.get_var()
+			file.close()
+			print(g.solvedPat)
 	print(g.quest_list.size())
 	g.ans_images.resize(g.quest_list.size())
 	g.qix2ID.resize(g.quest_list.size())
 	for i in g.quest_list.size():	# 問題パネルセットアップ
-		if g.solved.size() <= i:
-			g.solved.push_back(false)
+		#if g.solved.size() <= i:
+		#	g.solved.push_back(false)
 		g.qix2ID[i] = g.quest_list[i][g.KEY_ID]
 		var panel = QuestPanel.instance()
 		panel.set_number(i+1)
 		panel.set_difficulty(g.quest_list[i][g.KEY_DIFFICULTY])
-		if g.solved[i]:
+		#if g.solved[i]:
+		if g.solvedPat.has(g.qix2ID[i]):
 			panel.set_title(g.quest_list[i][g.KEY_TITLE])
 			panel.set_ans_image(g.solvedPat[g.qix2ID[i]])
 			#panel.set_ans_image(g.ans_images[i])

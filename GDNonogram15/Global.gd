@@ -1,11 +1,14 @@
 extends Node2D
 
-var lvl_vscroll = 0	# レベルシーン スクロール位置
+const solvedPatFileName = "user://saved.dat"
+
+var solvedPatLoaded = false
+var lvl_vscroll = 0		# レベルシーン スクロール位置
 var solveMode = true
 var qNumber = 0			# [#1, ...#N]
 var qix2ID = []			# qix → QID 配列
 var solvedPat = {}		# QID -> [data0, data1, ...] 辞書
-var solved = []			# true/false
+#var solved = []			# true/false
 var ans_images = []		# 解答ビットパターン配列
 
 enum {

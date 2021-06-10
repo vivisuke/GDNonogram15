@@ -642,12 +642,17 @@ func _input(event):
 	if mode == MODE_SOLVE:
 		if is_solved():
 			if g.solveMode:
-				g.solved[qix] = true
+				#g.solved[qix] = true
 				if !g.solvedPat.has(qID):
 					var lst = []
 					for y in range(N_IMG_CELL_VERT):
 						lst.push_back(get_h_data(y))
 					g.solvedPat[qID] = lst
+					#
+					var file = File.new()
+					file.open(g.solvedPatFileName, File.WRITE)
+					file.store_var(g.solvedPat)
+					file.close()
 				$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 										", '" + g.quest_list[qix][g.KEY_TITLE] +
 										"' by " + g.quest_list[qix][g.KEY_AUTHOR])
