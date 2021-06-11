@@ -32,7 +32,7 @@ var FallingBlack = load("res://FallingBlack.tscn")
 var FallingCross = load("res://FallingCross.tscn")
 
 enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES, }
-enum { SET_CELL, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
+enum { SET_CELL, SET_CELL_BE, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
 
 var qix					# 問題番号 [0, N]
 var qID					# 問題ID
@@ -622,7 +622,7 @@ func _input(event):
 						v = TILE_NONE
 				cell_val = v
 				#$TileMap.set_cell(xy.x, xy.y, v)
-				push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, v])
+				push_to_undo_stack([SET_CELL_BE, xy.x, xy.y, v0, v])
 				update_undo_redo()
 				set_cell_basic(xy.x, xy.y, v)
 				if v0 == TILE_BLACK && v != TILE_BLACK:
@@ -630,8 +630,11 @@ func _input(event):
 			else:
 				return		# 盤面外をクリックした場合
 		elif event.is_action_released("click") || event.is_action_released("rt_click"):
-			mouse_pushed = false;
-	elif event is InputEventMouseMotion && mouse_pushed:
+			if mouse_pushed:
+				mouse_pushed = false;
+				if !undo_stack.empty() && undo_stack.back()[0] <= SET_CELL_BE:
+					undo_stack.back()[0] ^= 1		# 最下位ビット反転
+	elif event is InputEventMouseMotion && mouse_pushed:	# マウスドラッグ
 		var xy = posToXY(event.position)
 		if xy.x >= 0 && xy != last_xy:
 			#print(xy)
@@ -913,6 +916,14 @@ func _on_UndoButton_pressed():
 		var y = item[2]
 		var v0 = item[3]
 		set_cell_basic(x, y, v0)
+	elif item[0] == SET_CELL_BE:
+		set_cell_basic(item[1], item[2], item[3])
+		while true:
+			undo_ix -= 1
+			item = undo_stack[undo_ix]
+			set_cell_basic(item[1], item[2], item[3])
+			if item[0] == SET_CELL_BE:
+				break;
 	elif item[0] == CLEAR_ALL:
 		for y in range(N_IMG_CELL_VERT):
 			var d = item[y+1]
@@ -937,6 +948,14 @@ func _on_RedoButton_pressed():
 		var y = item[2]
 		var v = item[4]
 		set_cell_basic(x, y, v)
+	elif item[0] == SET_CELL_BE:
+		set_cell_basic(item[1], item[2], item[4])
+		while true:
+			undo_ix += 1
+			item = undo_stack[undo_ix]
+			set_cell_basic(item[1], item[2], item[4])
+			if item[0] == SET_CELL_BE:
+				break;
 	elif item[0] == CLEAR_ALL:
 		clear_all_basic()
 	elif item[0] == ROT_LEFT:
