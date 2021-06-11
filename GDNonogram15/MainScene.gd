@@ -127,7 +127,8 @@ func _ready():
 		qID = g.qix2ID[qix]
 		print("QID = ", qID)
 		$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
-							", '???' by " + g.quest_list[qix][g.KEY_AUTHOR])
+							", '" + g.quest_list[qix][g.KEY_TITLE][0] + "???' by " +
+							g.quest_list[qix][g.KEY_AUTHOR])
 		set_quest(g.quest_list[qix][g.KEY_V_CLUES], g.quest_list[qix][g.KEY_H_CLUES])
 		for y in range(N_IMG_CELL_VERT):
 			h_answer1_bits_1[y] = 0
