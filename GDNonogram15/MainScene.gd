@@ -36,6 +36,7 @@ enum { SET_CELL, SET_CELL_BE, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
 
 var qix					# 問題番号 [0, N]
 var qID					# 問題ID
+var qSolved = false
 var mode = MODE_EDIT_PICT;
 var dialog_opened = false;
 var mouse_pushed = false
@@ -56,7 +57,7 @@ var h_autoFilledCross = []		# 自動計算で☓を入れたセル（ビット�
 var v_autoFilledCross = []		# 自動計算で☓を入れたセル（ビットボード, x == 0 が最下位ビット）
 var h_usedup = []			# 水平方向手がかり数字を使い切った＆エラー無し
 var v_usedup = []			# 垂直方向手がかり数字を使い切った＆エラー無し
-
+var shock_wave_timer = -1
 var undo_ix = 0
 var undo_stack = []
 
@@ -134,7 +135,15 @@ func _ready():
 			h_answer1_bits_1[y] = 0
 		init_usedup()
 	update_undo_redo()
+	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	pass # Replace with function body.
+func _process(delta):
+	if shock_wave_timer >= 0:
+		shock_wave_timer += delta
+		$CanvasLayer/ColorRect.material.set_shader_param("size", shock_wave_timer)
+		if shock_wave_timer > 2:
+			shock_wave_timer = -1.0
+	pass
 func update_undo_redo():
 	$UndoButton.disabled = undo_ix == 0
 	$RedoButton.disabled = undo_ix == undo_stack.size()
@@ -629,7 +638,8 @@ func _input(event):
 				if v0 == TILE_BLACK && v != TILE_BLACK:
 					setup_fallingBlack(event.position)
 			else:
-				return		# 盤面外をクリックした場合
+				#return		# 盤面外をクリックした場合
+				pass
 		elif event.is_action_released("click") || event.is_action_released("rt_click"):
 			if mouse_pushed:
 				mouse_pushed = false;
@@ -650,6 +660,9 @@ func _input(event):
 	if mode == MODE_SOLVE:
 		if is_solved():
 			if g.solveMode:
+				if !qSolved:
+					qSolved = true
+					shock_wave_timer = 0.0		# start shock wave
 				# ☓消去
 				for y in range(N_IMG_CELL_VERT):
 					for x in range(N_IMG_CELL_HORZ):
@@ -672,8 +685,10 @@ func _input(event):
 										"' by " + g.quest_list[qix][g.KEY_AUTHOR])
 			$MessLabel.add_color_override("font_color", Color.blue)
 			$MessLabel.text = "Solved, Good Job !"
-		elif help_text.empty():
-			$MessLabel.text = ""
+		else:	# not is_solved()
+			qSolved = false
+			if help_text.empty():
+				$MessLabel.text = ""
 	pass
 func clear_all():
 	var item = [CLEAR_ALL]
