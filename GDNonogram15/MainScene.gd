@@ -400,6 +400,18 @@ func update_h_candidates():
 		#print( "h_cand[", y, "] = ", to_binText(h_candidates[y]) )
 	#print("g_map[[4]] = ", g_map[[4]])
 	pass
+func remove_h_candidates_conflicted():		# 現在のセルの状態にマッチしない候補をリストから削除
+	for y in range(N_IMG_CELL_VERT):
+		var d1 = get_h_data(y)
+		var d0 = get_h_data0(y)
+		remove_conflicted(d1, d0, h_candidates[y])
+	pass
+func remove_v_candidates_conflicted():		# 現在のセルの状態にマッチしない候補をリストから削除
+	for x in range(N_IMG_CELL_HORZ):
+		var d1 = get_v_data(x)
+		var d0 = get_v_data0(x)
+		remove_conflicted(d1, d0, v_candidates[x])
+	pass
 func is_data_OK(d, d0, lst):	# d が lst のすべてと矛盾する場合は false を返す
 	for i in range(lst.size()):
 		if (lst[i] & d) == d && (~lst[i] & d0) == d0:
@@ -988,6 +1000,9 @@ func _on_RedoButton_pressed():
 func fixedLine():
 	for y in range(N_IMG_CELL_VERT):
 		var d = get_h_data(y)
+		if y == 6:
+			print("h_data[", y , "] = ", to_binText(d));
+			print("h_fixed_bits_1[", y , "] = ", to_binText(h_fixed_bits_1[y]));
 		if (d & h_fixed_bits_1[y]) != h_fixed_bits_1[y]:
 			return y;
 		var d0 = get_h_data0(y)
@@ -1006,6 +1021,7 @@ func fixedColumn():
 func _on_HintButton_pressed():
 	init_arrays()
 	init_candidates()
+	remove_h_candidates_conflicted()
 	update_h_fixedbits()	# h_candidates[] を元に h_fixed_bits_1, 0 を計算
 	var y = fixedLine()		# 確定セルがある行を探す
 	print("hint: line = ", y)
@@ -1016,6 +1032,7 @@ func _on_HintButton_pressed():
 		for x in range(N_IMG_CELL_HORZ):
 			$BoardBG/TileMapBG.set_cell(x, y, TILE_BG_YELLOW)
 		return
+	remove_v_candidates_conflicted()
 	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
 	var x = fixedColumn()	# 確定セルがある列を探す
 	print("hint: column = ", x)
