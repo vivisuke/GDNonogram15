@@ -636,7 +636,7 @@ func _input(event):
 				var v0 = $TileMap.get_cell(xy.x, xy.y)
 				var v = v0
 				if event.is_action_pressed("click"):		# left mouse button
-					v = TILE_BLACK if v == TILE_CROSS else -v;
+					v = TILE_BLACK if v == TILE_NONE else TILE_NONE;
 				else:
 					#v = TILE_CROSS if v != TILE_CROSS else TILE_BLACK
 					v += 1
