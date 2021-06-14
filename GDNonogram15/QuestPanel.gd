@@ -74,7 +74,7 @@ func _draw():
 	style_box.shadow_size = 8 # if !mouse_pushed else 4
 	draw_style_box(style_box, Rect2(POSITION, SIZE))
 	# サムネイル
-	var col = Color.lightgray if ans_iamge.empty() else Color.white
+	var col = Color.lightgray if ans_iamge.empty() else Color("#ffffef")
 	draw_rect(Rect2(THUMBNAIL_X-2, THUMBNAIL_POS-2, THUMBNAIL_WIDTH+4, THUMBNAIL_WIDTH+4), col)
 	if !ans_iamge.empty():
 		for y in range(IMG_HEIGHT):
