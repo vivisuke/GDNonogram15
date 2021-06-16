@@ -124,6 +124,7 @@ func _ready():
 	#set_quest(vq, hq)
 	h_answer1_bits_1.resize(N_IMG_CELL_VERT)
 	if g.solveMode:
+		#qix = g.qNum2QIX[g.qNumber - 1]
 		qix = g.qNumber - 1
 		qID = g.qix2ID[qix]
 		print("QID = ", qID)

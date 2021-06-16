@@ -8,11 +8,16 @@ var scroll_pos
 
 var QuestPanel = load("res://QuestPanel.tscn")
 
-
+class MyCustomSorter:
+	var g 
+	static func sort_ascending(a, b):
+		return true if a[1] < b[1] else false
+	#static func sort_descending(a, b):
+	#	return true if a > b else false
 func _ready():
 	#var vsb = $ScrollContainer.get_v_scrollbar()
 	#vsb.step = 10
-	if !g.solvedPatLoaded:
+	if !g.solvedPatLoaded:			# クリア履歴未読込の場合
 		g.solvedPatLoaded = true
 		var file = File.new()
 		#print(g.solvedPatFileName)
@@ -21,24 +26,37 @@ func _ready():
 			g.solvedPat = file.get_var()
 			file.close()
 			print(g.solvedPat)
-	print(g.quest_list.size())
+	print(g.quest_list0.size())
+	if g.quest_list.empty():	# ソート済み問題配列が空
+		g.quest_list.resize(g.quest_list0.size())
+		for i in range(g.quest_list0.size()):
+			g.quest_list[i] = g.quest_list0[i]
+		g.quest_list.sort_custom(MyCustomSorter, "sort_ascending")
+	#if g.qNum2QIX.empty():			# 問題番号 → 問題リストIX（qix）テーブルが未構築の場合
+	#	g.qNum2QIX.resize(g.quest_list.size())
+	#	for i in range(g.quest_list.size()):
+	#		g.qNum2QIX[i] = i
+	#	MyCustomSorter.g = g
+	#	g.qNum2QIX.sort_custom(MyCustomSorter, "sort_ascending")
 	g.ans_images.resize(g.quest_list.size())
 	g.qix2ID.resize(g.quest_list.size())
 	for i in g.quest_list.size():	# 問題パネルセットアップ
 		#if g.solved.size() <= i:
 		#	g.solved.push_back(false)
-		g.qix2ID[i] = g.quest_list[i][g.KEY_ID]
+		#var qix = g.qNum2QIX[i]
+		var qix = i
+		g.qix2ID[qix] = g.quest_list[qix][g.KEY_ID]
 		var panel = QuestPanel.instance()
 		panel.set_number(i+1)
-		panel.set_difficulty(g.quest_list[i][g.KEY_DIFFICULTY])
+		panel.set_difficulty(g.quest_list[qix][g.KEY_DIFFICULTY])
 		#if g.solved[i]:
-		if g.solvedPat.has(g.qix2ID[i]):
-			panel.set_title(g.quest_list[i][g.KEY_TITLE])
-			panel.set_ans_image(g.solvedPat[g.qix2ID[i]])
+		if g.solvedPat.has(g.qix2ID[qix]):
+			panel.set_title(g.quest_list[qix][g.KEY_TITLE])
+			panel.set_ans_image(g.solvedPat[g.qix2ID[qix]])
 			#panel.set_ans_image(g.ans_images[i])
 		else:
-			panel.set_title(g.quest_list[i][g.KEY_TITLE][0] + "???")
-		panel.set_author(g.quest_list[i][g.KEY_AUTHOR])
+			panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
+		panel.set_author(g.quest_list[qix][g.KEY_AUTHOR])
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#
 		panel.connect("pressed", self, "_on_QuestPanel_pressed")
@@ -75,6 +93,7 @@ func _on_QuestPanel_pressed(num):
 	print("vscroll = ", g.lvl_vscroll)
 	g.solveMode = true;
 	g.qNumber = num
+	#g.qix = qNum2QIX[num-1]
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
 
