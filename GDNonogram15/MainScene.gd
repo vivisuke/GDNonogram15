@@ -434,7 +434,7 @@ func remove_conflicted(d1, d0, lst):		# d1, d0 と矛盾する要素を削除
 	for i in range(lst.size()-1, -1, -1):
 		if (lst[i] & d1) != d1 || (~lst[i] & d0) != d0:
 			lst.remove(i)
-func check_h_clues(y0 : int):		# 水平方向チェック
+func remove_h_auto_cross(y0):
 	if h_autoFilledCross[y0] != 0:		# ☓オートフィルでフィルされた☓を削除
 		var vmask = 1 << y0
 		var mask = 1
@@ -444,6 +444,15 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 				$TileMap.set_cell(x, y0, TILE_NONE)
 			mask <<= 1
 		h_autoFilledCross[y0] = 0
+func set_h_auto_cross(y0):
+	var mask = 1
+	for x in range(N_IMG_CELL_HORZ):
+		if $TileMap.get_cell(x, y0) == TILE_NONE:
+			$TileMap.set_cell(x, y0, TILE_CROSS)
+			h_autoFilledCross[y0] |= mask
+		mask <<= 1
+func check_h_clues(y0 : int):		# 水平方向チェック
+	remove_h_auto_cross(y0)
 	#
 	var d1 = get_h_data(y0)
 	var d0 = get_h_data0(y0)
@@ -460,12 +469,7 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 		if lst.has(d1):		# d1 が正解に含まれる場合
 			h_usedup[y0] = true
 			bg = TILE_BG_GRAY if d1 != 0 else TILE_NONE			# グレイ or 無し
-			var mask = 1
-			for x in range(N_IMG_CELL_HORZ):
-				if $TileMap.get_cell(x, y0) == TILE_NONE:
-					$TileMap.set_cell(x, y0, TILE_CROSS)
-					h_autoFilledCross[y0] |= mask
-				mask <<= 1
+			set_h_auto_cross(y0)
 			for x in range(h_clues[y0].size()):
 				$BoardBG/TileMapBG.set_cell(-x-1, y0, bg)
 		else:
@@ -477,7 +481,7 @@ func check_h_clues(y0 : int):		# 水平方向チェック
 			for x in range(h_clues[y0].size()):
 				$BoardBG/TileMapBG.set_cell(-x-1, y0, (TILE_NONE if uu[x] == 0 else TILE_BG_GRAY))
 	pass
-func check_v_clues(x0 : int):		# 垂直方向チェック
+func remove_v_auto_cross(x0):
 	if v_autoFilledCross[x0] != 0:
 		var hmask = 1 << x0
 		var mask = 1
@@ -487,6 +491,15 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 				$TileMap.set_cell(x0, y, TILE_NONE)
 			mask <<= 1
 		v_autoFilledCross[x0] = 0
+func set_v_auto_cross(x0):
+	var mask = 1
+	for y in range(N_IMG_CELL_VERT):
+		if $TileMap.get_cell(x0, y) == TILE_NONE:
+			$TileMap.set_cell(x0, y, TILE_CROSS)
+			v_autoFilledCross[x0] |= mask
+		mask <<= 1
+func check_v_clues(x0 : int):		# 垂直方向チェック
+	remove_v_auto_cross(x0)
 	#var mask = 1 << x0
 	#for y in range(N_IMG_CELL_VERT):
 	#	if (h_autoFilledCross[y] & mask) != 0:
@@ -507,12 +520,7 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 		if lst.has(d1):		# d1 が正解に含まれる場合
 			v_usedup[x0] = true
 			bg = TILE_BG_GRAY if d1 != 0 else TILE_NONE			# グレイ or 無し
-			var mask = 1
-			for y in range(N_IMG_CELL_VERT):
-				if $TileMap.get_cell(x0, y) == TILE_NONE:
-					$TileMap.set_cell(x0, y, TILE_CROSS)
-					v_autoFilledCross[x0] |= mask
-				mask <<= 1
+			set_v_auto_cross(x0)
 			for y in range(v_clues[x0].size()):
 				$BoardBG/TileMapBG.set_cell(x0, -y-1, bg)
 		else:
@@ -951,8 +959,8 @@ func set_cell_basic(x, y, v):
 	if mode == MODE_EDIT_PICT:
 		update_clues(x, y)
 	elif mode == MODE_SOLVE:
-		check_all_clues()
-		#check_clues(x, y)
+		#check_all_clues()
+		check_clues(x, y)
 	var img = 0 if v == TILE_BLACK else TILE_NONE
 	$MiniTileMap.set_cell(x, y, img)
 func _on_UndoButton_pressed():
