@@ -523,6 +523,11 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 			var uu = usedup_clues(lst, d1, v_clues[x0].size())
 			for y in range(v_clues[x0].size()):
 				$BoardBG/TileMapBG.set_cell(x0, -y-1, (TILE_NONE if uu[y] == 0 else TILE_BG_GRAY))
+func check_all_clues():
+	for y in range(N_IMG_CELL_VERT):
+		check_h_clues(y)
+	for x in range(N_IMG_CELL_HORZ):
+		check_v_clues(x)
 func check_clues(x0, y0):
 	check_h_clues(y0)
 	check_v_clues(x0)
@@ -649,7 +654,7 @@ func _input(event):
 				var v0 = $TileMap.get_cell(xy.x, xy.y)
 				var v = v0
 				if event.is_action_pressed("click"):		# left mouse button
-					v = TILE_BLACK if v == TILE_NONE else TILE_NONE;
+					v = TILE_BLACK if v0 == TILE_NONE else TILE_NONE;
 				else:
 					#v = TILE_CROSS if v != TILE_CROSS else TILE_BLACK
 					v += 1
@@ -946,7 +951,8 @@ func set_cell_basic(x, y, v):
 	if mode == MODE_EDIT_PICT:
 		update_clues(x, y)
 	elif mode == MODE_SOLVE:
-		check_clues(x, y)
+		check_all_clues()
+		#check_clues(x, y)
 	var img = 0 if v == TILE_BLACK else TILE_NONE
 	$MiniTileMap.set_cell(x, y, img)
 func _on_UndoButton_pressed():
