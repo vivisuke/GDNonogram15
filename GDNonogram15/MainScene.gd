@@ -656,10 +656,10 @@ func _input(event):
 				if event.is_action_pressed("click"):		# left mouse button
 					v = TILE_BLACK if v0 == TILE_NONE else TILE_NONE;
 				else:
-					#v = TILE_CROSS if v != TILE_CROSS else TILE_BLACK
-					v += 1
-					if v > TILE_BLACK:
-						v = TILE_NONE
+					v = TILE_CROSS if v0 == TILE_NONE else TILE_NONE
+					#v += 1
+					#if v > TILE_BLACK:
+					#	v = TILE_NONE
 				cell_val = v
 				#$TileMap.set_cell(xy.x, xy.y, v)
 				push_to_undo_stack([SET_CELL_BE, xy.x, xy.y, v0, v])
