@@ -38,6 +38,7 @@ var qix					# 問題番号 [0, N]
 var qID					# 問題ID
 var qSolved = false
 var elapsedTime = 0.0	# 経過時間（単位：秒）
+var hintTime = 0.0		# != 0 の間はヒント使用不可（単位：秒）
 var mode = MODE_EDIT_PICT;
 var dialog_opened = false;
 var mouse_pushed = false
@@ -145,6 +146,11 @@ func _process(delta):
 	var m = sec / 60
 	sec -= m * 60
 	$timeLabel.text = "%02d:%02d" % [m, sec]
+	#
+	if hintTime > 0:
+		hintTime -= delta
+		if hintTime <= 0:
+			update_commandButtons()
 	if shock_wave_timer >= 0:
 		shock_wave_timer += delta
 		$CanvasLayer/ColorRect.material.set_shader_param("size", shock_wave_timer)
@@ -885,7 +891,7 @@ func update_modeButtons():
 		$EditButton.icon = load("res://images/edit_white.png")
 	pass
 func update_commandButtons():
-	$HintButton.disabled = mode != MODE_SOLVE
+	$HintButton.disabled = mode != MODE_SOLVE || hintTime > 0
 	$LeftButton.disabled = mode == MODE_SOLVE
 	$DownButton.disabled = mode == MODE_SOLVE
 	$UpButton.disabled = mode == MODE_SOLVE
@@ -1038,6 +1044,8 @@ func _on_HintButton_pressed():
 		$MessLabel.text = help_text
 		for x in range(N_IMG_CELL_HORZ):
 			$BoardBG/TileMapBG.set_cell(x, y, TILE_BG_YELLOW)
+		hintTime = 60
+		update_commandButtons()
 		return
 	remove_v_candidates_conflicted()
 	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
@@ -1049,5 +1057,7 @@ func _on_HintButton_pressed():
 		$MessLabel.text = help_text
 		for y2 in range(N_IMG_CELL_VERT):
 			$BoardBG/TileMapBG.set_cell(x, y2, TILE_BG_YELLOW)
+		hintTime = 60
+		update_commandButtons()
 		return
 	pass # Replace with function body.
