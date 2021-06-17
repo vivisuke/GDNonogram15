@@ -160,8 +160,8 @@ SPR# 状 P Open Close ver     Type  概要
 0151 ◎ C 06/17 06/17 0.002│ToDo│右クリック：?→空白
 0152 ● C 06/17            │問題│手がかり数字０の行にいったん?が全部入ると、左クリックしても黒にならない
 0153 ◎ C 06/17 06/17 0.002│ToDo│set_auto_cross(), remove_auto_cross() 関数追加
-0154 ● C 06/17            │ToDo│check_h_conflicted(), check_v_conflicted() 追加
-0155 ● C 06/17            │ToDo│
+0154 ◎ C 06/17 06/17 0.003│ToDo│check_h_conflicted(), check_v_conflicted() 追加
+0155 ● C 06/17            │ToDo│quest_list0[] は廃止し、quest_list[] を直接ソート
 0156 ● C 06/17            │ToDo│
 0157 ● C 06/17            │ToDo│
 0158 ● C 06/17            │ToDo│

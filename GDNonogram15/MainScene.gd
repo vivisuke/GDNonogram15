@@ -451,21 +451,26 @@ func set_h_auto_cross(y0):
 			$TileMap.set_cell(x, y0, TILE_CROSS)
 			h_autoFilledCross[y0] |= mask
 		mask <<= 1
-func check_h_clues(y0 : int):		# 水平方向チェック
-	remove_h_auto_cross(y0)
-	#
+func check_h_conflicted(y0):
 	var d1 = get_h_data(y0)
 	var d0 = get_h_data0(y0)
 	#print("d0 = ", d0)
 	var lst = g_map[h_clues[y0]].duplicate()
 	var bg = TILE_NONE
 	remove_conflicted(d1, d0, lst)
+	bg = TILE_BG_YELLOW if lst.empty() else TILE_NONE
+	for x in range(h_clues[y0].size()):
+		$BoardBG/TileMapBG.set_cell(-x-1, y0, bg)
+func check_h_clues(y0 : int):		# 水平方向チェック
+	var d1 = get_h_data(y0)
+	var d0 = get_h_data0(y0)
+	#print("d0 = ", d0)
+	var lst = g_map[h_clues[y0]].duplicate()
+	var bg = TILE_NONE
+	remove_conflicted(d1, d0, lst)
+	remove_h_auto_cross(y0)
 	h_usedup[y0] = false
-	if lst.empty():		# 候補数字が無くなった
-		bg = TILE_BG_YELLOW
-		for x in range(h_clues[y0].size()):
-			$BoardBG/TileMapBG.set_cell(-x-1, y0, bg)
-	else:
+	if !lst.empty():		# 候補数字が残っている場合
 		if lst.has(d1):		# d1 が正解に含まれる場合
 			h_usedup[y0] = true
 			bg = TILE_BG_GRAY if d1 != 0 else TILE_NONE			# グレイ or 無し
@@ -498,25 +503,25 @@ func set_v_auto_cross(x0):
 			$TileMap.set_cell(x0, y, TILE_CROSS)
 			v_autoFilledCross[x0] |= mask
 		mask <<= 1
+func check_v_conflicted(x0):
+	var d1 = get_v_data(x0)
+	var d0 = get_v_data0(x0)
+	#print("d0 = ", d0)
+	var lst = g_map[v_clues[x0]].duplicate()
+	var bg = TILE_NONE
+	remove_conflicted(d1, d0, lst)
+	bg = TILE_BG_YELLOW if lst.empty() else TILE_NONE
+	for y in range(v_clues[x0].size()):
+		$BoardBG/TileMapBG.set_cell(x0, -y-1, bg)
 func check_v_clues(x0 : int):		# 垂直方向チェック
-	remove_v_auto_cross(x0)
-	#var mask = 1 << x0
-	#for y in range(N_IMG_CELL_VERT):
-	#	if (h_autoFilledCross[y] & mask) != 0:
-	#		$TileMap.set_cell(x0, y, TILE_NONE)
-	#		h_autoFilledCross[y] ^= mask
-	#
 	var d1 = get_v_data(x0)
 	var d0 = get_v_data0(x0)
 	var lst = g_map[v_clues[x0]].duplicate()
 	var bg = TILE_NONE
 	remove_conflicted(d1, d0, lst)
+	remove_v_auto_cross(x0)
 	v_usedup[x0] = false
-	if lst.empty():
-		bg = TILE_BG_YELLOW
-		for y in range(v_clues[x0].size()):
-			$BoardBG/TileMapBG.set_cell(x0, -y-1, bg)
-	else:
+	if !lst.empty():
 		if lst.has(d1):		# d1 が正解に含まれる場合
 			v_usedup[x0] = true
 			bg = TILE_BG_GRAY if d1 != 0 else TILE_NONE			# グレイ or 無し
@@ -531,14 +536,18 @@ func check_v_clues(x0 : int):		# 垂直方向チェック
 			var uu = usedup_clues(lst, d1, v_clues[x0].size())
 			for y in range(v_clues[x0].size()):
 				$BoardBG/TileMapBG.set_cell(x0, -y-1, (TILE_NONE if uu[y] == 0 else TILE_BG_GRAY))
-func check_all_clues():
-	for y in range(N_IMG_CELL_VERT):
-		check_h_clues(y)
-	for x in range(N_IMG_CELL_HORZ):
-		check_v_clues(x)
+#func check_all_clues():
+#	for y in range(N_IMG_CELL_VERT):
+#		check_h_clues(y)
+#	for x in range(N_IMG_CELL_HORZ):
+#		check_v_clues(x)
 func check_clues(x0, y0):
 	check_h_clues(y0)
 	check_v_clues(x0)
+	for y in range(N_IMG_CELL_VERT):
+		check_h_conflicted(y)
+	for x in range(N_IMG_CELL_HORZ):
+		check_v_conflicted(x)
 func init_usedup():
 	for y in range(N_IMG_CELL_VERT):
 		if h_clues[y] == [0]:
