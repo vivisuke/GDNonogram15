@@ -107,6 +107,7 @@ func _ready():
 		for y in range(N_IMG_CELL_VERT):
 			h_answer1_bits_1[y] = 0
 		init_usedup()
+		set_crosses_null_line_column()
 	update_undo_redo()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	pass # Replace with function body.
@@ -408,6 +409,15 @@ func remove_conflicted(d1, d0, lst):		# d1, d0 と矛盾する要素を削除
 	for i in range(lst.size()-1, -1, -1):
 		if (lst[i] & d1) != d1 || (~lst[i] & d0) != d0:
 			lst.remove(i)
+func set_crosses_null_line_column():	# 手がかり数字0の行・列に全部 ☓ を埋める
+	for y in range(N_IMG_CELL_VERT):
+		if h_clues[y] == [0]:
+			for x in range(N_IMG_CELL_HORZ):
+				$TileMap.set_cell(x, y, TILE_CROSS)
+	for x in range(N_IMG_CELL_HORZ):
+		if v_clues[x] == [0]:
+			for y in range(N_IMG_CELL_VERT):
+				$TileMap.set_cell(x, y, TILE_CROSS)
 func remove_h_auto_cross(y0):
 	if h_autoFilledCross[y0] != 0:		# ☓オートフィルでフィルされた☓を削除
 		var vmask = 1 << y0
@@ -936,6 +946,7 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 			mask >>= 1
 			$TileMap.set_cell(x, y, TILE_BLACK if (d & mask) != 0 else TILE_NONE)
 	upate_imageTileMap()
+	set_crosses_null_line_column();
 func _on_BackButton_pressed():
 	get_tree().change_scene("res://LevelScene.tscn")
 	pass # Replace with function body.
