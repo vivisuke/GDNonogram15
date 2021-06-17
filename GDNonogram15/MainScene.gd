@@ -36,7 +36,7 @@ enum { SET_CELL, SET_CELL_BE, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
 
 var qix					# 問題番号 [0, N]
 var qID					# 問題ID
-var qSolved = false
+var qSolved = false		# 現問題をクリア状態か？
 var elapsedTime = 0.0	# 経過時間（単位：秒）
 var hintTime = 0.0		# != 0 の間はヒント使用不可（単位：秒）
 var mode = MODE_EDIT_PICT;
@@ -111,19 +111,20 @@ func _ready():
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	pass # Replace with function body.
 func _process(delta):
-	elapsedTime += delta
-	var sec = int(elapsedTime)
-	var m = sec / 60
-	sec -= m * 60
-	$timeLabel.text = "%02d:%02d" % [m, sec]
-	#
-	if hintTime > 0:
-		hintTime -= delta
-		if hintTime <= 0:
-			update_commandButtons()
-			$HintButton/timeLabel.text = ""
-		else:
-			$HintButton/timeLabel.text = "%02d" % int(hintTime)
+	if !qSolved:
+		elapsedTime += delta
+		var sec = int(elapsedTime)
+		var m = sec / 60
+		sec -= m * 60
+		$timeLabel.text = "%02d:%02d" % [m, sec]
+		#
+		if hintTime > 0:
+			hintTime -= delta
+			if hintTime <= 0:
+				update_commandButtons()
+				$HintButton/timeLabel.text = ""
+			else:
+				$HintButton/timeLabel.text = "%02d" % int(hintTime)
 	if shock_wave_timer >= 0:
 		shock_wave_timer += delta
 		$CanvasLayer/ColorRect.material.set_shader_param("size", shock_wave_timer)
