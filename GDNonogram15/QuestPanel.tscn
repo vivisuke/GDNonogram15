@@ -29,13 +29,28 @@ __meta__ = {
 }
 
 [node name="difficulty" type="Label" parent="."]
-margin_left = 153.0
+margin_left = 152.0
 margin_top = 10.0
-margin_right = 252.0
+margin_right = 251.0
 margin_bottom = 34.0
+rect_pivot_offset = Vector2( 128, 412 )
 mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
 text = "Difficulty: 0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="clearTime" type="Label" parent="."]
+margin_left = 320.0
+margin_top = 10.0
+margin_right = 432.0
+margin_bottom = 34.0
+rect_pivot_offset = Vector2( 128, 412 )
+mouse_filter = 1
+custom_fonts/font = SubResource( 1 )
+text = "Time:  00:00"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }

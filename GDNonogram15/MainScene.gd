@@ -707,6 +707,7 @@ func _input(event):
 					var lst = []
 					for y in range(N_IMG_CELL_VERT):
 						lst.push_back(get_h_data(y))
+					lst.push_back(int(elapsedTime))
 					g.solvedPat[qID] = lst
 					#
 					var file = File.new()
@@ -838,6 +839,7 @@ func print_clues(clues):
 	txt += "],"
 	print(txt)
 func _on_CheckButton_pressed():
+	set_crosses_null_line_column()
 	init_arrays()
 	init_candidates()
 	print_clues(v_clues)

@@ -23,6 +23,7 @@ var ans_iamge = []
 
 func _ready():
 	#g = get_node("/root/Global")
+	#$clearTime.text = ""
 	pass # Replace with function body.
 
 func set_number(n : int):
@@ -34,6 +35,13 @@ func set_number(n : int):
 	#	$Question.hide()
 func set_difficulty(n : int):
 	$difficulty.text = "Difficulty: %d" % n
+func set_clearTime(n : int):
+	if n < 1:
+		$clearTime.text = ""
+	else:
+		var m = n / 60
+		var s = n % 60
+		$clearTime.text = "Time: %02d:%02d" % [m, s]
 func set_title(ttl):
 	$title.text = "Title: " + ttl
 	solved = true

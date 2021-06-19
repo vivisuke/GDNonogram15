@@ -1,5 +1,7 @@
 extends Node2D
 
+const N_IMG_CELL_VERT = 15
+
 onready var g = get_node("/root/Global")
 
 var mouse_pushed = false
@@ -52,10 +54,13 @@ func _ready():
 		#if g.solved[i]:
 		if g.solvedPat.has(g.qix2ID[qix]):
 			panel.set_title(g.quest_list[qix][g.KEY_TITLE])
-			panel.set_ans_image(g.solvedPat[g.qix2ID[qix]])
+			var lst = g.solvedPat[g.qix2ID[qix]]
+			panel.set_ans_image(lst)
 			#panel.set_ans_image(g.ans_images[i])
+			panel.set_clearTime(lst[N_IMG_CELL_VERT] if lst.size() > N_IMG_CELL_VERT else 0)
 		else:
 			panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
+			panel.set_clearTime(0)
 		panel.set_author(g.quest_list[qix][g.KEY_AUTHOR])
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#
