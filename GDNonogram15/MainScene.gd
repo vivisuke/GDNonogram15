@@ -418,6 +418,11 @@ func set_crosses_null_line_column():	# 手がかり数字0の行・列に全部 
 		if v_clues[x] == [0]:
 			for y in range(N_IMG_CELL_VERT):
 				$TileMap.set_cell(x, y, TILE_CROSS)
+func clear_all_crosses():
+	for y in range(N_IMG_CELL_VERT):
+		for x in range(N_IMG_CELL_HORZ):
+			if $TileMap.get_cell(x, y) == TILE_CROSS:
+				$TileMap.set_cell(x, y, TILE_NONE)
 func remove_h_auto_cross(y0):
 	if h_autoFilledCross[y0] != 0:		# ☓オートフィルでフィルされた☓を削除
 		var vmask = 1 << y0
@@ -897,6 +902,7 @@ func _on_CheckButton_pressed():
 			mask >>= 1
 		txt += "\n"
 	print(txt)
+	clear_all_crosses();
 	pass # Replace with function body.
 func update_modeButtons():
 	if mode == MODE_SOLVE:
