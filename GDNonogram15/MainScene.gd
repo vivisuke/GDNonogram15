@@ -710,10 +710,15 @@ func _input(event):
 					lst.push_back(int(elapsedTime))
 					g.solvedPat[qID] = lst
 					#
-					var file = File.new()
-					file.open(g.solvedPatFileName, File.WRITE)
-					file.store_var(g.solvedPat)
-					file.close()
+					saveSolvedPat()
+				else:
+					var lst = g.solvedPat[qID]
+					if lst.size() == N_IMG_CELL_VERT:
+						lst.push_back(int(elapsedTime))
+						saveSolvedPat()
+					elif int(elapsedTime) < lst.back():
+						lst[N_IMG_CELL_VERT] = int(elapsedTime)
+						saveSolvedPat()
 				$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 										", '" + g.quest_list[qix][g.KEY_TITLE] +
 										"' by " + g.quest_list[qix][g.KEY_AUTHOR])
@@ -724,6 +729,11 @@ func _input(event):
 			if help_text.empty():
 				$MessLabel.text = ""
 	pass
+func saveSolvedPat():
+	var file = File.new()
+	file.open(g.solvedPatFileName, File.WRITE)
+	file.store_var(g.solvedPat)
+	file.close()
 func clear_all():
 	var item = [CLEAR_ALL]
 	for y in range(N_IMG_CELL_VERT):
