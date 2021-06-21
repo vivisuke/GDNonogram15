@@ -39,9 +39,11 @@ func set_clearTime(n : int):
 	if n < 1:
 		$clearTime.text = ""
 	else:
+		var h = n / (60*60)
+		n -= h * (60*60)
 		var m = n / 60
 		var s = n % 60
-		$clearTime.text = "Time: %02d:%02d" % [m, s]
+		$clearTime.text = "Time: %02d:%02d:%02d" % [h, m, s]
 func set_title(ttl):
 	$title.text = "Title: " + ttl
 	solved = true

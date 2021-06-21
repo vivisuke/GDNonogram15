@@ -115,9 +115,11 @@ func _process(delta):
 	if !qSolved:
 		elapsedTime += delta
 		var sec = int(elapsedTime)
+		var h = sec / (60*60)
+		sec -= h * (60*60)
 		var m = sec / 60
 		sec -= m * 60
-		$timeLabel.text = "%02d:%02d" % [m, sec]
+		$timeLabel.text = "%02d:%02d:%02d" % [h, m, sec]
 		#
 		if hintTime > 0:
 			hintTime -= delta

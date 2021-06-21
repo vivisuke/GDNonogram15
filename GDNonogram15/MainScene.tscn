@@ -767,12 +767,12 @@ __meta__ = {
 }
 
 [node name="timeLabel" type="Label" parent="."]
-margin_left = 424.743
+margin_left = 410.0
 margin_top = 133.708
-margin_right = 464.743
+margin_right = 466.0
 margin_bottom = 147.708
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "00:00"
+text = "00:00:00"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
