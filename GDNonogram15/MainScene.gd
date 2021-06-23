@@ -108,19 +108,21 @@ func _ready():
 		for y in range(N_IMG_CELL_VERT):
 			h_answer1_bits_1[y] = 0
 		init_usedup()
-		if( g.solvedPat.has(qID) &&
-				g.solvedPat[qID].size() > N_IMG_CELL_VERT &&	# 経過時間が保存されている
-				g.solvedPat[qID][N_IMG_CELL_VERT] < 0 ):		# 経過時間がマイナス → 途中経過
-			for y in range(N_IMG_CELL_VERT):
-				var d = g.solvedPat[qID][y]
-				var mask = 1 << N_IMG_CELL_HORZ
-				for x in range(N_IMG_CELL_HORZ):
-					mask >>= 1
-					if (d&mask) != 0:
-						$TileMap.set_cell(x, y, TILE_BLACK)
-						#$MiniTileMap.set_cell(x, y, TILE_BLACK)
-						#set_cell_basic(x, y, TILE_BLACK)
-			upate_imageTileMap()
+		if g.solvedPat.has(qID):	# 保存データあり
+			if( g.solvedPat[qID].size() > N_IMG_CELL_VERT &&	# 経過時間が保存されている
+					g.solvedPat[qID][N_IMG_CELL_VERT] < 0 ):		# 経過時間がマイナス → 途中経過
+				for y in range(N_IMG_CELL_VERT):
+					var d = g.solvedPat[qID][y]
+					var mask = 1 << N_IMG_CELL_HORZ
+					for x in range(N_IMG_CELL_HORZ):
+						mask >>= 1
+						if (d&mask) != 0:
+							$TileMap.set_cell(x, y, TILE_BLACK)
+							#$MiniTileMap.set_cell(x, y, TILE_BLACK)
+							#set_cell_basic(x, y, TILE_BLACK)
+				upate_imageTileMap()
+			else:
+				qSolved = true		# すでにクリア済み
 		set_crosses_null_line_column()
 	update_undo_redo()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
