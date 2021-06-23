@@ -36,7 +36,8 @@ enum { SET_CELL, SET_CELL_BE, CLEAR_ALL, ROT_LEFT, ROT_RIGHT, ROT_UP, ROT_DOWN}
 
 var qix					# 問題番号 [0, N]
 var qID					# 問題ID
-var qSolved = false		# 現問題をクリア状態か？
+var qSolved = false		# 現問題をクリア済みか？
+var qSolvedStat = false		# 現問題をクリア状態か？
 var elapsedTime = 0.0	# 経過時間（単位：秒）
 var hintTime = 0.0		# != 0 の間はヒント使用不可（単位：秒）
 var mode = MODE_EDIT_PICT;
@@ -112,7 +113,7 @@ func _ready():
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	pass # Replace with function body.
 func _process(delta):
-	if !qSolved:
+	if !qSolvedStat:
 		elapsedTime += delta
 		var sec = int(elapsedTime)
 		var h = sec / (60*60)
@@ -698,10 +699,11 @@ func _input(event):
 			if v0 == TILE_BLACK && cell_val != TILE_BLACK:
 				setup_fallingBlack(event.position)
 	if mode == MODE_SOLVE:
-		if is_solved():
+		if is_solved():			# クリア状態
+			qSolved = true		# クリア済みフラグON
 			if g.solveMode:
-				if !qSolved:
-					qSolved = true
+				if !qSolvedStat:
+					qSolvedStat = true
 					shock_wave_timer = 0.0		# start shock wave
 				# ☓消去
 				for y in range(N_IMG_CELL_VERT):
@@ -720,19 +722,19 @@ func _input(event):
 					saveSolvedPat()
 				else:
 					var lst = g.solvedPat[qID]
-					if lst.size() == N_IMG_CELL_VERT:
+					if lst.size() == N_IMG_CELL_VERT:		# クリアタイムが記録されていない場合
 						lst.push_back(int(elapsedTime))
 						saveSolvedPat()
-					elif int(elapsedTime) < lst.back():
-						lst[N_IMG_CELL_VERT] = int(elapsedTime)
-						saveSolvedPat()
+					#elif int(elapsedTime) < lst.back():		# 以前のクリアタイムより短かった場合
+					#	lst[N_IMG_CELL_VERT] = int(elapsedTime)
+					#	saveSolvedPat()
 				$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 										", '" + g.quest_list[qix][g.KEY_TITLE] +
 										"' by " + g.quest_list[qix][g.KEY_AUTHOR])
 			$MessLabel.add_color_override("font_color", Color.blue)
 			$MessLabel.text = "Solved, Good Job !"
 		else:	# not is_solved()
-			qSolved = false
+			qSolvedStat = false
 			if help_text.empty():
 				$MessLabel.text = ""
 	pass
@@ -968,6 +970,13 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 	upate_imageTileMap()
 	set_crosses_null_line_column();
 func _on_BackButton_pressed():
+	if !qSolved && !qSolvedStat:
+		var lst = []
+		for y in range(N_IMG_CELL_VERT):
+			lst.push_back(get_h_data(y))
+		lst.push_back(-int(elapsedTime))
+		g.solvedPat[qID] = lst
+		saveSolvedPat()
 	get_tree().change_scene("res://LevelScene.tscn")
 	pass # Replace with function body.
 func set_cell_basic(x, y, v):

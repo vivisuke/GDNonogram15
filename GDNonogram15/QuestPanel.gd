@@ -16,6 +16,7 @@ const THUMBNAIL_POS = (90-THUMBNAIL_WIDTH)/2+2
 const THUMBNAIL_X = 100-30
 
 var mouse_pushed = false
+var time = 0
 var saved_pos
 var number :int = 0
 var solved = false
@@ -36,6 +37,7 @@ func set_number(n : int):
 func set_difficulty(n : int):
 	$difficulty.text = "Difficulty: %d" % n
 func set_clearTime(n : int):
+	time = n
 	if n < 1:
 		$clearTime.text = ""
 	else:
@@ -44,6 +46,7 @@ func set_clearTime(n : int):
 		var m = n / 60
 		var s = n % 60
 		$clearTime.text = "Time: %02d:%02d:%02d" % [h, m, s]
+	update()
 func set_title(ttl):
 	$title.text = "Title: " + ttl
 	solved = true
@@ -84,7 +87,7 @@ func _draw():
 	style_box.shadow_size = 8 # if !mouse_pushed else 4
 	draw_style_box(style_box, Rect2(POSITION, SIZE))
 	# サムネイル
-	var col = Color.lightgray if ans_iamge.empty() else Color("#ffffef")
+	var col = Color.lightgray if ans_iamge.empty() else Color("#ffffef") if time >= 0 else Color.lightyellow
 	draw_rect(Rect2(THUMBNAIL_X-2, THUMBNAIL_POS-2, THUMBNAIL_WIDTH+4, THUMBNAIL_WIDTH+4), col)
 	if !ans_iamge.empty():
 		for y in range(IMG_HEIGHT):
