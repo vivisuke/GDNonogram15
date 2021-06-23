@@ -118,6 +118,9 @@ func _ready():
 					mask >>= 1
 					if (d&mask) != 0:
 						$TileMap.set_cell(x, y, TILE_BLACK)
+						#$MiniTileMap.set_cell(x, y, TILE_BLACK)
+						#set_cell_basic(x, y, TILE_BLACK)
+			upate_imageTileMap()
 		set_crosses_null_line_column()
 	update_undo_redo()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
