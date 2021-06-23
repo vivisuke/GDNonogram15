@@ -121,6 +121,14 @@ func _ready():
 							$TileMap.set_cell(x, y, TILE_BLACK)
 							#$MiniTileMap.set_cell(x, y, TILE_BLACK)
 							#set_cell_basic(x, y, TILE_BLACK)
+				if g.solvedPat[qID].size() > N_IMG_CELL_VERT + 1:	# ☓情報も保存されている場合
+					for y in range(N_IMG_CELL_VERT):
+						var d = g.solvedPat[qID][y + N_IMG_CELL_VERT + 1]
+						var mask = 1 << N_IMG_CELL_HORZ
+						for x in range(N_IMG_CELL_HORZ):
+							mask >>= 1
+							if (d&mask) != 0:
+								$TileMap.set_cell(x, y, TILE_CROSS)
 				upate_imageTileMap()
 			else:
 				qSolved = true		# すでにクリア済み
@@ -991,6 +999,8 @@ func _on_BackButton_pressed():
 		for y in range(N_IMG_CELL_VERT):
 			lst.push_back(get_h_data(y))
 		lst.push_back(-int(elapsedTime))
+		for y in range(N_IMG_CELL_VERT):
+			lst.push_back(get_h_data0(y))
 		g.solvedPat[qID] = lst
 		saveSolvedPat()
 	get_tree().change_scene("res://LevelScene.tscn")
