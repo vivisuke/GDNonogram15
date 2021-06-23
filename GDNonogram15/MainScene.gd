@@ -111,6 +111,7 @@ func _ready():
 		if g.solvedPat.has(qID):	# 保存データあり
 			if( g.solvedPat[qID].size() > N_IMG_CELL_VERT &&	# 経過時間が保存されている
 					g.solvedPat[qID][N_IMG_CELL_VERT] < 0 ):		# 経過時間がマイナス → 途中経過
+				elapsedTime = -g.solvedPat[qID][N_IMG_CELL_VERT]
 				for y in range(N_IMG_CELL_VERT):
 					var d = g.solvedPat[qID][y]
 					var mask = 1 << N_IMG_CELL_HORZ
