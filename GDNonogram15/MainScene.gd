@@ -684,6 +684,7 @@ func _input(event):
 			$MessLabel.text = ""
 			clearTileMapBG()
 			if xy.x >= 0:
+				$clickAudio.play()
 				mouse_pushed = true;
 				last_xy = xy
 				var v0 = $TileMap.get_cell(xy.x, xy.y)
@@ -729,6 +730,7 @@ func _input(event):
 				if !qSolvedStat:
 					qSolvedStat = true
 					shock_wave_timer = 0.0		# start shock wave
+					$clearedAudio.play()
 				# ☓消去
 				for y in range(N_IMG_CELL_VERT):
 					for x in range(N_IMG_CELL_HORZ):

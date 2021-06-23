@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -54,6 +54,8 @@
 [ext_resource path="res://images/lightbulb_white.png" type="Texture" id=52]
 [ext_resource path="res://images/lightbulb_gray.png" type="Texture" id=53]
 [ext_resource path="res://images/lightbulb_black.png" type="Texture" id=54]
+[ext_resource path="res://sounds/kirakira-3.mp3" type="AudioStream" id=55]
+[ext_resource path="res://sounds/button-3.mp3" type="AudioStream" id=56]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -777,6 +779,12 @@ align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="clearedAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 55 )
+
+[node name="clickAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 56 )
 
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]

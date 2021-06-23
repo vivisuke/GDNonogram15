@@ -11,5 +11,5 @@ dest_files=[ "res://.import/kirakira.mp3-418a23c5d7ae0574ba2b0a8c793ef654.mp3str
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
