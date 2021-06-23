@@ -63,7 +63,7 @@ margin_top = 70.0
 margin_right = 480.0
 margin_bottom = 84.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "ver 0.004"
+text = "ver 0.005"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false

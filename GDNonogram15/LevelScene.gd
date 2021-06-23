@@ -53,8 +53,11 @@ func _ready():
 		panel.set_difficulty(g.quest_list[qix][g.KEY_DIFFICULTY])
 		#if g.solved[i]:
 		if g.solvedPat.has(g.qix2ID[qix]):
-			panel.set_title(g.quest_list[qix][g.KEY_TITLE])
 			var lst = g.solvedPat[g.qix2ID[qix]]
+			if lst.size() <= N_IMG_CELL_VERT || lst[N_IMG_CELL_VERT] > 0:
+				panel.set_title(g.quest_list[qix][g.KEY_TITLE])
+			else:
+				panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
 			panel.set_ans_image(lst)
 			#panel.set_ans_image(g.ans_images[i])
 			panel.set_clearTime(lst[N_IMG_CELL_VERT] if lst.size() > N_IMG_CELL_VERT else 0)
