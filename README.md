@@ -22,7 +22,14 @@ https://www.youtube.com/watch?v=SCHdglr35pk
 
 # リソース
 
+本プロジェクトのソースコードはMITライセンスで、自由に使用することができますが、
+フォント・効果音などは作成者が著作権を有しています。再利用する場合は、それらの権利・利用条件を遵守するよう留意してください。
+
 - フォントは以下のサイトのものを利用させていただいております。
 
 https://www.fontspace.com/category/gaming
+
+- 効果音は「効果音ラボ」様の効果音を使用させていただいています。
+
+　　https://soundeffect-lab.info/
 
