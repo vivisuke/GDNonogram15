@@ -8,6 +8,7 @@ var solveMode = true
 var qNumber = 0			# [#1, ...#N]
 var qNum2QIX = []		# qNum (#1 ... #N) → QIX テーブル
 var qix2ID = []			# qix → QID 配列
+var settings = {}		# 設定辞書
 var solvedPat = {}		# QID -> [data0, data1, ...] 辞書
 #var solved = []			# true/false
 var ans_images = []		# 解答ビットパターン配列

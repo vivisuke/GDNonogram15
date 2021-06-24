@@ -135,6 +135,7 @@ func _ready():
 		set_crosses_null_line_column()
 	update_undo_redo()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
+	$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
 	pass # Replace with function body.
 func _process(delta):
 	if !qSolvedStat:
@@ -684,7 +685,8 @@ func _input(event):
 			$MessLabel.text = ""
 			clearTileMapBG()
 			if xy.x >= 0:
-				$clickAudio.play()
+				if $SoundButton.pressed:
+					$clickAudio.play()
 				mouse_pushed = true;
 				last_xy = xy
 				var v0 = $TileMap.get_cell(xy.x, xy.y)
@@ -730,7 +732,8 @@ func _input(event):
 				if !qSolvedStat:
 					qSolvedStat = true
 					shock_wave_timer = 0.0		# start shock wave
-					$clearedAudio.play()
+					if $SoundButton.pressed:
+						$clearedAudio.play()
 				# ☓消去
 				for y in range(N_IMG_CELL_VERT):
 					for x in range(N_IMG_CELL_HORZ):
@@ -1127,4 +1130,9 @@ func _on_HintButton_pressed():
 		hintTime = 60
 		update_commandButtons()
 		return
+	pass # Replace with function body.
+
+
+func _on_SoundButton_pressed():
+	g.settings["Sound"] = $SoundButton.pressed
 	pass # Replace with function body.
