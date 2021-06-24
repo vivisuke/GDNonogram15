@@ -192,7 +192,7 @@ SPR# 状 P Open Close ver     Type  概要
 0182 ● C 06/24            │ToDo│HTML：操作方法説明
 0183 ◎ C 06/24 06/24 0.005│ToDo│メイン画面：デフォルトは効果音ON
 0184 ◎ C 06/24 06/24 0.005│ToDo│効果音ON/OFF状態を g.settings に保存
-0185 ● C 06/24            │ToDo│
+0185 ◎ C 06/24 06/24 0.005│ToDo│g.settings をファイルに保存・復帰
 0186 ● C 06/24            │ToDo│
 0187 ● C 06/24            │ToDo│
 0188 ● C 06/24            │ToDo│

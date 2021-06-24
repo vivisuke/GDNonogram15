@@ -772,6 +772,11 @@ func saveSolvedPat():
 	file.open(g.solvedPatFileName, File.WRITE)
 	file.store_var(g.solvedPat)
 	file.close()
+func saveSettings():
+	var file = File.new()
+	file.open(g.settingsFileName, File.WRITE)
+	file.store_var(g.settings)
+	file.close()
 func clear_all():
 	var item = [CLEAR_ALL]
 	for y in range(N_IMG_CELL_VERT):
@@ -1135,4 +1140,5 @@ func _on_HintButton_pressed():
 
 func _on_SoundButton_pressed():
 	g.settings["Sound"] = $SoundButton.pressed
+	saveSettings()
 	pass # Replace with function body.

@@ -17,11 +17,16 @@ class MyCustomSorter:
 	#static func sort_descending(a, b):
 	#	return true if a > b else false
 func _ready():
+	var file = File.new()
+	if file.file_exists(g.settingsFileName):
+		file.open(g.settingsFileName, File.READ)
+		g.settings = file.get_var()
+		file.close()
+		print(g.settings)
 	#var vsb = $ScrollContainer.get_v_scrollbar()
 	#vsb.step = 10
 	if !g.solvedPatLoaded:			# クリア履歴未読込の場合
 		g.solvedPatLoaded = true
-		var file = File.new()
 		#print(g.solvedPatFileName)
 		if file.file_exists(g.solvedPatFileName):
 			file.open(g.solvedPatFileName, File.READ)

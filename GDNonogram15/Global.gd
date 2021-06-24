@@ -1,6 +1,7 @@
 extends Node2D
 
 const solvedPatFileName = "user://saved.dat"
+const settingsFileName = "user://settings.dat"
 
 var solvedPatLoaded = false
 var lvl_vscroll = 0		# レベルシーン スクロール位置
