@@ -38,6 +38,7 @@ func set_difficulty(n : int):
 	$difficulty.text = "Difficulty: %d" % n
 func set_clearTime(n : int):
 	time = n
+	n = abs(n)
 	if n < 1:
 		$clearTime.text = ""
 	else:
