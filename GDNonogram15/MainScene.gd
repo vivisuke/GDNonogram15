@@ -132,9 +132,11 @@ func _ready():
 								$TileMap.set_cell(x, y, TILE_CROSS)
 				upate_imageTileMap()
 				for y in range(N_IMG_CELL_VERT):
-					check_h_clues(y)	# 使い切った手がかり数字グレイアウト
+					check_h_clues(y)		# 使い切った手がかり数字グレイアウト
+					check_h_conflicted(y)
 				for x in range(N_IMG_CELL_HORZ):
-					check_v_clues(x)	# 使い切った手がかり数字グレイアウト
+					check_v_clues(x)		# 使い切った手がかり数字グレイアウト
+					check_v_conflicted(x)
 			else:
 				qSolved = true		# すでにクリア済み
 		set_crosses_null_line_column()
