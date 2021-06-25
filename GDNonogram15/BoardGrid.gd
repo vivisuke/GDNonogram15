@@ -15,9 +15,20 @@ const N_TOTAL_CELL_VERT = N_CLUES_CELL_VERT + N_IMG_CELL_VERT
 const CELL_WIDTH = BOARD_WIDTH / N_TOTAL_CELL_HORZ
 const CLUES_WIDTH = CELL_WIDTH * N_CLUES_CELL_HORZ
 const IMG_AREA_WIDTH = CELL_WIDTH * N_IMG_CELL_HORZ
+const IMAGE_ORG = Vector2(CELL_WIDTH*(N_CLUES_CELL_HORZ+0.5), CELL_WIDTH*(N_CLUES_CELL_VERT+0.5))
+
+var pos1 = Vector2(-1, -1)		# ライン起点、-1 for ライン無し
+var pos2 = Vector2(0, 0)		# ライン終点
 
 func _ready():
 	pass # Replace with function body.
+func clearLine():
+	pos1 = Vector2(-1, -1)
+	update()
+func setLine(p1, p2):
+	pos1 = p1
+	pos2 = p2
+	update()
 func _draw():
 	var y2 = BOARD_HEIGHT + 1
 	for x in range(N_TOTAL_CELL_HORZ+1):
@@ -41,6 +52,10 @@ func _draw():
 	#for x in range(4):
 	#	var px = (x*5 + N_CLUES_CELL_HORZ) * CELL_WIDTH
 	#	draw_line(Vector2(px, 0), Vector2(px, y2), Color.black)
+	if pos1.x >= 0:
+		var p1 = pos1 * CELL_WIDTH + IMAGE_ORG
+		var p2 = pos2 * CELL_WIDTH + IMAGE_ORG
+		draw_line(p1, p2, Color.blue, CELL_WIDTH/3+1)
 func _input(event):
 	#print("BoardGrid::_input()")
 	pass

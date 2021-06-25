@@ -44,6 +44,7 @@ var mode = MODE_EDIT_PICT;
 var dialog_opened = false;
 var mouse_pushed = false
 var last_xy = Vector2()
+var pushed_xy = Vector2()
 var cell_val = 0
 var g_map = {}		# 水平・垂直方向手がかり数字配列 → 候補数値マップ
 var slicedTable = []	# {0x0000 ～ 0x7fff → 連続ビットごとにスライスした配列} の配列
@@ -130,6 +131,10 @@ func _ready():
 							if (d&mask) != 0:
 								$TileMap.set_cell(x, y, TILE_CROSS)
 				upate_imageTileMap()
+				for y in range(N_IMG_CELL_VERT):
+					check_h_clues(y)	# 使い切った手がかり数字グレイアウト
+				for x in range(N_IMG_CELL_HORZ):
+					check_v_clues(x)	# 使い切った手がかり数字グレイアウト
 			else:
 				qSolved = true		# すでにクリア済み
 		set_crosses_null_line_column()
@@ -689,6 +694,7 @@ func _input(event):
 					$clickAudio.play()
 				mouse_pushed = true;
 				last_xy = xy
+				pushed_xy = xy
 				var v0 = $TileMap.get_cell(xy.x, xy.y)
 				var v = v0
 				if event.is_action_pressed("click"):		# left mouse button
@@ -711,6 +717,7 @@ func _input(event):
 		elif event.is_action_released("click") || event.is_action_released("rt_click"):
 			if mouse_pushed:
 				mouse_pushed = false;
+				##$BoardGrid.clearLine()
 				if !undo_stack.empty() && undo_stack.back()[0] <= SET_CELL_BE:
 					undo_stack.back()[0] ^= 1		# 最下位ビット反転
 	elif event is InputEventMouseMotion && mouse_pushed:	# マウスドラッグ
@@ -718,6 +725,7 @@ func _input(event):
 		if xy.x >= 0 && xy != last_xy:
 			#print(xy)
 			last_xy = xy
+			##$BoardGrid.setLine(pushed_xy, xy)
 			var v0 = $TileMap.get_cell(xy.x, xy.y)
 			push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, cell_val])
 			update_undo_redo()
