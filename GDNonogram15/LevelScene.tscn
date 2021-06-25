@@ -52,7 +52,7 @@ margin_right = 480.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-text = "GDNonogram"
+text = "SkskLogic"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
