@@ -142,4 +142,6 @@ func _on_ClearProgressDialog_confirmed():
 		var panel = $ScrollContainer/VBoxContainer.get_child(i)
 		panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
 		panel.set_clearTime(0)
+		panel.set_ans_image([])
+		#panel.update()
 	pass # Replace with function body.

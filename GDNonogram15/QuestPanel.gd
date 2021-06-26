@@ -55,7 +55,10 @@ func set_title(ttl):
 func set_author(name):
 	$author.text = "Author: " + name
 func set_ans_image(ai):
-	$Question.hide()
+	if !ai.empty():
+		$Question.hide()
+	else:
+		$Question.show()
 	ans_iamge = ai
 	update()
 func _input(event):
