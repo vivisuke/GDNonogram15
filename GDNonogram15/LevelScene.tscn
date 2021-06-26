@@ -121,3 +121,5 @@ window_title = "確認..."
 
 [connection signal="pressed" from="CenterContainer/HBoxContainer/ClearButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="CenterContainer/HBoxContainer/EditButton" to="." method="_on_EditButton_pressed"]
+[connection signal="confirmed" from="ClearProgressDialog" to="." method="_on_ClearProgressDialog_confirmed"]
+[connection signal="popup_hide" from="ClearProgressDialog" to="." method="_on_ClearProgressDialog_popup_hide"]

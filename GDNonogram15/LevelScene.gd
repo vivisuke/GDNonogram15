@@ -4,6 +4,7 @@ const N_IMG_CELL_VERT = 15
 
 onready var g = get_node("/root/Global")
 
+var dialog_opened = false
 var mouse_pushed = false
 var mouse_pos
 var scroll_pos
@@ -103,7 +104,7 @@ func _input(event):
 
 func _on_QuestPanel_pressed(num):
 	print("mouse_pos = ", mouse_pos)
-	if mouse_pos == null:
+	if mouse_pos == null || dialog_opened:
 		return
 	var v = $ScrollContainer.scroll_vertical
 	print("v = ", v)
@@ -115,16 +116,21 @@ func _on_QuestPanel_pressed(num):
 	#g.qix = qNum2QIX[num-1]
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
-
-
 func _on_EditButton_pressed():
 	g.lvl_vscroll = $ScrollContainer.scroll_vertical
 	print("vscroll = ", g.lvl_vscroll)
 	g.solveMode = false;
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
-
-
 func _on_ClearButton_pressed():
+	$ClearProgressDialog.window_title = "SakuSakuLogig"
+	$ClearProgressDialog.dialog_text = "Are you shure to clear Progress ?"
 	$ClearProgressDialog.popup_centered()
+	dialog_opened = true
+	pass # Replace with function body.
+func _on_ClearProgressDialog_popup_hide():
+	dialog_opened = false
+	pass # Replace with function body.
+func _on_ClearProgressDialog_confirmed():
+	print("_on_ClearProgressDialog_confirmed")
 	pass # Replace with function body.
