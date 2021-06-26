@@ -117,3 +117,7 @@ func _on_EditButton_pressed():
 	g.solveMode = false;
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
+
+
+func _on_ClearButton_pressed():
+	pass # Replace with function body.

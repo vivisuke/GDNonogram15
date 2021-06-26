@@ -1,12 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://LevelScene.gd" type="Script" id=2]
 [ext_resource path="res://images/edit_white.png" type="Texture" id=3]
 [ext_resource path="res://fonts/Hokjesgeest-PDGB.ttf" type="DynamicFontData" id=4]
-
-[sub_resource type="DynamicFont" id=1]
-font_data = ExtResource( 1 )
+[ext_resource path="res://images/clear_white_48.png" type="Texture" id=5]
 
 [sub_resource type="DynamicFont" id=2]
 size = 32
@@ -14,6 +12,9 @@ font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 20
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 1 )
 
 [node name="LevelScene" type="Node2D"]
@@ -37,18 +38,6 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
-
-[node name="EditButton" type="Button" parent="."]
-margin_left = 180.0
-margin_top = 725.0
-margin_right = 314.0
-margin_bottom = 779.0
-custom_fonts/font = SubResource( 1 )
-text = "Edit Mode"
-icon = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TitleLabel" type="Label" parent="."]
 margin_top = 20.0
@@ -83,4 +72,47 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="EditButton" to="." method="_on_EditButton_pressed"]
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_top = 700.0
+margin_right = 480.0
+margin_bottom = 800.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
+margin_left = 72.0
+margin_top = 23.0
+margin_right = 407.0
+margin_bottom = 77.0
+
+[node name="ClearButton" type="Button" parent="CenterContainer/HBoxContainer"]
+margin_right = 143.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 1 )
+text = "Clear Prgrs"
+icon = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CenterContainer/HBoxContainer"]
+margin_left = 147.0
+margin_right = 197.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 50, 0 )
+color = Color( 1, 1, 1, 0 )
+
+[node name="EditButton" type="Button" parent="CenterContainer/HBoxContainer"]
+margin_left = 201.0
+margin_right = 335.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 1 )
+text = "Edit Mode"
+icon = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="CenterContainer/HBoxContainer/ClearButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/EditButton" to="." method="_on_EditButton_pressed"]
