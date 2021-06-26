@@ -57,7 +57,7 @@ margin_right = 480.0
 margin_bottom = 90.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "ver 0.006"
+text = "ver 0.007"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
