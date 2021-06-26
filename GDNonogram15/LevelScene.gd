@@ -133,4 +133,13 @@ func _on_ClearProgressDialog_popup_hide():
 	pass # Replace with function body.
 func _on_ClearProgressDialog_confirmed():
 	print("_on_ClearProgressDialog_confirmed")
+	g.solvedPat = {}
+	var dir = Directory.new()
+	dir.remove(g.solvedPatFileName)
+	#
+	for i in g.quest_list.size():	# 問題パネルセットアップ
+		var qix = i
+		var panel = $ScrollContainer/VBoxContainer.get_child(i)
+		panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
+		panel.set_clearTime(0)
 	pass # Replace with function body.
