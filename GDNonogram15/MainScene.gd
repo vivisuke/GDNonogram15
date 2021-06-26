@@ -140,6 +140,7 @@ func _ready():
 			else:
 				qSolved = true		# すでにクリア済み
 		set_crosses_null_line_column()
+		print("qSolved = ", qSolved)
 	update_undo_redo()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
@@ -751,22 +752,17 @@ func _input(event):
 							$TileMap.set_cell(x, y, TILE_NONE)
 							setup_fallingCross(xyToPos(x, y))
 				#g.solved[qix] = true
-				if !g.solvedPat.has(qID):		# クリア辞書に入っていない場合
-					var lst = []
-					for y in range(N_IMG_CELL_VERT):
-						lst.push_back(get_h_data(y))
-					lst.push_back(int(elapsedTime))
-					g.solvedPat[qID] = lst
-					#
-					saveSolvedPat()
-				else:
-					var lst = g.solvedPat[qID]
-					if lst.size() == N_IMG_CELL_VERT:		# クリアタイムが記録されていない場合
-						lst.push_back(int(elapsedTime))
-						saveSolvedPat()
-					#elif int(elapsedTime) < lst.back():		# 以前のクリアタイムより短かった場合
-					#	lst[N_IMG_CELL_VERT] = int(elapsedTime)
-					#	saveSolvedPat()
+				#if !g.solvedPat.has(qID):		# クリア辞書に入っていない場合
+				var lst = []
+				for y in range(N_IMG_CELL_VERT):
+					lst.push_back(get_h_data(y))
+				lst.push_back(int(elapsedTime))
+				#
+				if( g.solvedPat.has(qID) &&
+						g.solvedPat[qID].size() == N_IMG_CELL_VERT + 1):		# クリアタイムが記録されている場合
+					lst[N_IMG_CELL_VERT] = g.solvedPat[qID][N_IMG_CELL_VERT]
+				g.solvedPat[qID] = lst
+				saveSolvedPat()
 				$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 										", '" + g.quest_list[qix][g.KEY_TITLE] +
 										"' by " + g.quest_list[qix][g.KEY_AUTHOR])
