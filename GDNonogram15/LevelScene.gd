@@ -96,11 +96,17 @@ func _input(event):
 				scroll_pos = $ScrollContainer.get_v_scroll()
 		elif event.is_action_released("click"):
 			mouse_pushed = false;
+			mouse_pos = null
 	elif event is InputEventMouseMotion && mouse_pushed:	# mouse Moved
 		$ScrollContainer.set_v_scroll(scroll_pos + mouse_pos.y - event.position.y)
 	pass
 
 func _on_QuestPanel_pressed(num):
+	print("mouse_pos = ", mouse_pos)
+	if mouse_pos == null:
+		return
+	var v = $ScrollContainer.scroll_vertical
+	print("v = ", v)
 	print("QuestPanel_pressed(", num, ")")
 	g.lvl_vscroll = $ScrollContainer.scroll_vertical
 	print("vscroll = ", g.lvl_vscroll)
@@ -120,4 +126,5 @@ func _on_EditButton_pressed():
 
 
 func _on_ClearButton_pressed():
+	$ClearProgressDialog.popup_centered()
 	pass # Replace with function body.
