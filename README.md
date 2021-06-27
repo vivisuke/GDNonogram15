@@ -1,5 +1,5 @@
 # SakuSakuLogic15（さくさくロジック）
-15x15 size only Nonogram (illust logic, PICROSS, お絵かきロジック)
+15x15 size only Nonogram (illust logic, PICROSS, お絵かきロジック15)
 
 ※ 「イラストロジック」は 株式会社日本文芸社、株式会社コナミデジタルエンタテインメントの登録商標です。<br>
 ※ 「お絵かきロジック」は 株式会社世界文化ホールディングスの登録商標です。<br>
