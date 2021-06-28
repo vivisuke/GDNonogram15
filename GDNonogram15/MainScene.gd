@@ -720,7 +720,7 @@ func _input(event):
 		elif event.is_action_released("click") || event.is_action_released("rt_click"):
 			if mouse_pushed:
 				mouse_pushed = false;
-				##$BoardGrid.clearLine()
+				$BoardGrid.clearLine()
 				if !undo_stack.empty() && undo_stack.back()[0] <= SET_CELL_BE:
 					undo_stack.back()[0] ^= 1		# 最下位ビット反転
 	elif event is InputEventMouseMotion && mouse_pushed:	# マウスドラッグ
@@ -728,14 +728,16 @@ func _input(event):
 		if xy.x >= 0 && xy != last_xy:
 			#print(xy)
 			last_xy = xy
-			##$BoardGrid.setLine(pushed_xy, xy)
-			var v0 = $TileMap.get_cell(xy.x, xy.y)
-			push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, cell_val])
-			update_undo_redo()
-			set_cell_basic(xy.x, xy.y, cell_val)
-			#$TileMap.set_cell(xy.x, xy.y, cell_val)
-			if v0 == TILE_BLACK && cell_val != TILE_BLACK:
-				setup_fallingBlack(event.position)
+			if true:
+				$BoardGrid.setLine(pushed_xy, xy)
+			else:
+				var v0 = $TileMap.get_cell(xy.x, xy.y)
+				push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, cell_val])
+				update_undo_redo()
+				set_cell_basic(xy.x, xy.y, cell_val)
+				#$TileMap.set_cell(xy.x, xy.y, cell_val)
+				if v0 == TILE_BLACK && cell_val != TILE_BLACK:
+					setup_fallingBlack(event.position)
 	if mode == MODE_SOLVE:
 		if is_solved():			# クリア状態
 			qSolved = true		# クリア済みフラグON
