@@ -721,6 +721,8 @@ func _input(event):
 			if mouse_pushed:
 				mouse_pushed = false;
 				$BoardGrid.clearLine()
+				if pushed_xy != last_xy:
+					set_cell_rect(pushed_xy, last_xy, cell_val)
 				if !undo_stack.empty() && undo_stack.back()[0] <= SET_CELL_BE:
 					undo_stack.back()[0] ^= 1		# 最下位ビット反転
 	elif event is InputEventMouseMotion && mouse_pushed:	# マウスドラッグ
@@ -1032,6 +1034,16 @@ func set_cell_basic(x, y, v):
 		check_clues(x, y)
 	var img = 0 if v == TILE_BLACK else TILE_NONE
 	$MiniTileMap.set_cell(x, y, img)
+func set_cell_rect(pos1, pos2, v):
+	var x0 = min(pos1.x, pos2.x)
+	var y0 = min(pos1.y, pos2.y)
+	var wd = max(pos1.x, pos2.x) - x0 + 1
+	var ht = max(pos1.y, pos2.y) - y0 + 1
+	for y in range(ht):
+		for x in range(wd):
+			var v0 = $TileMap.get_cell(x0+x, y0+y)
+			set_cell_basic(x0+x, y0+y, v)
+			push_to_undo_stack([SET_CELL, x0+x, y0+y, v0, v])
 func _on_UndoButton_pressed():
 	undo_ix -= 1
 	var item = undo_stack[undo_ix]
