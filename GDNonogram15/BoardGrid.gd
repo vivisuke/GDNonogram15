@@ -19,6 +19,8 @@ const IMAGE_ORG = Vector2(CELL_WIDTH*(N_CLUES_CELL_HORZ), CELL_WIDTH*(N_CLUES_CE
 
 var pos1 = Vector2(-1, -1)		# ライン起点、-1 for ライン無し
 var pos2 = Vector2(0, 0)		# ライン終点
+var curX = -1
+var curY = -1
 var font
 
 func _ready():
@@ -27,6 +29,10 @@ func _ready():
 	pass # Replace with function body.
 func set_font(f):
 	font = f
+func set_cursor(cx, cy):
+	curX = cx
+	curY = cy
+	update()
 func clearLine():
 	pos1 = Vector2(-1, -1)
 	update()
@@ -77,6 +83,14 @@ func _draw():
 		var pos = pos2*CELL_WIDTH + IMAGE_ORG - sz - Vector2(2, 2)
 		draw_rect(Rect2(pos, sz+Vector2(2, 2)), Color.white)
 		draw_string(font, pos+Vector2(0, sz.y), txt, Color.black)
+	elif curX >= 0 && curY >= 0:
+		var col = Color(0.5, 1, 0.5, 0.4)
+		var pos = Vector2(curX, curY) * CELL_WIDTH + IMAGE_ORG
+		draw_rect(Rect2(pos, Vector2(CELL_WIDTH, CELL_WIDTH)), col)
+		pos = Vector2(-N_CLUES_CELL_HORZ, curY) * CELL_WIDTH + IMAGE_ORG
+		draw_rect(Rect2(pos, Vector2(CELL_WIDTH*N_CLUES_CELL_HORZ, CELL_WIDTH)), col)
+		pos = Vector2(curX, -N_CLUES_CELL_VERT) * CELL_WIDTH + IMAGE_ORG
+		draw_rect(Rect2(pos, Vector2(CELL_WIDTH, CELL_WIDTH*N_CLUES_CELL_VERT)), col)
 func _input(event):
 	#print("BoardGrid::_input()")
 	pass

@@ -692,6 +692,7 @@ func _input(event):
 			#print(xy)
 			$MessLabel.text = ""
 			clearTileMapBG()
+			$BoardGrid.set_cursor(-1, -1)
 			if xy.x >= 0:
 				if $SoundButton.pressed:
 					$clickAudio.play()
@@ -725,21 +726,28 @@ func _input(event):
 					set_cell_rect(pushed_xy, last_xy, cell_val)
 				if !undo_stack.empty() && undo_stack.back()[0] <= SET_CELL_BE:
 					undo_stack.back()[0] ^= 1		# 最下位ビット反転
-	elif event is InputEventMouseMotion && mouse_pushed:	# マウスドラッグ
+	elif event is InputEventMouseMotion:
 		var xy = posToXY(event.position)
-		if xy.x >= 0 && xy != last_xy:
-			#print(xy)
-			last_xy = xy
-			if true:
-				$BoardGrid.setLine(pushed_xy, xy)
+		if mouse_pushed:	# マウスドラッグ中
+			if xy.x >= 0 && xy != last_xy:
+				$BoardGrid.set_cursor(-1, -1)
+				#print(xy)
+				last_xy = xy
+				if true:
+					$BoardGrid.setLine(pushed_xy, xy)
+				else:
+					var v0 = $TileMap.get_cell(xy.x, xy.y)
+					push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, cell_val])
+					update_undo_redo()
+					set_cell_basic(xy.x, xy.y, cell_val)
+					#$TileMap.set_cell(xy.x, xy.y, cell_val)
+					if v0 == TILE_BLACK && cell_val != TILE_BLACK:
+						setup_fallingBlack(event.position)
+		else:
+			if xy.x >= 0:
+				$BoardGrid.set_cursor(xy.x, xy.y)
 			else:
-				var v0 = $TileMap.get_cell(xy.x, xy.y)
-				push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, cell_val])
-				update_undo_redo()
-				set_cell_basic(xy.x, xy.y, cell_val)
-				#$TileMap.set_cell(xy.x, xy.y, cell_val)
-				if v0 == TILE_BLACK && cell_val != TILE_BLACK:
-					setup_fallingBlack(event.position)
+				$BoardGrid.set_cursor(-1, -1)
 	if mode == MODE_SOLVE:
 		if is_solved():			# クリア状態
 			qSolved = true		# クリア済みフラグON
