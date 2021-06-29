@@ -74,7 +74,7 @@ func _draw():
 		#var pos = pos2*CELL_WIDTH + IMAGE_ORG - Vector2(CELL_WIDTH, 2)
 		var txt = "%d x %d" % [wd, ht]
 		var sz = font.get_string_size (txt)
-		var pos = pos2*CELL_WIDTH + IMAGE_ORG - sz
+		var pos = pos2*CELL_WIDTH + IMAGE_ORG - sz - Vector2(2, 2)
 		draw_rect(Rect2(pos, sz+Vector2(2, 2)), Color.white)
 		draw_string(font, pos+Vector2(0, sz.y), txt, Color.black)
 func _input(event):
