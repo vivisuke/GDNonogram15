@@ -123,7 +123,7 @@ func _on_EditButton_pressed():
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
 func _on_ClearButton_pressed():
-	$ClearProgressDialog.window_title = "SakuSakuLogig"
+	$ClearProgressDialog.window_title = "SakuSakuLogic"
 	$ClearProgressDialog.dialog_text = "Are you shure to clear Progress ?"
 	$ClearProgressDialog.popup_centered()
 	dialog_opened = true

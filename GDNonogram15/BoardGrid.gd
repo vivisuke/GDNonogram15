@@ -84,7 +84,7 @@ func _draw():
 		draw_rect(Rect2(pos, sz+Vector2(2, 2)), Color.white)
 		draw_string(font, pos+Vector2(0, sz.y), txt, Color.black)
 	elif curX >= 0 && curY >= 0:
-		var col = Color(0.5, 1, 0.5, 0.4)
+		var col = Color(0.5, 1, 0.5, 0.25)
 		var pos = Vector2(curX, curY) * CELL_WIDTH + IMAGE_ORG
 		draw_rect(Rect2(pos, Vector2(CELL_WIDTH, CELL_WIDTH)), col)
 		pos = Vector2(-N_CLUES_CELL_HORZ, curY) * CELL_WIDTH + IMAGE_ORG

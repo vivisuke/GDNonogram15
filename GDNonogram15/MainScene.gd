@@ -70,7 +70,7 @@ var help_text = ""
 func _ready():
 	if g.solveMode:
 		mode = MODE_SOLVE
-		$EditButton.disabled = true
+		$CenterContainer/HBoxContainer/EditButton.disabled = true
 	else:
 		mode = MODE_EDIT_PICT
 		$questLabel.text = ""
@@ -102,7 +102,7 @@ func _ready():
 		qix = g.qNumber - 1
 		qID = g.qix2ID[qix]
 		print("QID = ", qID)
-		$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
+		$titleBar/questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 							", '" + g.quest_list[qix][g.KEY_TITLE][0] + "???' by " +
 							g.quest_list[qix][g.KEY_AUTHOR])
 		set_quest(g.quest_list[qix][g.KEY_V_CLUES], g.quest_list[qix][g.KEY_H_CLUES])
@@ -962,15 +962,15 @@ func _on_CheckButton_pressed():
 	pass # Replace with function body.
 func update_modeButtons():
 	if mode == MODE_SOLVE:
-		$SolveButton.add_color_override("font_color", Color.white)
-		$SolveButton.icon = load("res://images/light_white.png")
-		$EditButton.add_color_override("font_color", Color.darkgray)
-		$EditButton.icon = load("res://images/edit_gray.png")
+		$CenterContainer/HBoxContainer/SolveButton.add_color_override("font_color", Color.white)
+		$CenterContainer/HBoxContainer/SolveButton.icon = load("res://images/light_white.png")
+		$CenterContainer/HBoxContainer/EditButton.add_color_override("font_color", Color.darkgray)
+		$CenterContainer/HBoxContainer/EditButton.icon = load("res://images/edit_gray.png")
 	elif mode == MODE_EDIT_PICT:
-		$SolveButton.add_color_override("font_color", Color.darkgray)
-		$SolveButton.icon = load("res://images/light_gray.png")
-		$EditButton.add_color_override("font_color", Color.white)
-		$EditButton.icon = load("res://images/edit_white.png")
+		$CenterContainer/HBoxContainer/SolveButton.add_color_override("font_color", Color.darkgray)
+		$CenterContainer/HBoxContainer/SolveButton.icon = load("res://images/light_gray.png")
+		$CenterContainer/HBoxContainer/EditButton.add_color_override("font_color", Color.white)
+		$CenterContainer/HBoxContainer/EditButton.icon = load("res://images/edit_white.png")
 	pass
 func update_commandButtons():
 	$HintButton.disabled = mode != MODE_SOLVE || hintTime > 0

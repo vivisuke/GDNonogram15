@@ -43,8 +43,6 @@
 [ext_resource path="res://images/rightward_gray.png" type="Texture" id=41]
 [ext_resource path="res://images/upward_gray.png" type="Texture" id=42]
 [ext_resource path="res://images/check_gray.png" type="Texture" id=43]
-[ext_resource path="res://images/list_white.png" type="Texture" id=44]
-[ext_resource path="res://images/list_black.png" type="Texture" id=45]
 [ext_resource path="res://images/redo_white.png" type="Texture" id=46]
 [ext_resource path="res://images/redo_black.png" type="Texture" id=47]
 [ext_resource path="res://images/redo_gray.png" type="Texture" id=48]
@@ -58,12 +56,21 @@
 [ext_resource path="res://sounds/button-3.mp3" type="AudioStream" id=56]
 [ext_resource path="res://images/volume_up.png" type="Texture" id=57]
 [ext_resource path="res://images/volume_off_black.png" type="Texture" id=58]
+[ext_resource path="res://titleBar.gd" type="Script" id=59]
 
 [sub_resource type="DynamicFont" id=1]
+size = 32
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 19 )
+
+[sub_resource type="DynamicFont" id=2]
 size = 20
 font_data = ExtResource( 19 )
 
-[sub_resource type="TileSet" id=2]
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 19 )
+
+[sub_resource type="TileSet" id=4]
 0/name = "yellow20x20.png 0"
 0/texture = ExtResource( 35 )
 0/tex_offset = Vector2( 0, 0 )
@@ -93,7 +100,7 @@ font_data = ExtResource( 19 )
 1/shapes = [  ]
 1/z_index = 0
 
-[sub_resource type="TileSet" id=3]
+[sub_resource type="TileSet" id=5]
 0/name = "cross20x20.png 0"
 0/texture = ExtResource( 5 )
 0/tex_offset = Vector2( 0, 0 )
@@ -333,7 +340,7 @@ font_data = ExtResource( 19 )
 16/shapes = [  ]
 16/z_index = 0
 
-[sub_resource type="TileSet" id=4]
+[sub_resource type="TileSet" id=6]
 0/name = "black6x6.png 0"
 0/texture = ExtResource( 6 )
 0/tex_offset = Vector2( 0, 0 )
@@ -348,14 +355,6 @@ font_data = ExtResource( 19 )
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
-
-[sub_resource type="DynamicFont" id=5]
-size = 32
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 19 )
-
-[sub_resource type="DynamicFont" id=6]
-font_data = ExtResource( 19 )
 
 [sub_resource type="Shader" id=7]
 code = "shader_type canvas_item;
@@ -389,6 +388,10 @@ shader_param/force = 0.024
 shader_param/size = 2.0
 shader_param/tichness = 0.1
 
+[sub_resource type="DynamicFont" id=9]
+size = 20
+font_data = ExtResource( 19 )
+
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -400,14 +403,91 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="questLabel" type="Label" parent="."]
-margin_left = 15.0
-margin_top = 105.708
-margin_right = 55.0
-margin_bottom = 133.708
+[node name="titleBar" type="ColorRect" parent="."]
+margin_right = 480.0
+margin_bottom = 50.0
+color = Color( 0.180392, 0.309804, 0.309804, 1 )
+script = ExtResource( 59 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackButton" type="TextureButton" parent="titleBar"]
+margin_left = 10.0
+margin_top = 2.0
+margin_right = 106.001
+margin_bottom = 98.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 25 )
+texture_pressed = ExtResource( 26 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="titleBar/BackButton"]
+visible = false
+margin_left = 10.0
+margin_top = 90.0
+margin_right = 87.0
+margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="questLabel" type="Label" parent="titleBar"]
+margin_left = 85.0
+margin_top = 13.0
+margin_right = 193.0
+margin_bottom = 41.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Quest Label"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_top = 75.0
+margin_right = 480.0
+margin_bottom = 135.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
+margin_left = 70.0
+margin_top = 3.0
+margin_right = 409.0
+margin_bottom = 57.0
+
+[node name="SolveButton" type="Button" parent="CenterContainer/HBoxContainer"]
+margin_right = 147.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 3 )
+text = "Solve Mode"
+icon = ExtResource( 36 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CenterContainer/HBoxContainer"]
+margin_left = 151.0
+margin_right = 201.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 50, 50 )
+color = Color( 1, 1, 1, 0 )
+
+[node name="EditButton" type="Button" parent="CenterContainer/HBoxContainer"]
+margin_left = 205.0
+margin_right = 339.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 3 )
+text = "Edit Mode"
+icon = ExtResource( 37 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -425,13 +505,13 @@ __meta__ = {
 
 [node name="TileMapBG" type="TileMap" parent="BoardBG"]
 position = Vector2( 160, 160 )
-tile_set = SubResource( 2 )
+tile_set = SubResource( 4 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2( 170, 310 )
-tile_set = SubResource( 3 )
+tile_set = SubResource( 5 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
@@ -448,34 +528,9 @@ __meta__ = {
 
 [node name="MiniTileMap" type="TileMap" parent="."]
 position = Vector2( 45, 185 )
-tile_set = SubResource( 4 )
+tile_set = SubResource( 6 )
 cell_size = Vector2( 6, 6 )
 format = 1
-
-[node name="BackButton" type="TextureButton" parent="."]
-margin_left = 10.0
-margin_top = 20.0
-margin_right = 106.001
-margin_bottom = 116.0
-rect_scale = Vector2( 0.5, 0.5 )
-texture_normal = ExtResource( 45 )
-texture_pressed = ExtResource( 44 )
-__meta__ = {
-"_edit_group_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="BackButton"]
-margin_left = 10.0
-margin_top = 90.0
-margin_right = 87.0
-margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Back"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ClearButton" type="TextureButton" parent="."]
 margin_left = 10.0
@@ -495,7 +550,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Clear"
 __meta__ = {
@@ -520,7 +575,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Hint"
 align = 1
@@ -558,7 +613,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Undo"
 __meta__ = {
@@ -584,7 +639,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Redo"
 __meta__ = {
@@ -610,7 +665,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "RotLt"
 __meta__ = {
@@ -636,7 +691,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Sound"
 __meta__ = {
@@ -662,7 +717,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "RotDn"
 __meta__ = {
@@ -688,7 +743,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "RotUp"
 __meta__ = {
@@ -714,7 +769,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "RotRt"
 __meta__ = {
@@ -740,7 +795,7 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Check"
 __meta__ = {
@@ -752,32 +807,8 @@ margin_left = 20.0
 margin_top = 626.0
 margin_right = 101.0
 margin_bottom = 654.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Message"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SolveButton" type="Button" parent="."]
-margin_left = 149.796
-margin_top = 20.0
-margin_right = 296.796
-margin_bottom = 74.0
-custom_fonts/font = SubResource( 6 )
-text = "Solve Mode"
-icon = ExtResource( 36 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="EditButton" type="Button" parent="."]
-margin_left = 335.0
-margin_top = 20.0
-margin_right = 469.0
-margin_bottom = 74.0
-custom_fonts/font = SubResource( 6 )
-text = "Edit Mode"
-icon = ExtResource( 37 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -797,10 +828,11 @@ __meta__ = {
 }
 
 [node name="timeLabel" type="Label" parent="."]
-margin_left = 410.0
-margin_top = 133.708
-margin_right = 466.0
-margin_bottom = 147.708
+margin_left = 392.0
+margin_top = 616.0
+margin_right = 470.0
+margin_bottom = 640.0
+custom_fonts/font = SubResource( 9 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "00:00:00"
 align = 2
@@ -814,7 +846,9 @@ stream = ExtResource( 55 )
 [node name="clickAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 56 )
 
-[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="titleBar/BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/SolveButton" to="." method="_on_SolveButton_pressed"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/EditButton" to="." method="_on_EditPictButton_pressed"]
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
 [connection signal="pressed" from="UndoButton" to="." method="_on_UndoButton_pressed"]
@@ -825,5 +859,3 @@ stream = ExtResource( 56 )
 [connection signal="pressed" from="UpButton" to="." method="_on_UpButton_pressed"]
 [connection signal="pressed" from="RightButton" to="." method="_on_RightButton_pressed"]
 [connection signal="pressed" from="CheckButton" to="." method="_on_CheckButton_pressed"]
-[connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
-[connection signal="pressed" from="EditButton" to="." method="_on_EditPictButton_pressed"]
