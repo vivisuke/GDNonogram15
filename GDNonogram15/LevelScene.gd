@@ -18,6 +18,8 @@ class MyCustomSorter:
 	#static func sort_descending(a, b):
 	#	return true if a > b else false
 func _ready():
+	g.lang_ja = TranslationServer.get_locale() == "ja"
+	print("g.lang_ja = ", g.lang_ja)
 	var file = File.new()
 	if file.file_exists(g.settingsFileName):
 		file.open(g.settingsFileName, File.READ)

@@ -36,6 +36,7 @@ func set_number(n : int):
 	#	$Question.hide()
 func set_difficulty(n : int):
 	$difficulty.text = "Difficulty: %d" % n
+	$jDiffi.text = "難易度 %d" % n
 func set_clearTime(n : int):
 	time = n
 	n = abs(n)
@@ -50,10 +51,12 @@ func set_clearTime(n : int):
 	update()
 func set_title(ttl):
 	$title.text = "Title: " + ttl
+	$jTitle.text = "タイトル " + ttl
 	solved = true
 	update()
 func set_author(name):
 	$author.text = "Author: " + name
+	$jAuthor.text = "問題作者 " + name
 func set_ans_image(ai):
 	if !ai.empty():
 		$Question.hide()

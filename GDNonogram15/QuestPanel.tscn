@@ -1,12 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://QuestPanel.gd" type="Script" id=1]
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://images/question.png" type="Texture" id=3]
+[ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
 font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 19
+font_data = ExtResource( 4 )
 
 [node name="QuestPanel" type="ReferenceRect"]
 margin_right = 450.0
@@ -29,6 +34,7 @@ __meta__ = {
 }
 
 [node name="difficulty" type="Label" parent="."]
+visible = false
 margin_left = 152.0
 margin_top = 10.0
 margin_right = 251.0
@@ -56,6 +62,7 @@ __meta__ = {
 }
 
 [node name="title" type="Label" parent="."]
+visible = false
 margin_left = 191.0
 margin_top = 38.0
 margin_right = 290.0
@@ -67,6 +74,7 @@ __meta__ = {
 }
 
 [node name="author" type="Label" parent="."]
+visible = false
 margin_left = 169.0
 margin_top = 65.0
 margin_right = 273.0
@@ -80,3 +88,33 @@ __meta__ = {
 [node name="Question" type="Sprite" parent="."]
 position = Vector2( 100, 48 )
 texture = ExtResource( 3 )
+
+[node name="jDiffi" type="Label" parent="."]
+margin_left = 176.0
+margin_top = 10.0
+margin_right = 260.0
+margin_bottom = 31.0
+custom_fonts/font = SubResource( 2 )
+text = "難易度 0"
+
+[node name="jTitle" type="Label" parent="."]
+margin_left = 160.0
+margin_top = 38.0
+margin_right = 277.0
+margin_bottom = 59.0
+custom_fonts/font = SubResource( 2 )
+text = "タイトル ???"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="jAuthor" type="Label" parent="."]
+margin_left = 160.0
+margin_top = 64.0
+margin_right = 277.0
+margin_bottom = 85.0
+custom_fonts/font = SubResource( 2 )
+text = "問題作者 ???"
+__meta__ = {
+"_edit_use_anchors_": false
+}
