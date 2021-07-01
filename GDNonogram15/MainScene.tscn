@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=68 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -43,6 +43,7 @@
 [ext_resource path="res://images/rightward_gray.png" type="Texture" id=41]
 [ext_resource path="res://images/upward_gray.png" type="Texture" id=42]
 [ext_resource path="res://images/check_gray.png" type="Texture" id=43]
+[ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=44]
 [ext_resource path="res://images/redo_white.png" type="Texture" id=46]
 [ext_resource path="res://images/redo_black.png" type="Texture" id=47]
 [ext_resource path="res://images/redo_gray.png" type="Texture" id=48]
@@ -65,7 +66,7 @@ font_data = ExtResource( 19 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 20
-font_data = ExtResource( 19 )
+font_data = ExtResource( 44 )
 
 [sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 19 )
@@ -439,10 +440,10 @@ __meta__ = {
 }
 
 [node name="questLabel" type="Label" parent="titleBar"]
-margin_left = 85.0
-margin_top = 13.0
-margin_right = 193.0
-margin_bottom = 41.0
+margin_left = 70.0
+margin_top = 15.0
+margin_right = 189.0
+margin_bottom = 43.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Quest Label"

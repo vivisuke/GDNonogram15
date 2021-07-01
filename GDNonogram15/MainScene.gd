@@ -1,4 +1,4 @@
-extends Node2D
+﻿extends Node2D
 
 onready var g = get_node("/root/Global")
 
@@ -73,7 +73,7 @@ func _ready():
 		$CenterContainer/HBoxContainer/EditButton.disabled = true
 	else:
 		mode = MODE_EDIT_PICT
-		$questLabel.text = ""
+		$titleBar/questLabel.text = ""
 		$MessLabel.text = ""
 	$HintButton/timeLabel.text = ""
 	update_modeButtons()
@@ -102,9 +102,13 @@ func _ready():
 		qix = g.qNumber - 1
 		qID = g.qix2ID[qix]
 		print("QID = ", qID)
-		$titleBar/questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
+		if true:
+			$titleBar/questLabel.text = (("#%d" % g.qNumber) + (", 難易度%d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 							", '" + g.quest_list[qix][g.KEY_TITLE][0] + "???' by " +
 							g.quest_list[qix][g.KEY_AUTHOR])
+		#$titleBar/questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
+		#					", '" + g.quest_list[qix][g.KEY_TITLE][0] + "???' by " +
+		#					g.quest_list[qix][g.KEY_AUTHOR])
 		set_quest(g.quest_list[qix][g.KEY_V_CLUES], g.quest_list[qix][g.KEY_H_CLUES])
 		for y in range(N_IMG_CELL_VERT):
 			h_answer1_bits_1[y] = 0
@@ -775,11 +779,16 @@ func _input(event):
 					lst[N_IMG_CELL_VERT] = g.solvedPat[qID][N_IMG_CELL_VERT]
 				g.solvedPat[qID] = lst
 				saveSolvedPat()
-				$questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
-										", '" + g.quest_list[qix][g.KEY_TITLE] +
-										"' by " + g.quest_list[qix][g.KEY_AUTHOR])
+				if true:
+					$titleBar/questLabel.text = (("#%d" % g.qNumber) + (", 難易度%d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
+											", '" + g.quest_list[qix][g.KEY_TITLE] +
+											"' by " + g.quest_list[qix][g.KEY_AUTHOR])
+				#$titleBar/questLabel.text = (("#%d" % g.qNumber) + (", diffi: %d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
+				#						", '" + g.quest_list[qix][g.KEY_TITLE] +
+				#						"' by " + g.quest_list[qix][g.KEY_AUTHOR])
 			$MessLabel.add_color_override("font_color", Color.blue)
-			$MessLabel.text = "Solved, Good Job !"
+			$MessLabel.text = "問題クリアです。グッジョブ！"
+			#$MessLabel.text = "Solved, Good Job !"
 		else:	# not is_solved()
 			qSolvedStat = false
 			if help_text.empty():
@@ -937,10 +946,12 @@ func _on_CheckButton_pressed():
 	print(solved)
 	if solved:
 		$MessLabel.add_color_override("font_color", Color.black)
-		$MessLabel.text = "Propper Quest (difficulty: %d)" % itr
+		$MessLabel.text = "適切な問題です(難易度: %d)。" % itr
+		#$MessLabel.text = "Propper Quest (difficulty: %d)" % itr
 	else:
 		$MessLabel.add_color_override("font_color", Color.red)
-		$MessLabel.text = "Impropper Quest"
+		$MessLabel.text = "不適切な問題です。"
+		#$MessLabel.text = "Impropper Quest"
 	var txt = ""
 	for y in range(N_IMG_CELL_VERT):
 		#print(to_binText(h_fixed_bits_1[y]), " ", to_binText(h_fixed_bits_0[y]))
@@ -1142,7 +1153,10 @@ func _on_HintButton_pressed():
 	var y = fixedLine()		# 確定セルがある行を探す
 	print("hint: line = ", y)
 	if y >= 0:
-		help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+		if true:
+			help_text = "%d行目に確定するセルがあります。" % (y+1)
+		else:
+			help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
 		$MessLabel.add_color_override("font_color", Color.black)
 		$MessLabel.text = help_text
 		for x in range(N_IMG_CELL_HORZ):
@@ -1155,7 +1169,10 @@ func _on_HintButton_pressed():
 	var x = fixedColumn()	# 確定セルがある列を探す
 	print("hint: column = ", x)
 	if x >= 0:
-		help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
+		if true:
+			help_text = "%d列目に確定するセルがあります。" % (x+1)
+		else:
+			help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
 		$MessLabel.add_color_override("font_color", Color.black)
 		$MessLabel.text = help_text
 		for y2 in range(N_IMG_CELL_VERT):
