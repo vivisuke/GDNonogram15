@@ -25,9 +25,9 @@ https://www.youtube.com/watch?v=SCHdglr35pk
 
 - フォントは以下のサイトのものを利用させていただいております。
 
-https://flopdesign.booth.pm/
+　　https://flopdesign.booth.pm/
 
-https://www.fontspace.com/category/gaming
+　　https://www.fontspace.com/category/gaming
 
 - 効果音は「効果音ラボ」様の効果音を使用させていただいています。
 
