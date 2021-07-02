@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://LevelScene.gd" type="Script" id=2]
 [ext_resource path="res://images/edit_white.png" type="Texture" id=3]
 [ext_resource path="res://fonts/Hokjesgeest-PDGB.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://images/clear_white_48.png" type="Texture" id=5]
+[ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -15,7 +16,7 @@ size = 20
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=3]
-font_data = ExtResource( 1 )
+font_data = ExtResource( 6 )
 
 [node name="LevelScene" type="Node2D"]
 script = ExtResource( 2 )
@@ -57,7 +58,7 @@ margin_right = 480.0
 margin_bottom = 90.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "ver 0.008"
+text = "ver 0.009"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -81,34 +82,34 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
-margin_left = 72.0
+margin_left = 85.0
 margin_top = 23.0
-margin_right = 407.0
+margin_right = 395.0
 margin_bottom = 77.0
 
 [node name="ClearButton" type="Button" parent="CenterContainer/HBoxContainer"]
-margin_right = 143.0
+margin_right = 126.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 3 )
-text = "Clear Prgrs"
+text = "進捗消去"
 icon = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ColorRect" type="ColorRect" parent="CenterContainer/HBoxContainer"]
-margin_left = 147.0
-margin_right = 197.0
+margin_left = 130.0
+margin_right = 180.0
 margin_bottom = 54.0
 rect_min_size = Vector2( 50, 0 )
 color = Color( 1, 1, 1, 0 )
 
 [node name="EditButton" type="Button" parent="CenterContainer/HBoxContainer"]
-margin_left = 201.0
-margin_right = 335.0
+margin_left = 184.0
+margin_right = 310.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 3 )
-text = "Edit Mode"
+text = "問題作成"
 icon = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
