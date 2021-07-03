@@ -126,6 +126,7 @@ func _on_EditButton_pressed():
 	pass # Replace with function body.
 func _on_ClearButton_pressed():
 	$ClearProgressDialog.window_title = "SakuSakuLogic"
+	#$ClearProgressDialog.dialog_text = "進捗を消去しても後悔しませんか？"
 	$ClearProgressDialog.dialog_text = "Are you shure to clear Progress ?"
 	$ClearProgressDialog.popup_centered()
 	dialog_opened = true

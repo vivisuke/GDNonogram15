@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=69 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -62,14 +62,14 @@
 [sub_resource type="DynamicFont" id=1]
 size = 32
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 19 )
+font_data = ExtResource( 44 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 20
 font_data = ExtResource( 44 )
 
 [sub_resource type="DynamicFont" id=3]
-font_data = ExtResource( 19 )
+font_data = ExtResource( 44 )
 
 [sub_resource type="TileSet" id=4]
 0/name = "yellow20x20.png 0"
@@ -357,6 +357,10 @@ font_data = ExtResource( 19 )
 0/shapes = [  ]
 0/z_index = 0
 
+[sub_resource type="DynamicFont" id=10]
+size = 22
+font_data = ExtResource( 44 )
+
 [sub_resource type="Shader" id=7]
 code = "shader_type canvas_item;
 
@@ -460,34 +464,34 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
-margin_left = 70.0
+margin_left = 69.0
 margin_top = 3.0
-margin_right = 409.0
+margin_right = 411.0
 margin_bottom = 57.0
 
 [node name="SolveButton" type="Button" parent="CenterContainer/HBoxContainer"]
-margin_right = 147.0
+margin_right = 142.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 3 )
-text = "Solve Mode"
+text = "問題を解く"
 icon = ExtResource( 36 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ColorRect" type="ColorRect" parent="CenterContainer/HBoxContainer"]
-margin_left = 151.0
-margin_right = 201.0
+margin_left = 146.0
+margin_right = 196.0
 margin_bottom = 54.0
 rect_min_size = Vector2( 50, 50 )
 color = Color( 1, 1, 1, 0 )
 
 [node name="EditButton" type="Button" parent="CenterContainer/HBoxContainer"]
-margin_left = 205.0
-margin_right = 339.0
+margin_left = 200.0
+margin_right = 342.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 3 )
-text = "Edit Mode"
+text = "問題を作る"
 icon = ExtResource( 37 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -553,7 +557,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Clear"
+text = "全消去"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -578,22 +582,26 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Hint"
+text = "ヒント"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="timeLabel" type="Label" parent="HintButton"]
-margin_left = 28.0
-margin_top = 29.0
-margin_right = 55.0
-margin_bottom = 43.0
+margin_left = 24.0
+margin_top = 20.0
+margin_right = 58.0
+margin_bottom = 45.0
 rect_scale = Vector2( 1.5, 1.5 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "00"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="UndoButton" type="TextureButton" parent="."]
 margin_left = 330.0
@@ -616,7 +624,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Undo"
+text = "戻す"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -642,7 +650,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Redo"
+text = "進める"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -668,7 +676,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "RotLt"
+text = "左回転"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -694,7 +702,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Sound"
+text = "効果音"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -720,7 +728,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "RotDn"
+text = "下回転"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -746,7 +754,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "RotUp"
+text = "上回転"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -772,7 +780,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "RotRt"
+text = "右回転"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -798,7 +806,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Check"
+text = "検査"
 __meta__ = {
 "_edit_use_anchors_": false
 }
