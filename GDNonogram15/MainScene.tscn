@@ -357,11 +357,11 @@ font_data = ExtResource( 44 )
 0/shapes = [  ]
 0/z_index = 0
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=7]
 size = 22
 font_data = ExtResource( 44 )
 
-[sub_resource type="Shader" id=7]
+[sub_resource type="Shader" id=8]
 code = "shader_type canvas_item;
 
 uniform vec2 center;
@@ -386,14 +386,14 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=8]
-shader = SubResource( 7 )
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
 shader_param/center = Vector2( 0.5, 0.5 )
 shader_param/force = 0.024
 shader_param/size = 2.0
 shader_param/tichness = 0.1
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=10]
 size = 20
 font_data = ExtResource( 19 )
 
@@ -594,7 +594,7 @@ margin_top = 20.0
 margin_right = 58.0
 margin_bottom = 45.0
 rect_scale = Vector2( 1.5, 1.5 )
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 7 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "00"
 align = 1
@@ -676,7 +676,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "左回転"
+text = "左移動"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -728,7 +728,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "下回転"
+text = "下移動"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -754,7 +754,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "上回転"
+text = "上移動"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -780,7 +780,7 @@ margin_right = 87.0
 margin_bottom = 126.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "右回転"
+text = "右移動"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -825,7 +825,7 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-material = SubResource( 8 )
+material = SubResource( 9 )
 use_parent_material = true
 margin_right = 480.0
 margin_bottom = 800.0
@@ -841,7 +841,7 @@ margin_left = 392.0
 margin_top = 616.0
 margin_right = 470.0
 margin_bottom = 640.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "00:00:00"
 align = 2

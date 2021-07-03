@@ -20,6 +20,9 @@ class MyCustomSorter:
 func _ready():
 	g.lang_ja = TranslationServer.get_locale() == "ja"
 	print("g.lang_ja = ", g.lang_ja)
+	#var theme = $ClearProgressDialog.get_theme()
+	#var newfont = load("res://fonts/FlopDesignFONT.otf")
+	#theme.set_default_font(newfont)
 	var file = File.new()
 	if file.file_exists(g.settingsFileName):
 		file.open(g.settingsFileName, File.READ)
