@@ -143,7 +143,7 @@ func _ready():
 					check_v_conflicted(x)
 			else:
 				qSolved = true		# すでにクリア済み
-		set_crosses_null_line_column()
+		set_crosses_null_line_column()	# 手がかり数字0の行・列に全部 ☓ を埋める
 		print("qSolved = ", qSolved)
 	update_undo_redo()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
@@ -841,6 +841,7 @@ func clear_all_basic():
 				$BoardBG/TileMapBG.set_cell(x, -y-1, TILE_NONE)
 func _on_ClearButton_pressed():
 	clear_all()
+	set_crosses_null_line_column()	# 手がかり数字0の行・列に全部 ☓ を埋める
 	pass # Replace with function body.
 func upate_imageTileMap():
 	for y in range(N_IMG_CELL_VERT):
@@ -919,7 +920,7 @@ func print_clues(clues):
 	txt += "],"
 	print(txt)
 func _on_CheckButton_pressed():
-	set_crosses_null_line_column()
+	set_crosses_null_line_column()	# 手がかり数字0の行・列に全部 ☓ を埋める
 	init_arrays()
 	init_candidates()
 	print_clues(v_clues)
@@ -1031,7 +1032,7 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 			mask >>= 1
 			$TileMap.set_cell(x, y, TILE_BLACK if (d & mask) != 0 else TILE_NONE)
 	upate_imageTileMap()
-	set_crosses_null_line_column();
+	set_crosses_null_line_column();	# 手がかり数字0の行・列に全部 ☓ を埋める
 func _on_BackButton_pressed():
 	if !qSolved && !qSolvedStat:
 		var lst = []
