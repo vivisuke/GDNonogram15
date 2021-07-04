@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://BoardBG.gd" type="Script" id=2]
@@ -26,24 +26,25 @@
 [ext_resource path="res://images/num12.png" type="Texture" id=24]
 [ext_resource path="res://images/leftward_white.png" type="Texture" id=25]
 [ext_resource path="res://images/leftward_black.png" type="Texture" id=26]
-[ext_resource path="res://images/rightward_white.png" type="Texture" id=27]
-[ext_resource path="res://images/upward_black.png" type="Texture" id=28]
-[ext_resource path="res://images/rightward_black.png" type="Texture" id=29]
-[ext_resource path="res://images/downward_black.png" type="Texture" id=30]
-[ext_resource path="res://images/downward_white.png" type="Texture" id=31]
-[ext_resource path="res://images/upward_white.png" type="Texture" id=32]
+[ext_resource path="res://images/shift_up_white.png" type="Texture" id=27]
+[ext_resource path="res://images/shift_left_black.png" type="Texture" id=28]
+[ext_resource path="res://images/shift_down_gray.png" type="Texture" id=29]
+[ext_resource path="res://images/shift_up_black.png" type="Texture" id=30]
+[ext_resource path="res://images/shift_down_white.png" type="Texture" id=31]
+[ext_resource path="res://images/shift_left_gray.png" type="Texture" id=32]
 [ext_resource path="res://images/check_black.png" type="Texture" id=33]
 [ext_resource path="res://images/check_white.png" type="Texture" id=34]
 [ext_resource path="res://images/yellow20x20.png" type="Texture" id=35]
 [ext_resource path="res://images/light_white.png" type="Texture" id=36]
 [ext_resource path="res://images/edit_white.png" type="Texture" id=37]
 [ext_resource path="res://images/lightgray20x20.png" type="Texture" id=38]
-[ext_resource path="res://images/downward_gray.png" type="Texture" id=39]
-[ext_resource path="res://images/leftward_gray.png" type="Texture" id=40]
-[ext_resource path="res://images/rightward_gray.png" type="Texture" id=41]
-[ext_resource path="res://images/upward_gray.png" type="Texture" id=42]
+[ext_resource path="res://images/shift_down_black.png" type="Texture" id=39]
+[ext_resource path="res://images/shift_right_gray.png" type="Texture" id=40]
+[ext_resource path="res://images/shift_left_white.png" type="Texture" id=41]
+[ext_resource path="res://images/shift_right_white.png" type="Texture" id=42]
 [ext_resource path="res://images/check_gray.png" type="Texture" id=43]
 [ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=44]
+[ext_resource path="res://images/shift_right_black.png" type="Texture" id=45]
 [ext_resource path="res://images/redo_white.png" type="Texture" id=46]
 [ext_resource path="res://images/redo_black.png" type="Texture" id=47]
 [ext_resource path="res://images/redo_gray.png" type="Texture" id=48]
@@ -58,6 +59,7 @@
 [ext_resource path="res://images/volume_up.png" type="Texture" id=57]
 [ext_resource path="res://images/volume_off_black.png" type="Texture" id=58]
 [ext_resource path="res://titleBar.gd" type="Script" id=59]
+[ext_resource path="res://images/shift_up_gray.png" type="Texture" id=60]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -655,32 +657,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LeftButton" type="TextureButton" parent="."]
-margin_left = 90.0
-margin_top = 730.0
-margin_right = 186.001
-margin_bottom = 826.0
-rect_scale = Vector2( 0.5, 0.5 )
-texture_normal = ExtResource( 26 )
-texture_pressed = ExtResource( 25 )
-texture_disabled = ExtResource( 40 )
-__meta__ = {
-"_edit_group_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="LeftButton"]
-margin_left = 10.0
-margin_top = 90.0
-margin_right = 87.0
-margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "左移動"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="SoundButton" type="TextureButton" parent="."]
 margin_left = 10.0
 margin_top = 730.0
@@ -707,15 +683,41 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="LeftButton" type="TextureButton" parent="."]
+margin_left = 90.0
+margin_top = 730.0
+margin_right = 186.001
+margin_bottom = 826.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 28 )
+texture_pressed = ExtResource( 41 )
+texture_disabled = ExtResource( 32 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="LeftButton"]
+margin_left = 10.0
+margin_top = 90.0
+margin_right = 87.0
+margin_bottom = 126.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "左移動"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="DownButton" type="TextureButton" parent="."]
 margin_left = 170.0
 margin_top = 730.0
 margin_right = 266.0
 margin_bottom = 826.0
 rect_scale = Vector2( 0.5, 0.5 )
-texture_normal = ExtResource( 30 )
+texture_normal = ExtResource( 39 )
 texture_pressed = ExtResource( 31 )
-texture_disabled = ExtResource( 39 )
+texture_disabled = ExtResource( 29 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -739,9 +741,9 @@ margin_top = 730.0
 margin_right = 346.0
 margin_bottom = 826.0
 rect_scale = Vector2( 0.5, 0.5 )
-texture_normal = ExtResource( 28 )
-texture_pressed = ExtResource( 32 )
-texture_disabled = ExtResource( 42 )
+texture_normal = ExtResource( 30 )
+texture_pressed = ExtResource( 27 )
+texture_disabled = ExtResource( 60 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -765,9 +767,9 @@ margin_top = 730.0
 margin_right = 426.0
 margin_bottom = 826.0
 rect_scale = Vector2( 0.5, 0.5 )
-texture_normal = ExtResource( 29 )
-texture_pressed = ExtResource( 27 )
-texture_disabled = ExtResource( 41 )
+texture_normal = ExtResource( 45 )
+texture_pressed = ExtResource( 42 )
+texture_disabled = ExtResource( 40 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -862,8 +864,8 @@ stream = ExtResource( 56 )
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
 [connection signal="pressed" from="UndoButton" to="." method="_on_UndoButton_pressed"]
 [connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
-[connection signal="pressed" from="LeftButton" to="." method="_on_LeftButton_pressed"]
 [connection signal="pressed" from="SoundButton" to="." method="_on_SoundButton_pressed"]
+[connection signal="pressed" from="LeftButton" to="." method="_on_LeftButton_pressed"]
 [connection signal="pressed" from="DownButton" to="." method="_on_DownButton_pressed"]
 [connection signal="pressed" from="UpButton" to="." method="_on_UpButton_pressed"]
 [connection signal="pressed" from="RightButton" to="." method="_on_RightButton_pressed"]
