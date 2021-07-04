@@ -1,4 +1,4 @@
-﻿extends Node2D
+extends Node2D
 
 onready var g = get_node("/root/Global")
 
@@ -487,10 +487,17 @@ func check_h_conflicted(y0):
 	var lst = g_map[h_clues[y0]].duplicate()
 	var bg = TILE_NONE
 	remove_conflicted(d1, d0, lst)
-	bg = TILE_BG_YELLOW if lst.empty() else TILE_NONE
-	for x in range(h_clues[y0].size()):
+	if lst.empty():
+		for x in range(h_clues[y0].size()):
+			$BoardBG/TileMapBG.set_cell(-x-1, y0, TILE_BG_YELLOW)
+	else:
+		for x in range(h_clues[y0].size()):
+			if $BoardBG/TileMapBG.get_cell(-x-1, y0) != TILE_BG_GRAY:
+				$BoardBG/TileMapBG.set_cell(-x-1, y0, TILE_NONE)	# グレイでなければ透明に
+	#bg = TILE_BG_YELLOW if lst.empty() else TILE_NONE
+	#for x in range(h_clues[y0].size()):
 		#if $BoardBG/TileMapBG.get_cell(-x-1, y0) != TILE_BG_GRAY:
-		$BoardBG/TileMapBG.set_cell(-x-1, y0, bg)	# 黄色の方が優先
+		#$BoardBG/TileMapBG.set_cell(-x-1, y0, bg)	# 黄色の方が優先
 func check_h_clues(y0 : int):		# 水平方向チェック
 	var d1 = get_h_data(y0)
 	var d0 = get_h_data0(y0)
@@ -540,10 +547,17 @@ func check_v_conflicted(x0):
 	var lst = g_map[v_clues[x0]].duplicate()
 	var bg = TILE_NONE
 	remove_conflicted(d1, d0, lst)
-	bg = TILE_BG_YELLOW if lst.empty() else TILE_NONE
-	for y in range(v_clues[x0].size()):
+	if lst.empty():
+		for y in range(v_clues[x0].size()):
+			$BoardBG/TileMapBG.set_cell(x0, -y-1, TILE_BG_YELLOW)
+	else:
+		for y in range(v_clues[x0].size()):
+			if $BoardBG/TileMapBG.get_cell(x0, -y-1) != TILE_BG_GRAY:
+				$BoardBG/TileMapBG.set_cell(x0, -y-1, TILE_NONE)	# グレイでなければ透明に
+	#bg = TILE_BG_YELLOW if lst.empty() else TILE_NONE
+	#for y in range(v_clues[x0].size()):
 		#if $BoardBG/TileMapBG.get_cell(x0, -y-1) != TILE_BG_GRAY:
-		$BoardBG/TileMapBG.set_cell(x0, -y-1, bg)
+		#$BoardBG/TileMapBG.set_cell(x0, -y-1, bg)
 func check_v_clues(x0 : int):		# 垂直方向チェック
 	var d1 = get_v_data(x0)
 	var d0 = get_v_data0(x0)
