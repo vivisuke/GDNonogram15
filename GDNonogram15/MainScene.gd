@@ -74,7 +74,7 @@ func _ready():
 	else:
 		mode = MODE_EDIT_PICT
 		$titleBar/questLabel.text = ""
-		$MessLabel.text = ""
+	$MessLabel.text = ""
 	$HintButton/timeLabel.text = ""
 	update_modeButtons()
 	update_commandButtons()
