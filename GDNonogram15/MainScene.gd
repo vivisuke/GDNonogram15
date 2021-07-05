@@ -855,7 +855,8 @@ func clear_all_basic():
 				$BoardBG/TileMapBG.set_cell(x, -y-1, TILE_NONE)
 func _on_ClearButton_pressed():
 	clear_all()
-	set_crosses_null_line_column()	# 手がかり数字0の行・列に全部 ☓ を埋める
+	if mode == MODE_SOLVE:
+		set_crosses_null_line_column()	# 手がかり数字0の行・列に全部 ☓ を埋める
 	pass # Replace with function body.
 func upate_imageTileMap():
 	for y in range(N_IMG_CELL_VERT):
