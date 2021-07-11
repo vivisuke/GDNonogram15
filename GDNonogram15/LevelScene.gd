@@ -1,6 +1,7 @@
 extends Node2D
 
 const N_IMG_CELL_VERT = 15
+const PANEL_HEIGHT = 100
 
 onready var g = get_node("/root/Global")
 
@@ -150,4 +151,21 @@ func _on_ClearProgressDialog_confirmed():
 		panel.set_clearTime(0)
 		panel.set_ans_image([])
 		#panel.update()
+	pass # Replace with function body.
+
+func nextNotSolved(qix):
+	while qix + 1 < g.quest_list.size():
+		qix += 1
+		if g.solvedPat.has(g.qix2ID[qix]):
+			var lst = g.solvedPat[g.qix2ID[qix]]
+			if !(lst.size() <= N_IMG_CELL_VERT || lst[N_IMG_CELL_VERT] > 0):
+				return qix
+		else:
+			return qix
+	return 0
+func _on_TabButton_pressed():
+	print($ScrollContainer.get_v_scroll())
+	var qix = floor($ScrollContainer.get_v_scroll() / PANEL_HEIGHT)
+	qix = nextNotSolved(qix)
+	$ScrollContainer.set_v_scroll(qix * PANEL_HEIGHT)
 	pass # Replace with function body.

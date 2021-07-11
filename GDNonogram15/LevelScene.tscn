@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://LevelScene.gd" type="Script" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://images/clear_white_48.png" type="Texture" id=5]
 [ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=6]
 [ext_resource path="res://ClearProgressDialog.gd" type="Script" id=7]
+[ext_resource path="res://images/tab_black.png" type="Texture" id=8]
+[ext_resource path="res://images/tab_white.png" type="Texture" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -59,7 +61,7 @@ margin_right = 480.0
 margin_bottom = 90.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "ver 0.009"
+text = "ver 0.010"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -122,7 +124,19 @@ margin_bottom = 70.0
 window_title = "確認..."
 script = ExtResource( 7 )
 
+[node name="TabButton" type="TextureButton" parent="."]
+margin_left = 424.291
+margin_top = 62.0
+margin_right = 472.291
+margin_bottom = 102.0
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="CenterContainer/HBoxContainer/ClearButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="CenterContainer/HBoxContainer/EditButton" to="." method="_on_EditButton_pressed"]
 [connection signal="confirmed" from="ClearProgressDialog" to="." method="_on_ClearProgressDialog_confirmed"]
 [connection signal="popup_hide" from="ClearProgressDialog" to="." method="_on_ClearProgressDialog_popup_hide"]
+[connection signal="pressed" from="TabButton" to="." method="_on_TabButton_pressed"]

@@ -45,13 +45,13 @@ func _draw():
 	for x in range(N_TOTAL_CELL_HORZ+1):
 		var y1 = 0 if x >= N_CLUES_CELL_HORZ || !x else CLUES_WIDTH
 		#var col = Color.black if x == 0 || x >= N_CLUES_CELL_HORZ && (x - N_CLUES_CELL_HORZ) % 5 == 0 else Color.gray
-		var col = Color.black if (x - N_CLUES_CELL_HORZ) % 5 == 0 else Color.gray
+		var col = Color.blue if (x - N_CLUES_CELL_HORZ) % 5 == 0 else Color.gray
 		draw_line(Vector2(x * CELL_WIDTH+1, y1), Vector2(x * CELL_WIDTH+1, y2), col)
 	var x2 = BOARD_WIDTH + 1
 	for y in range(N_TOTAL_CELL_VERT+1):
 		var x1 = 0 if y >= N_CLUES_CELL_HORZ || !y else CLUES_WIDTH
 		#var col = Color.black if y == 0 || y >= N_CLUES_CELL_VERT && (y - N_CLUES_CELL_VERT) % 5 == 0 else Color.gray
-		var col = Color.black if (y - N_CLUES_CELL_VERT) % 5 == 0 else Color.gray
+		var col = Color.blue if (y - N_CLUES_CELL_VERT) % 5 == 0 else Color.gray
 		draw_line(Vector2(x1, y * CELL_WIDTH+1), Vector2(x2, y * CELL_WIDTH+1), col)
 	draw_line(Vector2(0, 0), Vector2(x2, 0), Color.black)
 	draw_line(Vector2(0, y2+1), Vector2(x2, y2+1), Color.black)
