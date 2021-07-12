@@ -523,10 +523,10 @@ cell_size = Vector2( 20, 20 )
 format = 1
 
 [node name="BoardGrid" type="ColorRect" parent="."]
-margin_left = 9.0
-margin_top = 149.0
-margin_right = 472.0
-margin_bottom = 612.0
+margin_left = 10.0
+margin_top = 150.0
+margin_right = 473.0
+margin_bottom = 613.0
 color = Color( 1, 1, 1, 0 )
 script = ExtResource( 3 )
 __meta__ = {
