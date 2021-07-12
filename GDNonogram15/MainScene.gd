@@ -28,6 +28,8 @@ const TILE_BG_GRAY = 1
 const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
+const HINT_INTERVAL = 3
+
 var FallingBlack = load("res://FallingBlack.tscn")
 var FallingCross = load("res://FallingCross.tscn")
 
@@ -1140,6 +1142,20 @@ func _on_RedoButton_pressed():
 	undo_ix += 1
 	update_undo_redo()
 	pass # Replace with function body.
+func allFixedLine():	# 全部入れれる行を探す
+	for y in range(N_IMG_CELL_VERT):
+		if h_clues[y].empty():		# 手がかりなし → 0 → 全部バツ、ほんとはありえないけど一応チェック
+			return y
+		if h_candidates[y].size() == 1 && get_h_data(y) != h_candidates[y][0]:
+			return y;
+	return -1
+func allFixedColumn():	# 全部入れれるカラムを探す
+	for x in range(N_IMG_CELL_HORZ):
+		if v_clues[x].empty():		# 手がかりなし → 0 → 全部バツ、ほんとはありえないけど一応チェック
+			return x
+		if v_candidates[x].size() == 1 && get_v_data(x) != v_candidates[x][0]:
+			return x;
+	return -1
 func fixedLine():
 	for y in range(N_IMG_CELL_VERT):
 		var d = get_h_data(y)
@@ -1161,13 +1177,27 @@ func fixedColumn():
 		if (d0 & v_fixed_bits_0[x]) != v_fixed_bits_0[x]:
 			return x;
 	return -1
-func _on_HintButton_pressed():
+func search_hint_line_column() -> Array:	# [line, column], -1 for none
 	init_arrays()
 	init_candidates()
 	remove_h_candidates_conflicted()
 	update_h_fixedbits()	# h_candidates[] を元に h_fixed_bits_1, 0 を計算
-	var y = fixedLine()		# 確定セルがある行を探す
-	print("hint: line = ", y)
+	var y = allFixedLine()		# 全部入れれる行を探す
+	if y >= 0:
+		return [y, -1]
+	remove_v_candidates_conflicted()
+	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
+	var x = allFixedColumn()	# 確定セルがある列を探す
+	if x >= 0:
+		return [-1, x]
+	y = fixedLine()
+	if y >= 0:
+		return [y, -1]
+	x = fixedColumn()	# 確定セルがある列を探す
+	return [-1, x]
+func _on_HintButton_pressed():
+	var lc = search_hint_line_column()
+	var y = lc[0]
 	if y >= 0:
 		if true:
 			help_text = "%d行目に確定するセルがあります。" % (y+1)
@@ -1177,13 +1207,10 @@ func _on_HintButton_pressed():
 		$MessLabel.text = help_text
 		for x in range(N_IMG_CELL_HORZ):
 			$BoardBG/TileMapBG.set_cell(x, y, TILE_BG_YELLOW)
-		hintTime = 60
+		hintTime = HINT_INTERVAL
 		update_commandButtons()
 		return
-	remove_v_candidates_conflicted()
-	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
-	var x = fixedColumn()	# 確定セルがある列を探す
-	print("hint: column = ", x)
+	var x = lc[1]
 	if x >= 0:
 		if true:
 			help_text = "%d列目に確定するセルがあります。" % (x+1)
@@ -1193,7 +1220,7 @@ func _on_HintButton_pressed():
 		$MessLabel.text = help_text
 		for y2 in range(N_IMG_CELL_VERT):
 			$BoardBG/TileMapBG.set_cell(x, y2, TILE_BG_YELLOW)
-		hintTime = 60
+		hintTime = HINT_INTERVAL
 		update_commandButtons()
 		return
 	pass # Replace with function body.
