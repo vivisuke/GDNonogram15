@@ -39,7 +39,7 @@ func _ready():
 			file.open(g.solvedPatFileName, File.READ)
 			g.solvedPat = file.get_var()
 			file.close()
-			print(g.solvedPat)
+			##print(g.solvedPat)
 	print(g.quest_list0.size())
 	if g.quest_list.empty():	# ソート済み問題配列が空
 		g.quest_list.resize(g.quest_list0.size())
@@ -62,20 +62,36 @@ func _ready():
 		g.qix2ID[qix] = g.quest_list[qix][g.KEY_ID]
 		var panel = QuestPanel.instance()
 		panel.set_number(i+1)
-		panel.set_difficulty(g.quest_list[qix][g.KEY_DIFFICULTY])
+		var diffi = g.quest_list[qix][g.KEY_DIFFICULTY]
+		panel.set_difficulty(diffi)
 		#if g.solved[i]:
+		var ns = 0
+		var solved = false;
 		if g.solvedPat.has(g.qix2ID[qix]):
 			var lst = g.solvedPat[g.qix2ID[qix]]
 			if lst.size() <= N_IMG_CELL_VERT || lst[N_IMG_CELL_VERT] > 0:
+				solved = true
 				panel.set_title(g.quest_list[qix][g.KEY_TITLE])
 			else:
 				panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
 			panel.set_ans_image(lst)
 			#panel.set_ans_image(g.ans_images[i])
-			panel.set_clearTime(lst[N_IMG_CELL_VERT] if lst.size() > N_IMG_CELL_VERT else 0)
+			#panel.set_clearTime(lst[N_IMG_CELL_VERT] if lst.size() > N_IMG_CELL_VERT else 0)
+			if lst.size() > N_IMG_CELL_VERT:
+				panel.set_clearTime(lst[N_IMG_CELL_VERT])
+				if solved:
+					if lst[N_IMG_CELL_VERT] < diffi * 60 * 0.5:
+						ns = 3
+					elif lst[N_IMG_CELL_VERT] < diffi * 60:
+						ns = 2
+					elif lst[N_IMG_CELL_VERT] < diffi * 60 * 2:
+						ns = 1
+			else:
+				panel.set_clearTime(0)
 		else:
 			panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
 			panel.set_clearTime(0)
+		panel.set_star(ns)
 		panel.set_author(g.quest_list[qix][g.KEY_AUTHOR])
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#

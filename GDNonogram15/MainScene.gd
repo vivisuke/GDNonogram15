@@ -28,7 +28,12 @@ const TILE_BG_GRAY = 1
 const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
-const HINT_INTERVAL = 3
+const HINT_INTERVAL = 60
+enum {
+	HINT_ALL_FIXED = 1,
+	HINT_SIMPLE_BOX,
+	HINT_SIMPLE_BOXES,
+}
 
 var FallingBlack = load("res://FallingBlack.tscn")
 var FallingCross = load("res://FallingCross.tscn")
@@ -1156,6 +1161,23 @@ func allFixedColumn():	# 全部入れれるカラムを探す
 		if v_candidates[x].size() == 1 && get_v_data(x) != v_candidates[x][0]:
 			return x;
 	return -1
+func is_simple_box(clues, data) -> bool:
+	if clues.size() != 1 || clues[0] < 8:
+		return false;
+	var ln = (clues[0] - 8) * 2 + 1
+	var bits = ((1<<ln) - 1) << (15 - clues[0])
+	print("ln = ", ln, ", bits = ", to_binText(bits))
+	return (data & bits) != bits
+func simpleBoxLine():
+	for y in range(N_IMG_CELL_VERT):
+		if is_simple_box(h_clues[y], get_h_data(y)):
+			return y
+	return - 1
+func simpleBoxColumn():
+	for x in range(N_IMG_CELL_HORZ):
+		if is_simple_box(v_clues[x], get_v_data(x)):
+			return x
+	return - 1
 func fixedLine():
 	for y in range(N_IMG_CELL_VERT):
 		var d = get_h_data(y)
@@ -1184,25 +1206,42 @@ func search_hint_line_column() -> Array:	# [line, column], -1 for none
 	update_h_fixedbits()	# h_candidates[] を元に h_fixed_bits_1, 0 を計算
 	var y = allFixedLine()		# 全部入れれる行を探す
 	if y >= 0:
-		return [y, -1]
+		return [y, -1, HINT_ALL_FIXED]
 	remove_v_candidates_conflicted()
 	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
 	var x = allFixedColumn()	# 確定セルがある列を探す
 	if x >= 0:
-		return [-1, x]
+		return [-1, x, HINT_ALL_FIXED]
+	y = simpleBoxLine()
+	if y >= 0:
+		return [y, -1, HINT_SIMPLE_BOX]
+	x = simpleBoxColumn()
+	if x >= 0:
+		return [-1, x, HINT_SIMPLE_BOX]
 	y = fixedLine()
 	if y >= 0:
-		return [y, -1]
+		return [y, -1, 0]
 	x = fixedColumn()	# 確定セルがある列を探す
-	return [-1, x]
+	return [-1, x, 0]
 func _on_HintButton_pressed():
 	var lc = search_hint_line_column()
 	var y = lc[0]
 	if y >= 0:
-		if true:
-			help_text = "%d行目に確定するセルがあります。" % (y+1)
+		if lc[2] == HINT_ALL_FIXED:
+			if true:
+				help_text = "%d行目が全て確定します。" % (y+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+		elif lc[2] == HINT_SIMPLE_BOX:
+			if true:
+				help_text = "%d行目に「重なったら黒」があります。" % (y+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
 		else:
-			help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+			if true:
+				help_text = "%d行目に確定するセルがあります。" % (y+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
 		$MessLabel.add_color_override("font_color", Color.black)
 		$MessLabel.text = help_text
 		for x in range(N_IMG_CELL_HORZ):
@@ -1212,10 +1251,21 @@ func _on_HintButton_pressed():
 		return
 	var x = lc[1]
 	if x >= 0:
-		if true:
-			help_text = "%d列目に確定するセルがあります。" % (x+1)
+		if lc[2] == HINT_ALL_FIXED:
+			if true:
+				help_text = "%d列目が全て確定します。" % (x+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
+		elif lc[2] == HINT_SIMPLE_BOX:
+			if true:
+				help_text = "%d列目に「重なったら黒」があります。" % (x+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
 		else:
-			help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
+			if true:
+				help_text = "%d列目に確定するセルがあります。" % (x+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
 		$MessLabel.add_color_override("font_color", Color.black)
 		$MessLabel.text = help_text
 		for y2 in range(N_IMG_CELL_VERT):

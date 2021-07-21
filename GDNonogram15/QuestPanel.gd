@@ -37,6 +37,11 @@ func set_number(n : int):
 func set_difficulty(n : int):
 	$difficulty.text = "Difficulty: %d" % n
 	$jDiffi.text = "難易度 %d" % n
+func set_star(n : int):		# n: [0, 3]
+	var txt = ""
+	for i in range(n):
+		txt += "★"
+	$star.text = txt
 func set_clearTime(n : int):
 	time = n
 	n = abs(n)

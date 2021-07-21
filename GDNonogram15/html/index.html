@@ -47,7 +47,7 @@
 <li>マウス右ボタンクリックで、「白」「☓（バツ）」が交代します。<br>
 	※「☓」はそのセルが黒でないことが確定することを示します</li>
 <li>マウスボタン押下のまま移動（ドラッグ）することで、連続して黒や☓を置くことができます。</li>
-<li>ヒントボタンを押すと、確定できるセルがある行または列を黄色背景で強調します。<br>
+<li>ヒントボタンを押すと、黒またはバツを確定できるセルがある行または列を黄色背景で強調します。<br>
 	ヒントは何度でも使用できますが、一度使用すると１分間は使用不可となります。</li>
 </ul>
 
@@ -75,42 +75,56 @@
 (3) 右下で背景白で絵を描く「キャンパス部分」からなります（下図参照）。<br>
 また、キャンパス部分の各マスを「セル」と呼びます。</p>
 <img src="board.png" alt="" />
-<p>左部・上部の手がかり数字の数だけ、キャンパス部分のセルに黒を入れます。</p>
+<p><!--左部・上部の手がかり数字の数だけ、キャンパス部分のセルに黒を入れます。<br>-->
+手がかり数字とは、その行または列に黒がいくつ入るかを示す数字です。</p>
 <!--<br>
 例えば、横方向の手がかり数字が 15 の場合は、その行の全てのセルに黒が入ります（下図参照）。</p>
 <table border=1>
 <tr><td bgcolor=lightblue>15</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td></tr>
 </table>
---><p>黒が続く場合、続いた数が手がかり数字となります。<br>
-例えば 手がかり数字が「2」の場合は、「黒黒」となります。</p>
+-->
+<p>黒が続く場合、続いた数が手がかり数字となります。<br>
+例えば、「黒黒」の場合の手がかり数字が「2」となります。</p>
 <table border=1>
-<tr><td bgcolor=lightblue>2</td><td>■</td><td>■</td></tr>
+<tr><td bgcolor=lightblue>2</td><td>　</td><td>■</td><td>■</td><td>　</td></tr>
 </table>
-<p>「黒白黒」の場合の手がかり数字は「1 1」となります。</p>
+<p>「黒白黒」の場合の手がかり数字は「1, 1」<!--（じゅういち ではなく いち と いち）-->となります。</p>
 <table border=1>
-<tr><td bgcolor=lightblue>1</td><td bgcolor=lightblue>1</td><td>■</td><td>　</td><td>■</td></tr>
+<tr><td bgcolor=lightblue>1</td><td bgcolor=lightblue>1</td><td>　</td><td>■</td><td>　</td><td>■</td><td>　</td></tr>
 </table>
-<p>逆に言うと、手がかり数字が「1 1」の場合、「黒」と「黒」の間には一つ以上の空白を空けないといけないので、
-下図のような場合はNGとなります。</p>
+<p>逆に言うと、手がかり数字が「1, 1」の場合、「黒」と「黒」の間には一つ以上の空白を空けないといけないので、
+下図のような場合はNGとなります（NGの場合、手がかり数字の背景が黄色になります）。</p>
 <table border=1>
 <tr><td bgcolor=yellow>1</td><td bgcolor=yellow>1</td><td>■</td><td>■</td><td>　</td></tr>
 </table>
-<p>黒は手がかり数字の順番で入ります。例えば手がかり数字が「2 1」だった場合「黒黒白黒」はOKですが、
+<p>黒は手がかり数字の順番で入ります。例えば手がかり数字が「2, 1」だった場合「黒黒白黒」はOKですが、
 「黒白黒黒」はNGとなります。</p>
 <table border=1>
-<tr><td bgcolor=lightblue>2</td><td bgcolor=lightblue>1</td><td>■</td><td>■</td><td>　</td><td>■</td></tr>
+<tr><td bgcolor=lightblue>2</td><td bgcolor=lightblue>1</td><td>　</td><td>■</td><td>■</td><td>　</td><td>■</td><td>　</td></tr>
 </table>
 <p>下図はNGの例：</p>
 <table border=1>
-<tr><td bgcolor=yellow>2</td><td bgcolor=yellow>1</td><td>■</td><td>　</td><td>■</td><td>■</td></tr>
+<tr><td bgcolor=yellow>2</td><td bgcolor=yellow>1</td><td>　</td><td>■</td><td>　</td><td>■</td><td>■</td><td>　</td></tr>
 </table>
-<p>手がかり数字は左部、上部にあるので、その両方を満たすように黒を入れていくと、画像が完成します。</p>
+<p></p>
+<p>セル数が多いのに、手がかり数字が小さい場合は、黒の位置が決まらないのではないかと心配するかもしれませんが、
+実際には下図のように、手がかり数字は左部と上部にあるので、その両方を満たすように黒を入れていくと、画像が完成します
+（ただし、手がかり数字が空欄の場合は、0 を意味します）。</p>
+<table border=1>
+<tr><td>　</td><td bgcolor=lightblue>　</td><td bgcolor=lightblue>1</td><td bgcolor=lightblue>1</td><td bgcolor=lightblue>　</td></tr>
+<tr><td bgcolor=lightblue>2</td><td>　</td><td>■</td><td>■</td><td>　</td></tr>
+</table>
+<p>下図はNGの例：</p>
+<table border=1>
+<tr><td>　</td><td bgcolor=yellow>　</td><td bgcolor=lightblue>1</td><td bgcolor=yellow>1</td><td bgcolor=lightblue>　</td></tr>
+<tr><td bgcolor=lightblue>2</td><td>■</td><td>■</td><td>　</td><td>　</td></tr>
+</table>
 
 <h2>■ 基本解法テクニック</h2>
 <p>注意：以下の解法テクニック名は筆者が勝手に命名したものなので、一般には通用しないかもしれません。</p>
 
-<h3>「全部いれれる」</h3>
-<p>セルの余白が５で、手がかり数字が「5」の場合は、全てに黒が入ります。この解法を「全部いれれる」と呼びます。
+<h3>「全部入る」</h3>
+<p>セルの余白が５で、手がかり数字が「5」の場合は、全てに黒が入ります。この解法を「全部入る」と呼びます。
 これは他に黒の入れようが無いからです。</p>
 <table border=1>
 <tr><td bgcolor=lightblue>5</td><td>　</td><td>　</td><td>　</td><td>　</td><td>　</td></tr>
@@ -120,7 +134,7 @@
 <tr><td bgcolor=lightblue>5</td><td>■</td><td>■</td><td>■</td><td>■</td><td>■</td></tr>
 </table>
 
-<p>また、セルの余白が５で、手がかり数字が「1 3」のように、数字＋余白を足した結果が余白数に合致する場合も、
+<p>また、セルの余白が５で、手がかり数字が「1, 3」のように、数字＋余白を足した結果が余白数に合致する場合も、
 黒の入れ方が一通りしかないので、全部確定となります。
 先に示した余白数と手がかり数字が一致するのは、これの特殊な場合（余白がゼロ）となります。
 <table border=1>
