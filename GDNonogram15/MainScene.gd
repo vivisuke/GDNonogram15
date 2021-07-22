@@ -30,9 +30,11 @@ const ColorClues = Color("#dff9fb")
 
 const HINT_INTERVAL = 3 #60
 enum {
-	HINT_ALL_FIXED = 1,
-	HINT_SIMPLE_BOX,
-	HINT_SIMPLE_BOXES,
+	HINT_ALL_FIXED = 1,		# 全て入る
+	HINT_SIMPLE_BOX,		# 重なったら黒（手がかり数字がひとつだけ）
+	HINT_SIMPLE_BOXES,		# 重なったら黒（手がかり数字が複数）
+	HINT_X_BOTH_END,		# 確定したら両端にバツ
+	HINT_CAN_NOT_REACH,		# 届かない
 }
 
 var FallingBlack = load("res://FallingBlack.tscn")
@@ -1026,6 +1028,7 @@ func _on_SolveButton_pressed():		# 解答モード
 	clearTileMap()
 	clearMiniTileMap()
 	init_usedup()
+	set_crosses_null_line_column();	# 手がかり数字0の行・列に全部 ☓ を埋める
 	pass # Replace with function body.
 func change_cross_to_none():
 	for y in range(N_IMG_CELL_VERT):
@@ -1054,7 +1057,7 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 			mask >>= 1
 			$TileMap.set_cell(x, y, TILE_BLACK if (d & mask) != 0 else TILE_NONE)
 	upate_imageTileMap()
-	set_crosses_null_line_column();	# 手がかり数字0の行・列に全部 ☓ を埋める
+	#set_crosses_null_line_column();	# 手がかり数字0の行・列に全部 ☓ を埋める
 func _on_BackButton_pressed():
 	if !qSolved && !qSolvedStat:
 		var lst = []
@@ -1199,6 +1202,20 @@ func fixedColumn():
 		if (d0 & v_fixed_bits_0[x]) != v_fixed_bits_0[x]:
 			return x;
 	return -1
+func isThereXBothEnd(data1, data0, fixed1, fixed0):
+	var mask = 1 << N_IMG_CELL_HORZ
+	for x in range(N_IMG_CELL_HORZ-1):
+		mask >>= 1
+		if (data0 & mask) == 0 && (fixed0 & mask) != 0 && (data1 & (mask>>1)) != 0:
+			return true
+		if (data1 & mask) == 0 && (data0 & (mask>>1)) == 0 && (fixed0 & (mask>>1)) != 0:
+			return true
+	return false;
+func isThereXBothEndLine():
+	for y in range(N_IMG_CELL_VERT):
+		if isThereXBothEnd(get_h_data(y), get_h_data0(y), h_fixed_bits_1[y], h_fixed_bits_0[y]):
+			return y
+	return -1
 func search_hint_line_column() -> Array:	# [line, column], -1 for none
 	init_arrays()
 	init_candidates()
@@ -1209,9 +1226,12 @@ func search_hint_line_column() -> Array:	# [line, column], -1 for none
 		return [y, -1, HINT_ALL_FIXED]
 	remove_v_candidates_conflicted()
 	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
-	var x = allFixedColumn()	# 確定セルがある列を探す
+	var x = allFixedColumn()	# 全部入れれる列を探す
 	if x >= 0:
 		return [-1, x, HINT_ALL_FIXED]
+	y = isThereXBothEndLine()
+	if y >= 0:
+		return [y, -1, HINT_X_BOTH_END]
 	y = simpleBoxLine()
 	if y >= 0:
 		return [y, -1, HINT_SIMPLE_BOX]
@@ -1237,6 +1257,11 @@ func _on_HintButton_pressed():
 				help_text = "%d行目に「重なったら黒」があります。" % (y+1)
 			else:
 				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+		elif lc[2] == HINT_X_BOTH_END:
+			if true:
+				help_text = "%d行目に「確定したら両端にバツ」があります。" % (y+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
 		else:
 			if true:
 				help_text = "%d行目に確定するセルがあります。" % (y+1)
@@ -1259,6 +1284,11 @@ func _on_HintButton_pressed():
 		elif lc[2] == HINT_SIMPLE_BOX:
 			if true:
 				help_text = "%d列目に「重なったら黒」があります。" % (x+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
+		elif lc[2] == HINT_X_BOTH_END:
+			if true:
+				help_text = "%d列目に「確定したら両端にバツ」があります。" % (x+1)
 			else:
 				help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
 		else:
