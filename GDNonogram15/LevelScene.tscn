@@ -83,9 +83,9 @@ __meta__ = {
 }
 
 [node name="solvedLabel" type="Label" parent="."]
-margin_left = 221.145
+margin_left = 200.0
 margin_top = 70.0
-margin_right = 305.145
+margin_right = 305.0
 margin_bottom = 94.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )

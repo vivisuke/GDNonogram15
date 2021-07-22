@@ -102,7 +102,8 @@ func _ready():
 		#
 		panel.connect("pressed", self, "_on_QuestPanel_pressed")
 	$scoreLabel.text = "SCORE: %d" % score
-	$solvedLabel.text = "Solved: %d/%d" % [nSolved, g.quest_list.size()]
+	var pc : int = round(nSolved * 100.0 / g.quest_list.size())
+	$solvedLabel.text = "Solved: %d/%d (%d%%)" % [nSolved, g.quest_list.size(), pc]
 	print("vscroll = ", g.lvl_vscroll)
 	$ScrollContainer.set_v_scroll(g.lvl_vscroll)
 	pass # Replace with function body.
@@ -175,7 +176,7 @@ func _on_ClearProgressDialog_confirmed():
 		panel.set_ans_image([])
 		#panel.update()
 	$scoreLabel.text = "SCORE: 0"
-	$solvedLabel.text = "Solved: 0/%d" % g.quest_list.size()
+	$solvedLabel.text = "Solved: 0/%d (0%)" % g.quest_list.size()
 	pass # Replace with function body.
 
 func nextNotSolved(qix):
