@@ -28,7 +28,7 @@ const TILE_BG_GRAY = 1
 const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
-const HINT_INTERVAL = 60
+const HINT_INTERVAL = 3 #60
 enum {
 	HINT_ALL_FIXED = 1,
 	HINT_SIMPLE_BOX,
