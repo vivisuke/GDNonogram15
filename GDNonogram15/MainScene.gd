@@ -1216,28 +1216,36 @@ func isThereXBothEndLine():
 		if isThereXBothEnd(get_h_data(y), get_h_data0(y), h_fixed_bits_1[y], h_fixed_bits_0[y]):
 			return y
 	return -1
+func isThereXBothEndColumn():
+	for x in range(N_IMG_CELL_HORZ):
+		if isThereXBothEnd(get_v_data(x), get_v_data0(x), v_fixed_bits_1[x], v_fixed_bits_0[x]):
+			return x
+	return -1
 func search_hint_line_column() -> Array:	# [line, column], -1 for none
 	init_arrays()
 	init_candidates()
 	remove_h_candidates_conflicted()
 	update_h_fixedbits()	# h_candidates[] を元に h_fixed_bits_1, 0 を計算
+	remove_v_candidates_conflicted()
+	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
 	var y = allFixedLine()		# 全部入れれる行を探す
 	if y >= 0:
 		return [y, -1, HINT_ALL_FIXED]
-	remove_v_candidates_conflicted()
-	update_v_fixedbits()	# v_candidates[] を元に v_fixed_bits_1, 0 を計算
 	var x = allFixedColumn()	# 全部入れれる列を探す
 	if x >= 0:
 		return [-1, x, HINT_ALL_FIXED]
-	y = isThereXBothEndLine()
-	if y >= 0:
-		return [y, -1, HINT_X_BOTH_END]
 	y = simpleBoxLine()
 	if y >= 0:
 		return [y, -1, HINT_SIMPLE_BOX]
 	x = simpleBoxColumn()
 	if x >= 0:
 		return [-1, x, HINT_SIMPLE_BOX]
+	y = isThereXBothEndLine()
+	if y >= 0:
+		return [y, -1, HINT_X_BOTH_END]
+	x = isThereXBothEndColumn()
+	if x >= 0:
+		return [-1, x, HINT_X_BOTH_END]
 	y = fixedLine()
 	if y >= 0:
 		return [y, -1, 0]
