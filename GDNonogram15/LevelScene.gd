@@ -54,6 +54,7 @@ func _ready():
 	#	g.qNum2QIX.sort_custom(MyCustomSorter, "sort_ascending")
 	g.ans_images.resize(g.quest_list.size())
 	g.qix2ID.resize(g.quest_list.size())
+	var score = 0
 	for i in g.quest_list.size():	# 問題パネルセットアップ
 		#if g.solved.size() <= i:
 		#	g.solved.push_back(false)
@@ -86,6 +87,7 @@ func _ready():
 						ns = 2
 					elif lst[N_IMG_CELL_VERT] < diffi * 60 * 2:
 						ns = 1
+				score += diffi * (10 + ns*2)
 			else:
 				panel.set_clearTime(0)
 		else:
@@ -96,6 +98,7 @@ func _ready():
 		$ScrollContainer/VBoxContainer.add_child(panel)
 		#
 		panel.connect("pressed", self, "_on_QuestPanel_pressed")
+	$scoreLabel.text = "SCORE: %d" % score
 	print("vscroll = ", g.lvl_vscroll)
 	$ScrollContainer.set_v_scroll(g.lvl_vscroll)
 	pass # Replace with function body.

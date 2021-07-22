@@ -44,9 +44,9 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 
 [node name="TitleLabel" type="Label" parent="."]
-margin_top = 20.0
+margin_top = 15.0
 margin_right = 480.0
-margin_bottom = 54.0
+margin_bottom = 49.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "SkskLogic"
@@ -56,13 +56,28 @@ __meta__ = {
 }
 
 [node name="versionLabel" type="Label" parent="."]
-margin_top = 66.0
-margin_right = 480.0
-margin_bottom = 90.0
+margin_left = 391.122
+margin_top = 28.0
+margin_right = 475.122
+margin_bottom = 52.0
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "ver 0.012"
+text = "v0.012"
 align = 1
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scoreLabel" type="Label" parent="."]
+margin_left = 15.0
+margin_top = 70.0
+margin_right = 99.0
+margin_bottom = 94.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "SCORE:"
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
