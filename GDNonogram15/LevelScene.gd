@@ -55,6 +55,7 @@ func _ready():
 	g.ans_images.resize(g.quest_list.size())
 	g.qix2ID.resize(g.quest_list.size())
 	var score = 0
+	var nSolved = 0
 	for i in g.quest_list.size():	# 問題パネルセットアップ
 		#if g.solved.size() <= i:
 		#	g.solved.push_back(false)
@@ -93,6 +94,7 @@ func _ready():
 			panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
 			panel.set_clearTime(0)
 		if solved:
+			nSolved += 1
 			score += diffi * (10 + ns*2)
 		panel.set_star(ns)
 		panel.set_author(g.quest_list[qix][g.KEY_AUTHOR])
@@ -100,6 +102,7 @@ func _ready():
 		#
 		panel.connect("pressed", self, "_on_QuestPanel_pressed")
 	$scoreLabel.text = "SCORE: %d" % score
+	$solvedLabel.text = "Solved: %d/%d" % [nSolved, g.quest_list.size()]
 	print("vscroll = ", g.lvl_vscroll)
 	$ScrollContainer.set_v_scroll(g.lvl_vscroll)
 	pass # Replace with function body.
@@ -172,6 +175,7 @@ func _on_ClearProgressDialog_confirmed():
 		panel.set_ans_image([])
 		#panel.update()
 	$scoreLabel.text = "SCORE: 0"
+	$solvedLabel.text = "Solved: 0/%d" % g.quest_list.size()
 	pass # Replace with function body.
 
 func nextNotSolved(qix):

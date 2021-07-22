@@ -82,6 +82,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="solvedLabel" type="Label" parent="."]
+margin_left = 221.145
+margin_top = 70.0
+margin_right = 305.145
+margin_bottom = 94.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Solved: "
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
 margin_top = 100.0
 margin_right = 480.0
