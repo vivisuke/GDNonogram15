@@ -68,7 +68,7 @@ func _ready():
 		#if g.solved[i]:
 		var ns = 0
 		var solved = false;
-		if g.solvedPat.has(g.qix2ID[qix]):
+		if g.solvedPat.has(g.qix2ID[qix]):		# クリア済み or 途中経過あり
 			var lst = g.solvedPat[g.qix2ID[qix]]
 			if lst.size() <= N_IMG_CELL_VERT || lst[N_IMG_CELL_VERT] > 0:
 				solved = true
@@ -78,7 +78,7 @@ func _ready():
 			panel.set_ans_image(lst)
 			#panel.set_ans_image(g.ans_images[i])
 			#panel.set_clearTime(lst[N_IMG_CELL_VERT] if lst.size() > N_IMG_CELL_VERT else 0)
-			if lst.size() > N_IMG_CELL_VERT:
+			if lst.size() > N_IMG_CELL_VERT:	# クリアタイムあり
 				panel.set_clearTime(lst[N_IMG_CELL_VERT])
 				if solved:
 					if lst[N_IMG_CELL_VERT] < diffi * 60 * 0.5:
@@ -87,12 +87,13 @@ func _ready():
 						ns = 2
 					elif lst[N_IMG_CELL_VERT] < diffi * 60 * 2:
 						ns = 1
-				score += diffi * (10 + ns*2)
 			else:
 				panel.set_clearTime(0)
 		else:
 			panel.set_title(g.quest_list[qix][g.KEY_TITLE][0] + "???")
 			panel.set_clearTime(0)
+		if solved:
+			score += diffi * (10 + ns*2)
 		panel.set_star(ns)
 		panel.set_author(g.quest_list[qix][g.KEY_AUTHOR])
 		$ScrollContainer/VBoxContainer.add_child(panel)
@@ -170,6 +171,7 @@ func _on_ClearProgressDialog_confirmed():
 		panel.set_clearTime(0)
 		panel.set_ans_image([])
 		#panel.update()
+	$scoreLabel.text = "SCORE: 0"
 	pass # Replace with function body.
 
 func nextNotSolved(qix):
