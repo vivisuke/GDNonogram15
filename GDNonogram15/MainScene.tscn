@@ -359,6 +359,10 @@ font_data = ExtResource( 44 )
 0/shapes = [  ]
 0/z_index = 0
 
+[sub_resource type="DynamicFont" id=10]
+size = 20
+font_data = ExtResource( 19 )
+
 [sub_resource type="DynamicFont" id=7]
 size = 22
 font_data = ExtResource( 44 )
@@ -394,10 +398,6 @@ shader_param/center = Vector2( 0.5, 0.5 )
 shader_param/force = 0.024
 shader_param/size = 2.0
 shader_param/tichness = 0.1
-
-[sub_resource type="DynamicFont" id=10]
-size = 20
-font_data = ExtResource( 19 )
 
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 1 )
@@ -499,11 +499,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="MessLabel" type="Label" parent="."]
+margin_left = 10.0
+margin_top = 145.0
+margin_right = 89.0
+margin_bottom = 164.0
+custom_fonts/font = SubResource( 2 )
+text = "Message"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="BoardBG" type="ColorRect" parent="."]
 margin_left = 10.0
-margin_top = 150.0
+margin_top = 170.0
 margin_right = 470.0
-margin_bottom = 610.0
+margin_bottom = 630.0
 color = Color( 1, 1, 0.937255, 1 )
 script = ExtResource( 2 )
 __meta__ = {
@@ -517,16 +528,16 @@ cell_size = Vector2( 20, 20 )
 format = 1
 
 [node name="TileMap" type="TileMap" parent="."]
-position = Vector2( 170, 310 )
+position = Vector2( 170, 330 )
 tile_set = SubResource( 5 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
 [node name="BoardGrid" type="ColorRect" parent="."]
 margin_left = 10.0
-margin_top = 150.0
+margin_top = 170.0
 margin_right = 473.0
-margin_bottom = 613.0
+margin_bottom = 633.0
 color = Color( 1, 1, 1, 0 )
 script = ExtResource( 3 )
 __meta__ = {
@@ -538,6 +549,19 @@ position = Vector2( 45, 185 )
 tile_set = SubResource( 6 )
 cell_size = Vector2( 6, 6 )
 format = 1
+
+[node name="timeLabel" type="Label" parent="."]
+margin_left = 392.0
+margin_top = 636.0
+margin_right = 470.0
+margin_bottom = 660.0
+custom_fonts/font = SubResource( 10 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "00:00:00"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ClearButton" type="TextureButton" parent="."]
 margin_left = 10.0
@@ -813,17 +837,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MessLabel" type="Label" parent="."]
-margin_left = 10.0
-margin_top = 626.0
-margin_right = 91.0
-margin_bottom = 654.0
-custom_fonts/font = SubResource( 2 )
-text = "Message"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
@@ -834,19 +847,6 @@ margin_bottom = 800.0
 mouse_filter = 2
 input_pass_on_modal_close_click = false
 color = Color( 1, 1, 1, 0.501961 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="timeLabel" type="Label" parent="."]
-margin_left = 392.0
-margin_top = 616.0
-margin_right = 470.0
-margin_bottom = 640.0
-custom_fonts/font = SubResource( 10 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "00:00:00"
-align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
