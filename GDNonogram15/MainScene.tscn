@@ -527,8 +527,8 @@ tile_set = SubResource( 4 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
-[node name="TileMap" type="TileMap" parent="."]
-position = Vector2( 170, 330 )
+[node name="TileMap" type="TileMap" parent="BoardBG"]
+position = Vector2( 160, 160 )
 tile_set = SubResource( 5 )
 cell_size = Vector2( 20, 20 )
 format = 1

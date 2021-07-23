@@ -87,7 +87,7 @@ func _ready():
 	$HintButton/timeLabel.text = ""
 	update_modeButtons()
 	update_commandButtons()
-	#$TileMap.set_cell(0, 0, 0)
+	#$BoardBG/TileMap.set_cell(0, 0, 0)
 	build_map()
 	build_slicedTable()
 	#print(g_map.size())
@@ -132,7 +132,7 @@ func _ready():
 					for x in range(N_IMG_CELL_HORZ):
 						mask >>= 1
 						if (d&mask) != 0:
-							$TileMap.set_cell(x, y, TILE_BLACK)
+							$BoardBG/TileMap.set_cell(x, y, TILE_BLACK)
 							#$MiniTileMap.set_cell(x, y, TILE_BLACK)
 							#set_cell_basic(x, y, TILE_BLACK)
 				if g.solvedPat[qID].size() > N_IMG_CELL_VERT + 1:	# ☓情報も保存されている場合
@@ -142,7 +142,7 @@ func _ready():
 						for x in range(N_IMG_CELL_HORZ):
 							mask >>= 1
 							if (d&mask) != 0:
-								$TileMap.set_cell(x, y, TILE_CROSS)
+								$BoardBG/TileMap.set_cell(x, y, TILE_CROSS)
 				upate_imageTileMap()
 				for y in range(N_IMG_CELL_VERT):
 					check_h_clues(y)		# 使い切った手がかり数字グレイアウト
@@ -462,31 +462,31 @@ func set_crosses_null_line_column():	# 手がかり数字0の行・列に全部 
 	for y in range(N_IMG_CELL_VERT):
 		if h_clues[y] == [0]:
 			for x in range(N_IMG_CELL_HORZ):
-				$TileMap.set_cell(x, y, TILE_CROSS)
+				$BoardBG/TileMap.set_cell(x, y, TILE_CROSS)
 	for x in range(N_IMG_CELL_HORZ):
 		if v_clues[x] == [0]:
 			for y in range(N_IMG_CELL_VERT):
-				$TileMap.set_cell(x, y, TILE_CROSS)
+				$BoardBG/TileMap.set_cell(x, y, TILE_CROSS)
 func clear_all_crosses():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			if $TileMap.get_cell(x, y) == TILE_CROSS:
-				$TileMap.set_cell(x, y, TILE_NONE)
+			if $BoardBG/TileMap.get_cell(x, y) == TILE_CROSS:
+				$BoardBG/TileMap.set_cell(x, y, TILE_NONE)
 func remove_h_auto_cross(y0):
 	if h_autoFilledCross[y0] != 0:		# ☓オートフィルでフィルされた☓を削除
 		var vmask = 1 << y0
 		var mask = 1
 		for x in range(N_IMG_CELL_HORZ):
 			if( (h_autoFilledCross[y0] & mask) != 0 && (v_autoFilledCross[x] & vmask) == 0 &&
-					$TileMap.get_cell(x, y0) == TILE_CROSS ):
-				$TileMap.set_cell(x, y0, TILE_NONE)
+					$BoardBG/TileMap.get_cell(x, y0) == TILE_CROSS ):
+				$BoardBG/TileMap.set_cell(x, y0, TILE_NONE)
 			mask <<= 1
 		h_autoFilledCross[y0] = 0
 func set_h_auto_cross(y0):
 	var mask = 1
 	for x in range(N_IMG_CELL_HORZ):
-		if $TileMap.get_cell(x, y0) == TILE_NONE:
-			$TileMap.set_cell(x, y0, TILE_CROSS)
+		if $BoardBG/TileMap.get_cell(x, y0) == TILE_NONE:
+			$BoardBG/TileMap.set_cell(x, y0, TILE_CROSS)
 			h_autoFilledCross[y0] |= mask
 		mask <<= 1
 func check_h_conflicted(y0):
@@ -538,15 +538,15 @@ func remove_v_auto_cross(x0):
 		var mask = 1
 		for y in range(N_IMG_CELL_VERT):
 			if( (v_autoFilledCross[x0] & mask) != 0 && (h_autoFilledCross[y] & hmask) == 0 &&
-					$TileMap.get_cell(x0, y) == TILE_CROSS ):
-				$TileMap.set_cell(x0, y, TILE_NONE)
+					$BoardBG/TileMap.get_cell(x0, y) == TILE_CROSS ):
+				$BoardBG/TileMap.set_cell(x0, y, TILE_NONE)
 			mask <<= 1
 		v_autoFilledCross[x0] = 0
 func set_v_auto_cross(x0):
 	var mask = 1
 	for y in range(N_IMG_CELL_VERT):
-		if $TileMap.get_cell(x0, y) == TILE_NONE:
-			$TileMap.set_cell(x0, y, TILE_CROSS)
+		if $BoardBG/TileMap.get_cell(x0, y) == TILE_NONE:
+			$BoardBG/TileMap.set_cell(x0, y, TILE_CROSS)
 			v_autoFilledCross[x0] |= mask
 		mask <<= 1
 func check_v_conflicted(x0):
@@ -620,30 +620,30 @@ func is_solved():
 func get_h_data(y0):
 	var data = 0
 	for x in range(N_IMG_CELL_HORZ):
-		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == TILE_BLACK else 0)
+		data = data * 2 + (1 if $BoardBG/TileMap.get_cell(x, y0) == TILE_BLACK else 0)
 	return data
 func get_h_data0(y0):
 	var data = 0
 	for x in range(N_IMG_CELL_HORZ):
-		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == TILE_CROSS else 0)
+		data = data * 2 + (1 if $BoardBG/TileMap.get_cell(x, y0) == TILE_CROSS else 0)
 	return data
 func get_v_data(x0):
 	var data = 0
 	for y in range(N_IMG_CELL_VERT):
-		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == TILE_BLACK else 0)
+		data = data * 2 + (1 if $BoardBG/TileMap.get_cell(x0, y) == TILE_BLACK else 0)
 	return data
 func get_v_data0(x0):
 	var data = 0
 	for y in range(N_IMG_CELL_VERT):
-		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == TILE_CROSS else 0)
+		data = data * 2 + (1 if $BoardBG/TileMap.get_cell(x0, y) == TILE_CROSS else 0)
 	return data
 func update_h_cluesText(y0, lst):
 	var x = -1
 	for i in range(lst.size()):
-		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0 if lst[i] != 0 else TILE_NONE)
+		$BoardBG/TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0 if lst[i] != 0 else TILE_NONE)
 		x -= 1
 	while x >= -N_CLUES_CELL_HORZ:
-		$TileMap.set_cell(x, y0, TILE_NONE)
+		$BoardBG/TileMap.set_cell(x, y0, TILE_NONE)
 		x -= 1
 func update_h_clues(y0):
 	# 水平方向手がかり数字更新
@@ -654,10 +654,10 @@ func update_h_clues(y0):
 func update_v_cluesText(x0, lst):
 	var y = -1
 	for i in range(lst.size()):
-		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0 if lst[i] != 0 else TILE_NONE)
+		$BoardBG/TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0 if lst[i] != 0 else TILE_NONE)
 		y -= 1
 	while y >= -N_CLUES_CELL_VERT:
-		$TileMap.set_cell(x0, y, TILE_NONE)
+		$BoardBG/TileMap.set_cell(x0, y, TILE_NONE)
 		y -= 1
 func update_v_clues(x0):
 	# 垂直方向手がかり数字更新
@@ -681,7 +681,7 @@ func clearMiniTileMap():
 func clearTileMap():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			$TileMap.set_cell(x, y, TILE_NONE)
+			$BoardBG/TileMap.set_cell(x, y, TILE_NONE)
 func clearTileMapBG():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
@@ -696,16 +696,16 @@ func setup_fallingCross(pos):
 	add_child(obj)
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
-	var X0 = $TileMap.position.x
-	var Y0 = $TileMap.position.y
+	var X0 = $BoardBG/TileMap.global_position.x
+	var Y0 = $BoardBG/TileMap.global_position.y
 	if pos.x >= X0 && pos.x < X0 + CELL_WIDTH*N_IMG_CELL_HORZ:
 		if pos.y >= Y0 && pos.y < Y0 + CELL_WIDTH*N_IMG_CELL_VERT:
 			xy.x = floor((pos.x - X0) / CELL_WIDTH)
 			xy.y = floor((pos.y - Y0) / CELL_WIDTH)
 	return xy
 func xyToPos(x, y):
-	var px = $TileMap.position.x + x * CELL_WIDTH
-	var py = $TileMap.position.y + y * CELL_WIDTH
+	var px = $BoardBG/TileMap.position.x + x * CELL_WIDTH
+	var py = $BoardBG/TileMap.position.y + y * CELL_WIDTH
 	return Vector2(px, py)
 func _input(event):
 	if dialog_opened:
@@ -726,7 +726,7 @@ func _input(event):
 				mouse_pushed = true;
 				last_xy = xy
 				pushed_xy = xy
-				var v0 = $TileMap.get_cell(xy.x, xy.y)
+				var v0 = $BoardBG/TileMap.get_cell(xy.x, xy.y)
 				var v = v0
 				if event.is_action_pressed("click"):		# left mouse button
 					v = TILE_BLACK if v0 != TILE_BLACK else TILE_NONE;
@@ -736,7 +736,7 @@ func _input(event):
 					#if v > TILE_BLACK:
 					#	v = TILE_NONE
 				cell_val = v
-				#$TileMap.set_cell(xy.x, xy.y, v)
+				#$BoardBG/TileMap.set_cell(xy.x, xy.y, v)
 				push_to_undo_stack([SET_CELL_BE, xy.x, xy.y, v0, v])
 				update_undo_redo()
 				set_cell_basic(xy.x, xy.y, v)
@@ -763,11 +763,11 @@ func _input(event):
 				if true:
 					$BoardGrid.setLine(pushed_xy, xy)
 				else:
-					var v0 = $TileMap.get_cell(xy.x, xy.y)
+					var v0 = $BoardBG/TileMap.get_cell(xy.x, xy.y)
 					push_to_undo_stack([SET_CELL, xy.x, xy.y, v0, cell_val])
 					update_undo_redo()
 					set_cell_basic(xy.x, xy.y, cell_val)
-					#$TileMap.set_cell(xy.x, xy.y, cell_val)
+					#$BoardBG/TileMap.set_cell(xy.x, xy.y, cell_val)
 					if v0 == TILE_BLACK && cell_val != TILE_BLACK:
 						setup_fallingBlack(event.position)
 		else:
@@ -787,8 +787,8 @@ func _input(event):
 				# ☓消去
 				for y in range(N_IMG_CELL_VERT):
 					for x in range(N_IMG_CELL_HORZ):
-						if $TileMap.get_cell(x, y) == TILE_CROSS:
-							$TileMap.set_cell(x, y, TILE_NONE)
+						if $BoardBG/TileMap.get_cell(x, y) == TILE_CROSS:
+							$BoardBG/TileMap.set_cell(x, y, TILE_NONE)
 							setup_fallingCross(xyToPos(x, y))
 				#g.solved[qix] = true
 				#if !g.solvedPat.has(qID):		# クリア辞書に入っていない場合
@@ -836,17 +836,17 @@ func clear_all():
 func clear_all_basic():
 	for y in range(N_TOTAL_CELL_VERT):
 		for x in range(N_TOTAL_CELL_HORZ):
-			if $TileMap.get_cell(x, y) == TILE_BLACK:
+			if $BoardBG/TileMap.get_cell(x, y) == TILE_BLACK:
 				setup_fallingBlack(xyToPos(x, y))
-			$TileMap.set_cell(x, y, TILE_NONE)
+			$BoardBG/TileMap.set_cell(x, y, TILE_NONE)
 			$MiniTileMap.set_cell(x, y, TILE_NONE)
 	if mode == MODE_EDIT_PICT:
 		for y in range(N_TOTAL_CELL_VERT):
 			for x in range(N_CLUES_CELL_HORZ):
-				$TileMap.set_cell(-x-1, y, TILE_NONE)
+				$BoardBG/TileMap.set_cell(-x-1, y, TILE_NONE)
 		for x in range(N_TOTAL_CELL_HORZ):
 			for y in range(N_CLUES_CELL_VERT):
-				$TileMap.set_cell(x, -y-1, TILE_NONE)
+				$BoardBG/TileMap.set_cell(x, -y-1, TILE_NONE)
 		for y in range(N_IMG_CELL_VERT):
 			h_clues[y] = [0]
 			for x in range(N_CLUES_CELL_HORZ):
@@ -870,18 +870,18 @@ func _on_ClearButton_pressed():
 func upate_imageTileMap():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			var img = 0 if $TileMap.get_cell(x, y) == 1 else TILE_NONE
+			var img = 0 if $BoardBG/TileMap.get_cell(x, y) == 1 else TILE_NONE
 			$MiniTileMap.set_cell(x, y, img)
 
 func rotate_left_basic():
 	var ar = []
 	for y in range(N_IMG_CELL_VERT):
-		ar.push_back($TileMap.get_cell(0, y))	# may be -1 or +1
+		ar.push_back($BoardBG/TileMap.get_cell(0, y))	# may be -1 or +1
 	for x in range(N_IMG_CELL_HORZ-1):
 		for y in range(N_IMG_CELL_VERT):
-			$TileMap.set_cell(x, y, $TileMap.get_cell(x+1, y))
+			$BoardBG/TileMap.set_cell(x, y, $BoardBG/TileMap.get_cell(x+1, y))
 	for y in range(N_IMG_CELL_VERT):
-		$TileMap.set_cell(N_IMG_CELL_HORZ-1, y, ar[y])
+		$BoardBG/TileMap.set_cell(N_IMG_CELL_HORZ-1, y, ar[y])
 	update_all_clues()
 	upate_imageTileMap()
 func _on_LeftButton_pressed():
@@ -891,12 +891,12 @@ func _on_LeftButton_pressed():
 func rotate_right_basic():
 	var ar = []
 	for y in range(N_IMG_CELL_VERT):
-		ar.push_back($TileMap.get_cell(N_IMG_CELL_HORZ-1, y))	# may be -1 or +1
+		ar.push_back($BoardBG/TileMap.get_cell(N_IMG_CELL_HORZ-1, y))	# may be -1 or +1
 	for x in range(N_IMG_CELL_HORZ-1, 0, TILE_NONE):
 		for y in range(N_IMG_CELL_VERT):
-			$TileMap.set_cell(x, y, $TileMap.get_cell(x-1, y))
+			$BoardBG/TileMap.set_cell(x, y, $BoardBG/TileMap.get_cell(x-1, y))
 	for y in range(N_IMG_CELL_VERT):
-		$TileMap.set_cell(0, y, ar[y])
+		$BoardBG/TileMap.set_cell(0, y, ar[y])
 	update_all_clues()
 	upate_imageTileMap()
 func _on_RightButton_pressed():
@@ -906,12 +906,12 @@ func _on_RightButton_pressed():
 func rotate_down_basic():
 	var ar = []
 	for x in range(N_IMG_CELL_HORZ):
-		ar.push_back($TileMap.get_cell(x, N_IMG_CELL_VERT-1))	# may be -1 or +1
+		ar.push_back($BoardBG/TileMap.get_cell(x, N_IMG_CELL_VERT-1))	# may be -1 or +1
 	for y in range(N_IMG_CELL_VERT-1, 0, TILE_NONE):
 		for x in range(N_IMG_CELL_HORZ):
-			$TileMap.set_cell(x, y, $TileMap.get_cell(x, y-1))
+			$BoardBG/TileMap.set_cell(x, y, $BoardBG/TileMap.get_cell(x, y-1))
 	for x in range(N_IMG_CELL_HORZ):
-		$TileMap.set_cell(x, 0, ar[x])
+		$BoardBG/TileMap.set_cell(x, 0, ar[x])
 	update_all_clues()
 	upate_imageTileMap()
 func _on_DownButton_pressed():
@@ -921,12 +921,12 @@ func _on_DownButton_pressed():
 func rotate_up_basic():
 	var ar = []
 	for x in range(N_IMG_CELL_HORZ):
-		ar.push_back($TileMap.get_cell(x, 0))	# may be -1 or +1
+		ar.push_back($BoardBG/TileMap.get_cell(x, 0))	# may be -1 or +1
 	for y in range(N_IMG_CELL_VERT-1):
 		for x in range(N_IMG_CELL_HORZ):
-			$TileMap.set_cell(x, y, $TileMap.get_cell(x, y+1))
+			$BoardBG/TileMap.set_cell(x, y, $BoardBG/TileMap.get_cell(x, y+1))
 	for x in range(N_IMG_CELL_HORZ):
-		$TileMap.set_cell(x, N_IMG_CELL_VERT-1, ar[x])
+		$BoardBG/TileMap.set_cell(x, N_IMG_CELL_VERT-1, ar[x])
 	update_all_clues()
 	upate_imageTileMap()
 func _on_UpButton_pressed():
@@ -1033,8 +1033,8 @@ func _on_SolveButton_pressed():		# 解答モード
 func change_cross_to_none():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			if $TileMap.get_cell(x, y) == TILE_CROSS:
-				$TileMap.set_cell(x, y, TILE_NONE)
+			if $BoardBG/TileMap.get_cell(x, y) == TILE_CROSS:
+				$BoardBG/TileMap.set_cell(x, y, TILE_NONE)
 func clear_clues_BG():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_CLUES_CELL_HORZ):
@@ -1055,7 +1055,7 @@ func _on_EditPictButton_pressed():		# 問題エディットモード
 		var mask = 1 << N_IMG_CELL_HORZ
 		for x in range(N_IMG_CELL_HORZ):
 			mask >>= 1
-			$TileMap.set_cell(x, y, TILE_BLACK if (d & mask) != 0 else TILE_NONE)
+			$BoardBG/TileMap.set_cell(x, y, TILE_BLACK if (d & mask) != 0 else TILE_NONE)
 	upate_imageTileMap()
 	#set_crosses_null_line_column();	# 手がかり数字0の行・列に全部 ☓ を埋める
 func _on_BackButton_pressed():
@@ -1071,7 +1071,7 @@ func _on_BackButton_pressed():
 	get_tree().change_scene("res://LevelScene.tscn")
 	pass # Replace with function body.
 func set_cell_basic(x, y, v):
-	$TileMap.set_cell(x, y, v)
+	$BoardBG/TileMap.set_cell(x, y, v)
 	if mode == MODE_EDIT_PICT:
 		update_clues(x, y)
 	elif mode == MODE_SOLVE:
@@ -1086,7 +1086,7 @@ func set_cell_rect(pos1, pos2, v):
 	var ht = max(pos1.y, pos2.y) - y0 + 1
 	for y in range(ht):
 		for x in range(wd):
-			var v0 = $TileMap.get_cell(x0+x, y0+y)
+			var v0 = $BoardBG/TileMap.get_cell(x0+x, y0+y)
 			set_cell_basic(x0+x, y0+y, v)
 			push_to_undo_stack([SET_CELL, x0+x, y0+y, v0, v])
 func _on_UndoButton_pressed():
