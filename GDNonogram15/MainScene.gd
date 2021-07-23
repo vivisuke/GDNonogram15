@@ -1202,13 +1202,32 @@ func fixedColumn():
 		if (d0 & v_fixed_bits_0[x]) != v_fixed_bits_0[x]:
 			return x;
 	return -1
+func isContBlackFixedToRight(data1, fixed1, mask):
+	if (data1 & mask) == 0 || (fixed1 & mask) == 0:
+		return false;
+	mask >>= 1
+	while mask != 0 && (fixed1 & mask) != 0:
+		if (data1 & mask) == 0:
+			return false;
+		mask >>= 1
+	return true
+func isContBlackFixedToLeft(data1, fixed1, mask):
+	if (data1 & mask) == 0 || (fixed1 & mask) == 0:
+		return false;
+	mask <<= 1
+	var LIMIT = 1 << N_IMG_CELL_HORZ
+	while mask < LIMIT && (fixed1 & mask) != 0:
+		if (data1 & mask) == 0:
+			return false;
+		mask <<= 1
+	return true
 func isThereXBothEnd(data1, data0, fixed1, fixed0):
 	var mask = 1 << N_IMG_CELL_HORZ
 	for x in range(N_IMG_CELL_HORZ-1):
 		mask >>= 1
-		if (data0 & mask) == 0 && (fixed0 & mask) != 0 && (data1 & (mask>>1)) != 0:
+		if (data0 & mask) == 0 && (fixed0 & mask) != 0 && isContBlackFixedToRight(data1, fixed1, mask>>1):
 			return true
-		if (data1 & mask) == 0 && (data0 & (mask>>1)) == 0 && (fixed0 & (mask>>1)) != 0:
+		if isContBlackFixedToLeft(data1, fixed1, mask) && (data0 & (mask>>1)) == 0 && (fixed0 & (mask>>1)) != 0:
 			return true
 	return false;
 func isThereXBothEndLine():
