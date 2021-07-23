@@ -533,11 +533,9 @@ tile_set = SubResource( 5 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
-[node name="BoardGrid" type="ColorRect" parent="."]
-margin_left = 10.0
-margin_top = 170.0
-margin_right = 473.0
-margin_bottom = 633.0
+[node name="BoardGrid" type="ColorRect" parent="BoardBG"]
+margin_right = 463.0
+margin_bottom = 463.0
 color = Color( 1, 1, 1, 0 )
 script = ExtResource( 3 )
 __meta__ = {
