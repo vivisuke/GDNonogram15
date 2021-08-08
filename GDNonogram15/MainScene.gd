@@ -28,13 +28,16 @@ const TILE_BG_GRAY = 1
 const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
-const HINT_INTERVAL = 3 #60
+const HINT_INTERVAL = 60
 enum {
 	HINT_ALL_FIXED = 1,		# 全て入る
 	HINT_SIMPLE_BOX,		# 重なったら黒（手がかり数字がひとつだけ）
 	HINT_SIMPLE_BOXES,		# 重なったら黒（手がかり数字が複数）
 	HINT_X_BOTH_END,		# 確定したら両端にバツ
 	HINT_CAN_NOT_REACH,		# 届かない
+	HINT_GLUE,				# くっつき
+	HINT_BLACK,				# 黒確定あり
+	HINT_CROSS,				# バツ確定あり
 }
 
 var FallingBlack = load("res://FallingBlack.tscn")
@@ -133,7 +136,7 @@ func _ready():
 						mask >>= 1
 						if (d&mask) != 0:
 							$BoardBG/TileMap.set_cell(x, y, TILE_BLACK)
-							#$MiniTileMap.set_cell(x, y, TILE_BLACK)
+							#$BoardBG/MiniTileMap.set_cell(x, y, TILE_BLACK)
 							#set_cell_basic(x, y, TILE_BLACK)
 				if g.solvedPat[qID].size() > N_IMG_CELL_VERT + 1:	# ☓情報も保存されている場合
 					for y in range(N_IMG_CELL_VERT):
@@ -677,7 +680,7 @@ func update_all_clues():
 func clearMiniTileMap():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
-			$MiniTileMap.set_cell(x, y, TILE_NONE)
+			$BoardBG/MiniTileMap.set_cell(x, y, TILE_NONE)
 func clearTileMap():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
@@ -839,7 +842,7 @@ func clear_all_basic():
 			if $BoardBG/TileMap.get_cell(x, y) == TILE_BLACK:
 				setup_fallingBlack(xyToPos(x, y))
 			$BoardBG/TileMap.set_cell(x, y, TILE_NONE)
-			$MiniTileMap.set_cell(x, y, TILE_NONE)
+			$BoardBG/MiniTileMap.set_cell(x, y, TILE_NONE)
 	if mode == MODE_EDIT_PICT:
 		for y in range(N_TOTAL_CELL_VERT):
 			for x in range(N_CLUES_CELL_HORZ):
@@ -871,7 +874,7 @@ func upate_imageTileMap():
 	for y in range(N_IMG_CELL_VERT):
 		for x in range(N_IMG_CELL_HORZ):
 			var img = 0 if $BoardBG/TileMap.get_cell(x, y) == 1 else TILE_NONE
-			$MiniTileMap.set_cell(x, y, img)
+			$BoardBG/MiniTileMap.set_cell(x, y, img)
 
 func rotate_left_basic():
 	var ar = []
@@ -1078,7 +1081,7 @@ func set_cell_basic(x, y, v):
 		#check_all_clues()
 		check_clues(x, y)
 	var img = 0 if v == TILE_BLACK else TILE_NONE
-	$MiniTileMap.set_cell(x, y, img)
+	$BoardBG/MiniTileMap.set_cell(x, y, img)
 func set_cell_rect(pos1, pos2, v):
 	var x0 = min(pos1.x, pos2.x)
 	var y0 = min(pos1.y, pos2.y)
@@ -1184,11 +1187,23 @@ func simpleBoxColumn():
 func fixedLine():
 	for y in range(N_IMG_CELL_VERT):
 		var d = get_h_data(y)
-		if y == 6:
-			print("h_data[", y , "] = ", to_binText(d));
-			print("h_fixed_bits_1[", y , "] = ", to_binText(h_fixed_bits_1[y]));
+		#if y == 6:
+		#	print("h_data[", y , "] = ", to_binText(d));
+		#	print("h_fixed_bits_1[", y , "] = ", to_binText(h_fixed_bits_1[y]));
 		if (d & h_fixed_bits_1[y]) != h_fixed_bits_1[y]:
 			return y;
+		var d0 = get_h_data0(y)
+		if (d0 & h_fixed_bits_0[y]) != h_fixed_bits_0[y]:
+			return y;
+	return -1
+func fixed1Line():
+	for y in range(N_IMG_CELL_VERT):
+		var d = get_h_data(y)
+		if (d & h_fixed_bits_1[y]) != h_fixed_bits_1[y]:
+			return y;
+	return -1
+func fixed0Line():
+	for y in range(N_IMG_CELL_VERT):
 		var d0 = get_h_data0(y)
 		if (d0 & h_fixed_bits_0[y]) != h_fixed_bits_0[y]:
 			return y;
@@ -1198,6 +1213,18 @@ func fixedColumn():
 		var d = get_v_data(x)
 		if (d & v_fixed_bits_1[x]) != v_fixed_bits_1[x]:
 			return x;
+		var d0 = get_v_data0(x)
+		if (d0 & v_fixed_bits_0[x]) != v_fixed_bits_0[x]:
+			return x;
+	return -1
+func fixed1Column():
+	for x in range(N_IMG_CELL_VERT):
+		var d = get_v_data(x)
+		if (d & v_fixed_bits_1[x]) != v_fixed_bits_1[x]:
+			return x;
+	return -1
+func fixed0Column():
+	for x in range(N_IMG_CELL_VERT):
 		var d0 = get_v_data0(x)
 		if (d0 & v_fixed_bits_0[x]) != v_fixed_bits_0[x]:
 			return x;
@@ -1240,6 +1267,37 @@ func isThereXBothEndColumn():
 		if isThereXBothEnd(get_v_data(x), get_v_data0(x), v_fixed_bits_1[x], v_fixed_bits_0[x]):
 			return x
 	return -1
+func isThereCanNotReach(data1, data0, fixed0):
+	return data1 != 0 && (data0 & fixed0) != fixed0
+func isThereCanNotReachLine():
+	for y in range(N_IMG_CELL_VERT):
+		if h_clues[y].size() == 1 && isThereCanNotReach(get_h_data(y), get_h_data0(y), h_fixed_bits_0[y]):
+			return y
+	return -1
+func isThereCanNotReachColumn():
+	for x in range(N_IMG_CELL_HORZ):
+		if v_clues[x].size() == 1 && isThereCanNotReach(get_v_data(x), get_v_data0(x), v_fixed_bits_0[x]):
+			return x
+	return -1
+func isThereGlue(data1, data0, fixed1):
+	var mask = 1 << N_IMG_CELL_HORZ
+	for x in range(N_IMG_CELL_HORZ-1):
+		mask >>= 1
+		if (data1 & mask) != 0 && (data1 & (mask>>1)) == 0 && (fixed1 & (mask>>1)) != 0:
+			return true
+		if (data1 & (mask>>1)) != 0 && (data1 & mask) == 0 && (fixed1 & mask) != 0:
+			return true
+	return false;
+func isThereGlueLine():
+	for y in range(N_IMG_CELL_VERT):
+		if isThereGlue(get_h_data(y), get_h_data0(y), h_fixed_bits_1[y]):
+			return y
+	return -1
+func isThereGlueColumn():
+	for x in range(N_IMG_CELL_VERT):
+		if isThereGlue(get_v_data(x), get_v_data0(x), v_fixed_bits_1[x]):
+			return x
+	return -1
 func search_hint_line_column() -> Array:	# [line, column], -1 for none
 	init_arrays()
 	init_candidates()
@@ -1265,6 +1323,30 @@ func search_hint_line_column() -> Array:	# [line, column], -1 for none
 	x = isThereXBothEndColumn()
 	if x >= 0:
 		return [-1, x, HINT_X_BOTH_END]
+	y = isThereCanNotReachLine()
+	if y >= 0:
+		return [y, -1, HINT_CAN_NOT_REACH]
+	x = isThereCanNotReachColumn()
+	if x >= 0:
+		return [-1, x, HINT_CAN_NOT_REACH]
+	y = isThereGlueLine()
+	if y >= 0:
+		return [y, -1, HINT_GLUE]
+	x = isThereGlueColumn()
+	if x >= 0:
+		return [-1, x, HINT_GLUE]
+	y = fixed1Line()
+	if y >= 0:
+		return [y, -1, HINT_BLACK]
+	x = fixed1Column()
+	if x >= 0:
+		return [-1, x, HINT_BLACK]
+	y = fixed0Line()
+	if y >= 0:
+		return [y, -1, HINT_CROSS]
+	x = fixed0Column()
+	if x >= 0:
+		return [-1, x, HINT_CROSS]
 	y = fixedLine()
 	if y >= 0:
 		return [y, -1, 0]
@@ -1287,6 +1369,26 @@ func _on_HintButton_pressed():
 		elif lc[2] == HINT_X_BOTH_END:
 			if true:
 				help_text = "%d行目に「確定したら両端にバツ」があります。" % (y+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+		elif lc[2] == HINT_CAN_NOT_REACH:
+			if true:
+				help_text = "%d行目に「届かない」があります。" % (y+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+		elif lc[2] == HINT_GLUE:
+			if true:
+				help_text = "%d行目に「くっつき」があります。" % (y+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+		elif lc[2] == HINT_BLACK:
+			if true:
+				help_text = "%d行目に黒が確定するセルがあります。" % (y+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
+		elif lc[2] == HINT_CROSS:
+			if true:
+				help_text = "%d行目にバツが確定するセルがあります。" % (y+1)
 			else:
 				help_text = "Hint: fixed cell(s) in the line-%d" % (y+1)
 		else:
@@ -1318,6 +1420,26 @@ func _on_HintButton_pressed():
 				help_text = "%d列目に「確定したら両端にバツ」があります。" % (x+1)
 			else:
 				help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
+		elif lc[2] == HINT_CAN_NOT_REACH:
+			if true:
+				help_text = "%d列目に「届かない」があります。" % (x+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
+		elif lc[2] == HINT_GLUE:
+			if true:
+				help_text = "%d列目に「くっつき」があります。" % (x+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the column-%d" % (x+1)
+		elif lc[2] == HINT_BLACK:
+			if true:
+				help_text = "%d列目に黒が確定するセルがあります。" % (x+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (x+1)
+		elif lc[2] == HINT_CROSS:
+			if true:
+				help_text = "%d列目にバツが確定するセルがあります。" % (x+1)
+			else:
+				help_text = "Hint: fixed cell(s) in the line-%d" % (x+1)
 		else:
 			if true:
 				help_text = "%d列目に確定するセルがあります。" % (x+1)
