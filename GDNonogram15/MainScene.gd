@@ -85,6 +85,7 @@ func _ready():
 		$CenterContainer/HBoxContainer/EditButton.disabled = true
 	else:
 		mode = MODE_EDIT_PICT
+		$BoardBG/titleLabel.text = ""
 		$titleBar/questLabel.text = ""
 	$MessLabel.text = ""
 	$HintButton/timeLabel.text = ""
@@ -114,6 +115,7 @@ func _ready():
 		qix = g.qNumber - 1
 		qID = g.qix2ID[qix]
 		print("QID = ", qID)
+		$BoardBG/titleLabel.text = g.quest_list[qix][g.KEY_TITLE][0] + "???"
 		if true:
 			$titleBar/questLabel.text = (("#%d" % g.qNumber) + (", 難易度%d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 							", '" + g.quest_list[qix][g.KEY_TITLE][0] + "???' by " +
@@ -805,6 +807,7 @@ func _input(event):
 					lst[N_IMG_CELL_VERT] = g.solvedPat[qID][N_IMG_CELL_VERT]
 				g.solvedPat[qID] = lst
 				saveSolvedPat()
+				$BoardBG/titleLabel.text = g.quest_list[qix][g.KEY_TITLE]
 				if true:
 					$titleBar/questLabel.text = (("#%d" % g.qNumber) + (", 難易度%d" % g.quest_list[qix][g.KEY_DIFFICULTY]) +
 											", '" + g.quest_list[qix][g.KEY_TITLE] +
