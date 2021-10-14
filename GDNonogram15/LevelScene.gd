@@ -25,7 +25,7 @@ func _ready():
 	#var newfont = load("res://fonts/FlopDesignFONT.otf")
 	#theme.set_default_font(newfont)
 	var file = File.new()
-	if file.file_exists(g.settingsFileName):
+	if file.file_exists(g.settingsFileName):		# 設定ファイル
 		file.open(g.settingsFileName, File.READ)
 		g.settings = file.get_var()
 		file.close()

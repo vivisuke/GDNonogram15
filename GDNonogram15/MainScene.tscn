@@ -73,11 +73,11 @@ font_data = ExtResource( 44 )
 [sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 44 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=4]
 size = 20
 font_data = ExtResource( 19 )
 
-[sub_resource type="TileSet" id=4]
+[sub_resource type="TileSet" id=5]
 0/name = "yellow20x20.png 0"
 0/texture = ExtResource( 35 )
 0/tex_offset = Vector2( 0, 0 )
@@ -107,7 +107,7 @@ font_data = ExtResource( 19 )
 1/shapes = [  ]
 1/z_index = 0
 
-[sub_resource type="TileSet" id=5]
+[sub_resource type="TileSet" id=6]
 0/name = "cross20x20.png 0"
 0/texture = ExtResource( 5 )
 0/tex_offset = Vector2( 0, 0 )
@@ -347,7 +347,7 @@ font_data = ExtResource( 19 )
 16/shapes = [  ]
 16/z_index = 0
 
-[sub_resource type="TileSet" id=6]
+[sub_resource type="TileSet" id=7]
 0/name = "black6x6.png 0"
 0/texture = ExtResource( 6 )
 0/tex_offset = Vector2( 0, 0 )
@@ -363,15 +363,15 @@ font_data = ExtResource( 19 )
 0/shapes = [  ]
 0/z_index = 0
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=8]
 size = 18
 font_data = ExtResource( 44 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=9]
 size = 22
 font_data = ExtResource( 44 )
 
-[sub_resource type="Shader" id=9]
+[sub_resource type="Shader" id=10]
 code = "shader_type canvas_item;
 
 uniform vec2 center;
@@ -396,8 +396,8 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=10]
-shader = SubResource( 9 )
+[sub_resource type="ShaderMaterial" id=11]
+shader = SubResource( 10 )
 shader_param/center = Vector2( 0.5, 0.5 )
 shader_param/force = 0.024
 shader_param/size = 2.0
@@ -508,7 +508,7 @@ margin_left = 392.0
 margin_top = 145.0
 margin_right = 470.0
 margin_bottom = 169.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "00:00:00"
 align = 2
@@ -529,13 +529,13 @@ __meta__ = {
 
 [node name="TileMapBG" type="TileMap" parent="BoardBG"]
 position = Vector2( 160, 160 )
-tile_set = SubResource( 4 )
+tile_set = SubResource( 5 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
 [node name="TileMap" type="TileMap" parent="BoardBG"]
 position = Vector2( 160, 160 )
-tile_set = SubResource( 5 )
+tile_set = SubResource( 6 )
 cell_size = Vector2( 20, 20 )
 format = 1
 
@@ -550,7 +550,7 @@ __meta__ = {
 
 [node name="MiniTileMap" type="TileMap" parent="BoardBG"]
 position = Vector2( 35, 35 )
-tile_set = SubResource( 6 )
+tile_set = SubResource( 7 )
 cell_size = Vector2( 6, 6 )
 format = 1
 
@@ -558,7 +558,7 @@ format = 1
 margin_top = 132.0
 margin_right = 160.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "title"
 align = 1
@@ -634,7 +634,7 @@ margin_top = 20.0
 margin_right = 58.0
 margin_bottom = 45.0
 rect_scale = Vector2( 1.5, 1.5 )
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "00"
 align = 1
@@ -854,7 +854,7 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-material = SubResource( 10 )
+material = SubResource( 11 )
 use_parent_material = true
 margin_right = 480.0
 margin_bottom = 800.0
