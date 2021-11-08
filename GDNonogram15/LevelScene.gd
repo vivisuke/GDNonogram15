@@ -40,12 +40,15 @@ func _ready():
 			g.solvedPat = file.get_var()
 			file.close()
 			##print(g.solvedPat)
+	g.quest_list.sort_custom(MyCustomSorter, "sort_ascending")
+	"""
 	print(g.quest_list0.size())
 	if g.quest_list.empty():	# ソート済み問題配列が空
 		g.quest_list.resize(g.quest_list0.size())
 		for i in range(g.quest_list0.size()):
 			g.quest_list[i] = g.quest_list0[i]
 		g.quest_list.sort_custom(MyCustomSorter, "sort_ascending")
+	"""
 	#if g.qNum2QIX.empty():			# 問題番号 → 問題リストIX（qix）テーブルが未構築の場合
 	#	g.qNum2QIX.resize(g.quest_list.size())
 	#	for i in range(g.quest_list.size()):

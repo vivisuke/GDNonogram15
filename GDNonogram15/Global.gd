@@ -31,7 +31,7 @@ var settings = {}		# 設定辞書
 var solvedPat = {}		# QID -> [data0, data1, ...] 辞書
 #var solved = []			# true/false
 var ans_images = []		# 解答ビットパターン配列
-var quest_list = []		# ソート済み問題配列
+#var quest_list = []		# ソート済み問題配列
 
 enum {
 	KEY_ID = 0,
@@ -41,7 +41,8 @@ enum {
 	KEY_V_CLUES,
 	KEY_H_CLUES,
 	}
-var quest_list0 = [		# 非ソート済み問題配列
+#var quest_list0 = [		# 非ソート済み問題配列
+var quest_list = [		# 非ソート済み問題配列
 	["Q004", 1, "Albert", "mamimumemo",
 	["", "", "", "", "1", "4", "3 1 1", "3 1", "3 1 1", "4", "1", "", "", "", ""],
 	["", "", "", "1 1", "1 1", "1 1", "", "7", "1 1 1", "1 1 1", "1 1", "3", "", "", ""]],
