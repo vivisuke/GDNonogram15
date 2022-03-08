@@ -1,8 +1,8 @@
-[gd_scene load_steps=72 format=2]
+[gd_scene load_steps=73 format=2]
 
-[ext_resource path="res://MainScene.gd" type="Script" id=1]
-[ext_resource path="res://BoardBG.gd" type="Script" id=2]
-[ext_resource path="res://BoardGrid.gd" type="Script" id=3]
+[ext_resource path="res://scripts/MainScene.gd" type="Script" id=1]
+[ext_resource path="res://scripts/BoardBG.gd" type="Script" id=2]
+[ext_resource path="res://scripts/BoardGrid.gd" type="Script" id=3]
 [ext_resource path="res://images/black20x20.png" type="Texture" id=4]
 [ext_resource path="res://images/cross20x20.png" type="Texture" id=5]
 [ext_resource path="res://images/black6x6.png" type="Texture" id=6]
@@ -58,8 +58,9 @@
 [ext_resource path="res://sounds/button-3.mp3" type="AudioStream" id=56]
 [ext_resource path="res://images/volume_up.png" type="Texture" id=57]
 [ext_resource path="res://images/volume_off_black.png" type="Texture" id=58]
-[ext_resource path="res://titleBar.gd" type="Script" id=59]
+[ext_resource path="res://scripts/titleBar.gd" type="Script" id=59]
 [ext_resource path="res://images/shift_up_gray.png" type="Texture" id=60]
+[ext_resource path="res://fake_confetti_particles.tscn" type="PackedScene" id=61]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -442,8 +443,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -454,8 +455,8 @@ margin_left = 70.0
 margin_top = 15.0
 margin_right = 189.0
 margin_bottom = 43.0
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Quest Label"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -508,8 +509,8 @@ margin_left = 392.0
 margin_top = 145.0
 margin_right = 470.0
 margin_bottom = 169.0
-custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
 text = "00:00:00"
 align = 2
 __meta__ = {
@@ -558,8 +559,8 @@ format = 1
 margin_top = 132.0
 margin_right = 160.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 8 )
 text = "title"
 align = 1
 __meta__ = {
@@ -595,8 +596,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "全消去"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -620,8 +621,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "ヒント"
 align = 1
 __meta__ = {
@@ -634,8 +635,8 @@ margin_top = 20.0
 margin_right = 58.0
 margin_bottom = 45.0
 rect_scale = Vector2( 1.5, 1.5 )
-custom_fonts/font = SubResource( 9 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 9 )
 text = "00"
 align = 1
 valign = 1
@@ -662,8 +663,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "戻す"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -688,8 +689,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "進める"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -714,8 +715,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "効果音"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -740,8 +741,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "左移動"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -766,8 +767,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "下移動"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -792,8 +793,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "上移動"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -818,8 +819,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "右移動"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -844,8 +845,8 @@ margin_left = 10.0
 margin_top = 90.0
 margin_right = 87.0
 margin_bottom = 126.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "検査"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -865,11 +866,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="clearedAudio" type="AudioStreamPlayer2D" parent="."]
+[node name="clearedAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 55 )
 
-[node name="clickAudio" type="AudioStreamPlayer2D" parent="."]
+[node name="clickAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 56 )
+
+[node name="FakeConfettiParticles" parent="." instance=ExtResource( 61 )]
 
 [connection signal="pressed" from="titleBar/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="CenterContainer/HBoxContainer/SolveButton" to="." method="_on_SolveButton_pressed"]

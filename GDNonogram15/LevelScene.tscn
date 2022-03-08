@@ -1,12 +1,12 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://LevelScene.gd" type="Script" id=2]
+[ext_resource path="res://scripts/LevelScene.gd" type="Script" id=2]
 [ext_resource path="res://images/edit_white.png" type="Texture" id=3]
 [ext_resource path="res://fonts/Hokjesgeest-PDGB.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://images/clear_white_48.png" type="Texture" id=5]
 [ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=6]
-[ext_resource path="res://ClearProgressDialog.gd" type="Script" id=7]
+[ext_resource path="res://scripts/ClearProgressDialog.gd" type="Script" id=7]
 [ext_resource path="res://images/tab_black.png" type="Texture" id=8]
 [ext_resource path="res://images/tab_white.png" type="Texture" id=9]
 
@@ -47,8 +47,8 @@ __meta__ = {
 margin_top = 15.0
 margin_right = 480.0
 margin_bottom = 49.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "SkskLogic"
 align = 1
 __meta__ = {
@@ -60,8 +60,8 @@ margin_left = 391.122
 margin_top = 28.0
 margin_right = 475.122
 margin_bottom = 52.0
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
 text = "v0.012"
 align = 1
 valign = 2
@@ -74,8 +74,8 @@ margin_left = 15.0
 margin_top = 70.0
 margin_right = 99.0
 margin_bottom = 94.0
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
 text = "SCORE:"
 valign = 1
 __meta__ = {
@@ -87,8 +87,8 @@ margin_left = 200.0
 margin_top = 70.0
 margin_right = 305.0
 margin_bottom = 94.0
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Solved: "
 valign = 1
 __meta__ = {
