@@ -194,7 +194,7 @@ func _process(delta):
 	if shock_wave_timer >= 0:
 		shock_wave_timer += delta
 		$CanvasLayer/ColorRect.material.set_shader_param("size", shock_wave_timer)
-		if shock_wave_timer > 0.25:
+		if shock_wave_timer > 2:
 			shock_wave_timer = -1.0
 	pass
 func update_undo_redo():
