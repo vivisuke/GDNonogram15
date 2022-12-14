@@ -32,6 +32,7 @@ Global="*res://Global.tscn"
 
 window/size/width=480
 window/size/height=800
+window/handheld/orientation="portrait"
 
 [global]
 
