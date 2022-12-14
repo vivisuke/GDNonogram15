@@ -283,7 +283,8 @@ SPR# 状 P Open Close ver     Type  概要
 0268 ◎ C 12/15 12/15 0.012│ToDo│Android版エクスポート
 0269 ◎ C 12/15 12/15 0.012│問題│Android版：画面方向不正？
 									対処：プロジェクト設定＞表示＞ウィンドウ＞Handheld＞Orientation：portrate
-0270 ● C 12/15            │問題│Android版：画面サイズ不正？
+0270 ◎ C 12/15 12/15 0.012│問題│Android版：画面サイズ不正？
+									対処：Stretch＞Mode：2d、アスペクト：keep
 0271 ● C 12/15            │ToDo│
 0272 ● C 12/15            │ToDo│
 0273 ● C 12/15            │ToDo│
