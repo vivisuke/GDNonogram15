@@ -179,7 +179,7 @@ func _on_ClearProgressDialog_confirmed():
 		panel.set_ans_image([])
 		#panel.update()
 	$scoreLabel.text = "SCORE: 0"
-	$solvedLabel.text = "Solved: 0/%d (0%)" % g.quest_list.size()
+	$solvedLabel.text = "Solved: 0/%d (0%%)" % g.quest_list.size()
 	pass # Replace with function body.
 
 func nextNotSolved(qix):
